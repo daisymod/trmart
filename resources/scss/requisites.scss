@@ -1,0 +1,50 @@
+.requisites-page{
+
+    &__warning{
+        margin-top: 32px;
+        display: flex;
+        max-width: 650px;
+        align-items: baseline;
+        &__img{
+            width: 16.5px;
+            height: 16.5px;
+            margin-right: 25px;
+        }
+
+
+    }
+
+    &__info{
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 30px;
+
+        &__hr{
+            margin-top: 126px;
+            width: 206px;
+            border: 1px solid #E6E6E6;
+        }
+
+        &__row{
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            &__text{
+                font-family: 'Noto Sans';
+                font-style: normal;
+                font-weight: 400;
+                font-size: 15px;
+                line-height: 43px;
+                color: #6D6D6D;
+
+                &__url{
+                    color: #4DB45F;
+                }
+
+                &:first-child{
+                    width: 206px;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,138 @@
+#feedback-popup{
+    max-width: 481px;
+    width: 100%;
+    margin: 0 auto;
+    background: #FFFFFF;
+    border: 1px solid rgba(219, 219, 219, 0.25);
+    box-shadow: 0px 14px 44px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+
+
+    .rating {
+        display: inline-block;
+        position: relative;
+        margin-left: 60px;
+
+        height: 50px;
+        line-height: 50px;
+        font-size: 50px;
+    }
+
+    .rating label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        cursor: pointer;
+    }
+
+    .rating label:last-child {
+        position: static;
+    }
+
+    .rating label:nth-child(1) {
+        z-index: 5;
+    }
+
+    .rating label:nth-child(2) {
+        z-index: 4;
+    }
+
+    .rating label:nth-child(3) {
+        z-index: 3;
+    }
+
+    .rating label:nth-child(4) {
+        z-index: 2;
+    }
+
+    .rating label:nth-child(5) {
+        z-index: 1;
+    }
+
+    .rating label input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+    }
+
+    .rating label .icon {
+        float: left;
+        color: transparent;
+    }
+
+    .rating label:last-child .icon {
+        color: #000000;
+    }
+
+    .rating:not(:hover) label input:checked ~ .icon,
+    .rating:hover label:hover input ~ .icon {
+        color: #37C155;;
+    }
+
+    .rating label input:focus:not(:checked) ~ .icon:last-child {
+        color: #000000;
+        text-shadow: 0 0 5px #37C155;;
+    }
+
+    .feedback-popup-wrap {
+        max-width: 370px;
+        width: 100%;
+        margin: 0 auto;
+        @include flex;
+        @include dir-col;
+
+        .seller-data{
+
+            font-family: 'Noto Sans';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 13px;
+            line-height: 18px;
+            text-align: center;
+            color: #A0A0A0;
+        }
+
+        .gray-feedback{
+            font-family: 'Noto Sans';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 20px;
+            line-height: 27px;
+            color: #363636;
+            opacity: 0.4;
+            display: flex;
+            justify-content: center;
+        }
+
+        h2 {
+            text-align: center;
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 27px;
+            color: #363636;
+        }
+
+        .main-form4 {
+            @include dir-col;
+
+            .green-btn {
+                margin-bottom: 30px;
+                padding: 11px 20px;
+                cursor: pointer;
+            }
+
+
+            textarea{
+                width: 362px;
+                height: 113px;
+                background: rgba(255, 255, 255, 0.6);
+                border: 1px solid #C3C3C2;
+                border-radius: 8px;
+                margin-bottom: 10px;
+                margin-top: 23px;
+            }
+        }
+    }
+}

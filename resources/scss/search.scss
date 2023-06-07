@@ -1,0 +1,97 @@
+#search-form {
+    position: relative;
+}
+
+    #search-result{
+        display: flex;
+        width: 100%;
+        flex-wrap: wrap;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 4px ;
+        margin-top: 3px;
+        position: absolute;
+        z-index: 10;
+        a{
+            cursor: pointer;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+            width: 100%;
+            font-weight: 400;
+            font-size: 15px;
+            line-height: 20px;
+            color: #555555;
+        }
+    }
+
+
+
+    #symbol-data{
+        color: #ffffff;
+    }
+
+
+    .info-text-gray{
+
+        font-family: 'Noto Sans';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 19px;
+        color: #A0A0A0;
+    }
+
+
+
+    .merchant_orders{
+        display: flex;
+        justify-content: space-between;
+    }
+
+
+
+    .orders_status{
+        width: 196px;
+        height: 31px;
+        background: #E4E4E4;
+        opacity: 0.41;
+        border-radius: 8px;
+        font-family: 'Noto Sans';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 13px;
+        line-height: 18px;
+        color: #2B2A28;
+    }
+
+
+    .cancel-btn{
+        font-family: 'Noto Sans';
+        font-style: normal;
+        font-weight: 300;
+        font-size: 13px;
+        line-height: 18px;
+        background: transparent;
+        color: #FF0000;
+    }
+
+
+
+
+    .small-checkbox input {
+        margin: 0.4rem;
+        cursor: pointer;
+    }
+
+
+
+    .label-checkbox-text{
+        font-family: 'Noto Sans';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        cursor: pointer;
+        line-height: 24px;
+        color: #868686;
+    }

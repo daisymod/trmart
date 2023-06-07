@@ -1,0 +1,26 @@
+<?php
+return [
+    'searchProduct' => 'Ürün Arama',
+    'feedbacks' => 'incelemeler',
+    'buyMore' => '100\'den fazla kez satın alındı',
+    'toFavorite' => 'favorilere',
+    'squad' => 'Kompozisyon ve bileşenler',
+    'color' => 'Renk',
+    'seeMore' => 'Daha fazla',
+    'tableSize' => 'Boyutlar',
+    'buyNow' => 'Şimdi satın al',
+    'about' => 'Şimdi al',
+    'addToCart' => 'Sepete ekle',
+    'old' => 'Yaş grubu (yıl)',
+    'about1' => 'Boyun çizgisi',
+    'about2' => 'dekoratif elemanlar',
+    'about3' => 'Arkadaki ürün uzunluğu',
+    'about4' => 'favori kahramanlar',
+    'about5' => 'Atamasi',
+    'about6' => 'Model Özellikleri',
+    'about7' => 'Satıcı hakkında daha fazla bilgi',
+    'showMore' => 'Hepsini genişlet',
+    'rating' => 'Değerlendirme',
+    'forFeedback' => 'temelli',
+
+];
