@@ -140,24 +140,26 @@
                                 </div>
                             </div>
                             <div class="info info2">
-                                <h4>@lang('cart.addressDelivery')</h4>
+                                <h4>@lang('cart.addressDelivery') <a class="green-text ml-2" href="{{route('customer.self')}}">@lang('customer.orders.change') </a></h4>
                                 <div class="customer-addresses">
                                     <div class="inputs-wrap">
                                         <span class="input-title">@lang('customer.form-label.fl1')</span>
                                         <select readonly class="form-control" name="country_id" id="profile-country_id">
-                                            <option selected disabled>@lang('customer.form-label.fl1')</option>
                                             @foreach($countries as $item)
-                                                <option @if(Auth::user()->country_id === $item->id) selected @endif value="{{$item->id}}">{{$item->name_ru}}</option>
+                                                @if(Auth::user()->country_id === $item->id)
+                                                    <option @if(Auth::user()->country_id === $item->id) selected @endif value="{{$item->id}}">{{$item->name_ru}}</option>
+                                                @endif
                                             @endforeach
                                         </select>
                                     </div>
                                     <div class="inputs-wrap">
                                         <span class="input-title">@lang('customer.form-label.fl2')</span>
                                         <select readonly class="form-control" name="region_id" id="profile-region_id">
-                                            <option disabled selected>@lang('customer.form-label.fl2')</option>
                                             @if($regions)
                                                 @foreach($regions as $item)
-                                                    <option @if(Auth::user()->region_id === $item->id) selected @endif value="{{$item->id}}">{{$item->name}}</option>
+                                                    @if(Auth::user()->region_id === $item->id)
+                                                        <option @if(Auth::user()->region_id === $item->id) selected @endif value="{{$item->id}}">{{$item->name}}</option>
+                                                    @endif
                                                 @endforeach
                                             @endif
                                         </select>
@@ -165,10 +167,11 @@
                                     <div class="inputs-wrap">
                                         <span class="input-title">@lang('customer.form-label.fl3')</span>
                                         <select readonly class="form-control" name="area_id" id="profile-area_id">
-                                            <option disabled selected>@lang('customer.form-label.fl3')</option>
                                             @if($areas)
                                                 @foreach($areas as $item)
-                                                    <option @if(Auth::user()->area_id === $item->id) selected @endif value="{{$item->id}}">{{$item->name}}</option>
+                                                    @if(Auth::user()->area_id === $item->id)
+                                                        <option @if(Auth::user()->area_id === $item->id) selected @endif value="{{$item->id}}">{{$item->name}}</option>
+                                                    @endif
                                                 @endforeach
                                             @endif
                                         </select>
@@ -176,10 +179,11 @@
                                     <div class="inputs-wrap">
                                         <span class="input-title">@lang('customer.form-label.fl4')</span>
                                         <select readonly class="form-control" name="city_id" id="profile-city_id">
-                                            <option disabled selected>@lang('customer.form-label.fl4')</option>
                                             @if($cities)
                                                 @foreach($cities as $item)
-                                                    <option @if(Auth::user()->city_id === $item->id) selected @endif value="{{$item->id}}">{{$item->name}}</option>
+                                                    @if(Auth::user()->city_id === $item->id)
+                                                        <option selected value="{{$item->id}}">{{$item->name}}</option>
+                                                    @endif
                                                 @endforeach
                                             @endif
                                         </select>
@@ -189,7 +193,9 @@
                                         <select readonly class="form-control" name="postcode_id" id="profile-postcode">
                                             @if($postCodes)
                                                 @foreach($postCodes as $item)
-                                                    <option @if(Auth::user()->postcode_id === $item->id) selected @endif value="{{$item->id}}">{{$item->title}}</option>
+                                                    @if(Auth::user()->postcode_id === $item->id)
+                                                        <option @if(Auth::user()->postcode_id === $item->id) selected @endif value="{{$item->id}}">{{$item->title}}</option>
+                                                    @endif
                                                 @endforeach
                                             @else
                                                 <option disabled selected id="profile-postcode__def">@lang('customer.form-label.fl5')</option>

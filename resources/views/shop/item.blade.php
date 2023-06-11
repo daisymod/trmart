@@ -111,11 +111,12 @@
                     <div class="size-table">
                         <p>@lang('products.tableSize')</p>
                         <div class="variants-radios">
+
                             @php $index = 1; @endphp
                             @foreach($size as $itemSize)
                                 @if($itemSize->sizeData->{'name_'.app()->getLocale()} != '')
-                                <div class="radio-wrap" data-size="{{$itemSize->sizeData->id}}">
-                                    <input type="radio" value="{{$itemSize->sizeData->{'name_'.app()->getLocale() } }}" id="radio{{$index}}" name="size">
+                                <div @if($itemSize->sizeData->exist) class="radio-wrap" @else class="radio-wrap not-active" @endif  data-size="{{$itemSize->sizeData->id}}">
+                                    <input @if(!$itemSize->sizeData->exist) disabled="disabled" @endif type="radio" value="{{$itemSize->sizeData->{'name_'.app()->getLocale() } }}" id="radio{{$index}}" name="size">
                                     <label for="radio{{$index}}">
                                         <b>{{$itemSize->sizeData->{'name_'.app()->getLocale() } }}</b>
                                     </label>

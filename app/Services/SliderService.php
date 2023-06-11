@@ -18,6 +18,7 @@ class SliderService
 
         foreach ($items as $item){
             $images = json_decode($item->image);
+            if ($images != null)
             $item->main_img = $images[0]->img;
         }
 

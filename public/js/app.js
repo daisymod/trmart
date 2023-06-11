@@ -3752,6 +3752,20 @@ $(document).ready(function () {
   $(".colors-slider").on("afterChange", function () {
     var color = document.getElementsByClassName('color-data-active slick-active');
     document.getElementById('color-text').innerHTML = color[0].dataset.color;
+    $.ajax({
+      type: "GET",
+      url: "/api/product/color-size",
+      data: {
+        'item_id': window.location.pathname.split("/").pop(),
+        'color': color[0].dataset.colorid,
+        'lang': 'tr'
+      },
+      cache: false,
+      success: function success(data) {
+        var radios = document.getElementsByClassName('variants-radios');
+        radios[0].innerHTML = data;
+      }
+    });
   });
   $('.colors-slider').slick({
     dots: false,

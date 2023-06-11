@@ -42,13 +42,19 @@ class OrderInfoResource extends JsonResource
     {
         switch ($status) {
             case 1:
-                return ['0%', '0%'];
+                return ['16%', '16%'];
             case 2:
-                return ['25%', 'calc(25% + 115px)'];
+                return ['33%', '33%'];
             case 3:
-                return ['50%', 'calc(50% + 115px)'];
+                return ['50%', '50%'];
             case 4:
+                return ['66%', '66%'];
+            case 5:
+                return ['83%', '83%'];
+            case 6:
                 return ['100%', '100%'];
+            case 7:
+                return ['0%', '0%'];
         }
     }
 }
