@@ -47,3 +47,6 @@ Route::get('/redirect', function () {
 })->name("redirect");
 
 Route::get("/product/paginate", [\App\Http\Controllers\CatalogItemController::class, "getPaginatePage"])->name("product.paginate");
+
+
+Route::get("/product/color-size", [\App\Http\Controllers\ShopController::class, "getColorAndSizeById"])->name("getColorAndSizeById");

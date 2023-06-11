@@ -508,8 +508,21 @@ $(document).ready(function () {
 
     $(".colors-slider").on("afterChange", function (){
         let color = document.getElementsByClassName('color-data-active slick-active');
-
         document.getElementById('color-text').innerHTML = color[0].dataset.color;
+        $.ajax({
+            type: "GET",
+            url: "/api/product/color-size",
+            data: {
+                'item_id': window.location.pathname.split("/").pop(),
+                'color': color[0].dataset.colorid,
+                'lang': 'tr',
+            },
+            cache: false,
+            success: function (data) {
+                let radios = document.getElementsByClassName('variants-radios');
+                radios[0].innerHTML = data;
+            }
+        });
     })
 
 

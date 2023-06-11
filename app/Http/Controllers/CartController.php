@@ -9,6 +9,7 @@ use App\Http\Requests\CartOderPostRequest;
 use App\Jobs\newOrderJob;
 use App\Models\City;
 use App\Models\Country;
+use App\Models\CurrencyRate;
 use App\Models\DeliveryPrice;
 use App\Models\KPLocation;
 use App\Models\KPPostCode;
@@ -25,6 +26,7 @@ use App\Services\UserCartService;
 use App\Services\UserService;
 use BeetleCore\Helper;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Queue\Jobs\Job;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -172,8 +174,9 @@ class CartController extends Controller
         return Helper::getUrl("https://delivery.pochta.ru/v2/calculate/tariff/delivery?json&object=27030&from=$from&to=$to&weight=1000&pack=10");
     }
 
-    public function actionCalculate()
+    public function actionCalculate(Request $request)
     {
+
         session()->put('deliveryCalDate', Carbon::now()->format('d-m-Y'));
         $td  = DeliveryPrice::query()->where('id', 1)->value('gr_price');
         $client = new KazPost();
@@ -183,11 +186,14 @@ class CartController extends Controller
         $delivery = 0;
         $deliveryTr = 0;
         $arr = [];
+        $coefficent = CurrencyRate::where('id','=',2)
+            ->first(); // kzt
         foreach ($cart as $key => $item) {
             $count = $count + $item['count'];
             $product = CatalogItem::find($item['id']);
             $weight  = $product->weight * $item['count'];
-            $price   = $product->price * $item['count'];
+            $price   = ceil($product->price * $coefficent->rate_end) * $item['count'];
+
             $kps = $client->getPostRate($weight, $price, Auth::user()->postcode);
             if (isset($kps->Sum)) {
                 $test[] = [$count, $product->id, $weight, $price, $kps->Sum];

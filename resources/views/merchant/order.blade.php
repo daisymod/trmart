@@ -160,7 +160,7 @@
                             @if(Auth::user()->role == 'admin' && ($order[0]['status_int'] == 1 || $order[0]['status_int'] == 2 || $order[0]['status_int'] == 3  ))
                                 <a data-question="Отменить заказ?" href="{{ route('merchant.cancel', $order[0]['id'] ) }}" class="order__canceled">@lang('customer.orders.cancel_the_order')</a>
                             @endif
-                            <div class="order__canceled_title text-center">@lang('customer.orders.with_a_refund')</div>
+                           <!-- <div class="order__canceled_title text-center">@lang('customer.orders.with_a_refund')</div> -->
                         </div>
                     </div>
                 </div>

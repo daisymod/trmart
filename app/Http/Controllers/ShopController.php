@@ -29,6 +29,63 @@ class ShopController
     {
     }
 
+    public function getColorAndSizeById(Request $request){
+        $data = ProductItem::select('size')
+                ->where('item_id','=',str_replace('.html','',$request->item_id))
+                ->where('color','=',$request->color)
+                ->where('count','>',0)
+                ->get()->toArray();
+
+        $size = ProductItem::where('item_id','=',str_replace('.html','',$request->item_id))
+            ->with('sizeData')
+            ->whereHas('sizeData',function ($q){
+            })
+            ->get()->unique('size');
+        $html = '';
+        $result = [];
+        array_walk_recursive($data, function ($item, $key) use (&$result) {
+            $result[] = $item;
+        });
+
+        $index = 1;
+        $checked = true;
+        foreach ($size as $item){
+
+            if (!in_array($item->sizeData->id,$result)){
+                $html .= '<div class="radio-wrap not-active" data-size="'.$item->sizeData->id  .'">
+                                    <input type="radio" disabled value="'.$item->sizeData->{'name_'.$request->lang}  .'" id="radio'.$index.'" name="size">
+                                    <label for="radio1">
+                                        <b>'.$item->sizeData->{'name_'.$request->lang}  .'</b>
+                                    </label>
+                                </div>';
+            }else{
+                $html .= '<div class="radio-wrap" data-size="'.$item->sizeData->id  .'">
+                                    <input '.$this->checkChecked($checked).' type="radio" value="'.$item->sizeData->{'name_'.$request->lang}  .'" id="radio'.$index.'" name="size">
+                                    <label for="radio1">
+                                        <b>'.$item->sizeData->{'name_'.$request->lang}  .'</b>
+                                    </label>
+                                </div>';
+
+                $checked = false;
+            }
+
+
+
+            $index ++;
+        }
+
+        return response()->json($html
+            , 201);
+    }
+
+    public function checkChecked($flag){
+        if ($flag == true){
+            return 'checked';
+        }else{
+            return '';
+        }
+    }
+
     public function actionList(Request $request, $id)
     {
         $filter = CatalogCatalogCharacteristic::where('catalog_id','=',$id)
@@ -68,6 +125,11 @@ class ShopController
 
         $colorCurrent = $color[0]->{"name_".app()->getLocale()} ;
 
+
+        foreach ($size as $item){
+            $item->sizeData->exist = $this->checkExist($item->sizeData->id,$color[0]->color,$id);
+        }
+
         foreach ($color as $item){
             $image = json_decode($item->colorData->image, true);
             if (!empty($image)) {
@@ -106,6 +168,23 @@ class ShopController
         }
 
         return view("shop.item",array_merge($compact,['canAddNewFeedback' =>$canAddNewFeedback,'colorCurrent' =>$colorCurrent,'checkProducts' => $checkProducts, 'color' => $color, 'size' => $size, 'characteristic'=> $characteristic, 'company' => $company,'avgCompanyFeedback' => $avgCompanyFeedback ?? 0, 'countCompanyFeedback' => $countCompanyFeedback ?? 0,  'count_feedback' =>count($feedback),'rating' => $rating, 'feedback' => $feedback, 'currency' => $currency,'turkeyCurrency'=> $turkeyCurrency,'coefficient'=> $coefficient]));
+    }
+
+
+    public function checkExist($size,$color,$id){
+
+        $exist = ProductItem::where('size','=',$size)
+            ->where('color','=',$color)
+            ->where('item_id','=',$id)
+            ->where('count','>',0)
+            ->first();
+
+        if (!empty($exist->id)){
+            return true;
+        }else{
+            return  false;
+        }
+
     }
 
     public function actionFind()

@@ -189,7 +189,7 @@ class newOrderJob implements ShouldQueue
             foreach ($merchantOrders as $key => $value) {
                 $merchant = User::where('id', '=', $key)
                     ->first();
-                $merchant->order_id = $value;
+
                 Mail::to($merchant->email)->send(new MerchantNewOrder($merchant));
             }
             $admin->order_id = implode(',', $adminOrders);
@@ -217,7 +217,7 @@ class newOrderJob implements ShouldQueue
             foreach ($merchantOrders as $key => $value) {
                 $merchant = User::where('id', '=', $key)
                     ->first();
-                $merchant->order_id = $value;
+
                 Mail::to($merchant->email)->send(new MerchantNewOrder($merchant));
             }
 

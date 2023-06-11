@@ -93,6 +93,24 @@ class CatalogItemsExcelLoadService
             }
 
 
+            $data = CatalogCharacteristic::all();
+
+            $indexRowCharacteristic = 22;
+            $getLastRowToResult = 22 + count($data);
+
+            if (empty($row[11])){
+                $resultArrayParse[$i][$getLastRowToResult + 1] = 'Color value cannot be empty';
+                $resultError++;
+                continue;
+            }
+
+            if (empty($row[12])){
+                $resultArrayParse[$i][$getLastRowToResult + 1] = 'Size value cannot be empty';
+                $resultError++;
+                continue;
+            }
+
+
             $dataItem = [
                 'name' => [
                     'ru' => $row[0],
@@ -141,21 +159,22 @@ class CatalogItemsExcelLoadService
             $checkCatalog = $item->checkExist($dataItem);
             $modelCharacteristic =  new CatalogItemDynamicCharacteristic;
             $characteristic = new CharacteristicService($modelCharacteristic);
+            $productItemModel = new ProductItem();
+            $productItemService = new ProductItemSerice($productItemModel);
 
             if (!empty($checkCatalog->id)) {
                 $is_create = false;
                 $catalog_id = $checkCatalog;
                 $item->update($dataItem,$catalog_id->id,$user);
+                $characteristic->delete($catalog_id->id);
+                $productItemService->delete($catalog_id->id);
             } else {
                 $is_create = true;
                 $catalog_id = $item->create($dataItem,$user);
             }
 
 
-            $characteristic->delete($catalog_id->id);
-            $data = CatalogCharacteristic::all();
 
-            $indexRowCharacteristic = 22;
 
             foreach ($data as $rowData){
                 $rowArray = str_replace('"]', '', str_replace('["', '', $row[$indexRowCharacteristic] ));
@@ -178,7 +197,7 @@ class CatalogItemsExcelLoadService
                 $indexRowCharacteristic++;
             }
 
-            $getLastRowToResult = 22 + count($data);
+
 
             if ($is_create == true){
                 $resultArrayParse[$i][$getLastRowToResult] = 'Product create - successful. Article - '.$article;
@@ -273,10 +292,17 @@ class CatalogItemsExcelLoadService
                 'sale' => empty($row[9]) ? 0 : $row[9],
             ];
 
-            $productItemModel = new ProductItem();
-            $productItemService = new ProductItemSerice($productItemModel);
 
-            $productItemService->create($productData, $catalog_id->id);
+            $checkProductItem = ProductItem::where('color','=',$colorData)
+                                ->where('size','=',$sizeData)
+                                ->where('item_id','=',$catalog_id->id)
+                                ->first();
+            if (!empty($checkProductItem->id)){
+                $productItemService->update($productData, $catalog_id->id);
+            }else{
+                $productItemService->create($productData, $catalog_id->id);
+            }
+
             $i++;
         }
 
