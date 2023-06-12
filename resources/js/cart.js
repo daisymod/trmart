@@ -29,6 +29,7 @@ jQuery(document).ready(function () {
                 count: parseInt(jQuery(this).parent().find("input").val()),
                 size: jQuery(this).parents(".right").find(".variants-radios input:checked").val(),
                 color: color[0].dataset.colorid,
+                
             },
             success: function (data) {
                 setCountPrice(data);
@@ -44,7 +45,7 @@ jQuery(document).ready(function () {
         count = count + 1;
         jQuery(this).parent().find("input").val(count);
         let box = jQuery(this).parents(".line").eq(0);
-        updateCountPrice(box);
+        updateCountPrice(box,'plus');
         $('.payment-method__block').hide()
         $('#get-del-price').show()
     });
@@ -67,7 +68,7 @@ jQuery(document).ready(function () {
         updateCountPrice(box);
     });
 
-    function updateCountPrice(box) {
+    function updateCountPrice(box,type) {
         let key = jQuery(box).data("key");
         jQuery.ajax({
             url: "/cart/set",
@@ -105,6 +106,25 @@ jQuery(document).ready(function () {
 
 
 
+            },
+            error: function (error) {
+
+                console.log(11111)
+                jQuery.ajax({
+                    url: "/cart/set",
+                    type: "POST",
+                    data: {
+                        key: key,
+                        count: 0
+                    },
+                    success: function (data) {
+                        jQuery("#count-items-cart").text(data.items.length);
+                        setCountPrice(data);
+                        jQuery(box).remove()
+                        $('.payment-method__block').hide()
+                        $('#get-del-price').show()
+                    }
+                });
             }
         });
     }

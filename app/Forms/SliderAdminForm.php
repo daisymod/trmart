@@ -16,5 +16,7 @@ class SliderAdminForm extends BasicForm
         "name" => [TextboxField::class],
         "link" => [TextboxField::class],
         "image" => [ImagesField::class, "width" => 1920, "height" => 400],
+        "dt_start" => [DateTimeField::class],
+        "dt_end" => [DateTimeField::class],
     ];
 }

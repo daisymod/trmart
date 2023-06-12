@@ -93,7 +93,7 @@
                 <div class="right">
 
                     <p class="color-info">@lang('products.color'): <span id="color-text">{{$color[0]->colorData->{'name_'.app()->getLocale()} }} </span></p>
-                    <div class="colors-slider-wrap">
+                    <div class="colors-slider-wrap"   >
                         <div class="slider-navigation">
                             <button type="button" class="slick-next" id="color-slick-next"><img src="/img/arr-right.svg" alt=""></button>
                             <button type="button" class="slick-prev" id="color-slick-prev"><img src="/img/arr-right.svg" alt=""></button>

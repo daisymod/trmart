@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Slider;
+use Carbon\Carbon;
 
 class SliderService
 {
@@ -13,7 +14,9 @@ class SliderService
 
     public function index(){
         $items =  $this->slider->query()
-            ->orderByDesc('id')
+            ->where('dt_start','<=',Carbon::now())
+            ->where('dt_end','>=',Carbon::now())
+            ->orderByDesc('dt_start')
             ->get();
 
         foreach ($items as $item){

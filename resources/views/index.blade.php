@@ -11,11 +11,13 @@
             @foreach($slider as $item)
                 <a href="{{$item->link}}">
                     <div class="item" style="background-image: url({{$item->main_img}})">
-                        <div class="item-wrap">
-                            <div class="persent">
-                                <p><span class="text">{{$item->name}}</span></p>
+                        @if(!empty($item->name))
+                            <div class="item-wrap">
+                                <div class="persent">
+                                    <p><span class="text">{{$item->name}}</span></p>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </a>
             @endforeach

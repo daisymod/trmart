@@ -35,6 +35,7 @@ class CatalogItemController
 
     public function actionListGet(CatalogItemActionService $service,Request $request)
     {
+        
         Gate::authorize("catalog-item-list");
         return view("catalog_item.list", $service->actionList($request));
     }
@@ -77,8 +78,7 @@ class CatalogItemController
 
         Gate::authorize("catalog-item-add");
         $data  = $this->item->create($request->all(),Auth::user());
-
-        for ($index=0;$index<count($request->compound);$index++){
+        for ($index=0;$index<count($request->compound['ru']);$index++){
             if (isset($request->percent[$index])){
                 $array = [
                     'name_ru' => $request->compound['ru'][$index] ?? null,
@@ -142,7 +142,7 @@ class CatalogItemController
         $this->characteristic->delete($id);
         $this->product->delete($id);
 
-        for ($index=0;$index<count($request->compound);$index++){
+        for ($index=0;$index<count($request->compound['ru']);$index++){
             if (isset($request->percent[$index])){
                 $array = [
                     'name_ru' => $request->compound['ru'][$index] ?? null,

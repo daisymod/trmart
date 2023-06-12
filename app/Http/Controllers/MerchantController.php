@@ -19,6 +19,8 @@ use App\Http\Resources\OrderItemResource;
 use App\Http\Resources\OrdersResource;
 use App\Mail\RejectNewItemMail;
 use App\Mail\RejectVerificationMerchantMail;
+use App\Models\CatalogCharacteristicItem;
+use App\Models\CatalogItem;
 use App\Models\City;
 use App\Models\Company;
 use App\Models\Country;
@@ -28,6 +30,7 @@ use App\Models\KPPostCode;
 use App\Models\Merchant;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\ProductItem;
 use App\Models\TRLocation;
 use App\Models\TurkeyRegion;
 use App\Models\User;
@@ -323,10 +326,10 @@ class MerchantController extends Controller
                     });
                 })
                 ->when(empty($request->to),function ($q){
-                    $q->whereBetween('created_at',[Carbon::now()->subDays(7)->format('Y-m-d h:i:s'),Carbon::now()->addDays(1)->format('Y-m-d h:i:s')]);
+                    $q->whereBetween('created_at',[Carbon::now()->subDays(7)->format('Y-m-d 00:00"00'),Carbon::now()->format('Y-m-d 23:59:59')]);
                 })
                 ->when(!empty($request->to),function ($q) use ($request){
-                    $q->whereBetween('created_at',[Carbon::parse($request->from)->format('Y-m-d h:i:s'),Carbon::parse($request->to)->addDays(1)->format('Y-m-d h:i:s')]);
+                    $q->whereBetween('created_at',[Carbon::parse($request->from)->format('Y-m-d 00:00"00'),Carbon::parse($request->to)->format('Y-m-d 23:59:59')]);
                 })
                 ->when(!empty($request->orders_status) &&  ($request->orders_status != 'all' ),function ($q) use ($request){
                         $q->where('status','=',$request->orders_status);
@@ -409,13 +412,29 @@ class MerchantController extends Controller
     }
 
     public function exportOrders(Request $request){
-        $response =  Excel::download(new OrderExport($request->from,$request->to,$request->merchant ?? null, $request->order_status ?? null), 'Items.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+        $response =  Excel::download(new OrderExport($request->from,$request->to,$request->merchant ?? null, $request->orders_status ?? null), 'Items.xlsx', \Maatwebsite\Excel\Excel::XLSX);
         ob_end_clean();
         return $response;
     }
 
 
     public function cancelOrder(Order $id){
+
+        $orderItem = OrderItem::where('order_id','=',$id->id)
+            ->first();
+
+        $size = CatalogCharacteristicItem::where('catalog_characteristic_id','=',16)
+            ->where('name_tr','=',$orderItem->size)
+            ->first();
+
+        $item = ProductItem::where('item_id','=',$orderItem->catalog_item_id)
+                ->where('color','=',$orderItem->color)
+                ->where('size','=',$size->id)
+                ->first();
+
+        $item->count = $item->count + $orderItem->count;
+        $item->save();
+
         $id->status = 7;
         $id->save();
         return Redirect::to(route("merchant.orders"));

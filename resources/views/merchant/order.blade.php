@@ -152,13 +152,10 @@
 
 
                             @if(Auth::user()->role == 'merchant' && $order[0]['status_int'] == 1)
-                                <form class="load-form-file-form" method="POST" action="{{ route("merchant.onWay",['id' => $order[0]['id']]) }}" enctype="multipart/form-data">
-                                    {{ csrf_field() }}
-                                    <button style="width: 100%; margin-top: 10px ; margin-bottom: 10px; height: 50px" class="green-btn product-btn1">@lang('system.setOnWay') </button>
-                                </form>
+                                <a data-question="{{ trans('system.question100') }}" href="{{ route("merchant.onWay",['id' => $order[0]['id']]) }}" style="width: 100%;height: 40px;display: flex;align-content: center;align-items: center;justify-content: center;" class="green-btn product-btn1">@lang('system.setOnWay')</a>
                             @endif
                             @if(Auth::user()->role == 'admin' && ($order[0]['status_int'] == 1 || $order[0]['status_int'] == 2 || $order[0]['status_int'] == 3  ))
-                                <a data-question="Отменить заказ?" href="{{ route('merchant.cancel', $order[0]['id'] ) }}" class="order__canceled">@lang('customer.orders.cancel_the_order')</a>
+                                <a data-question="{{ trans('system.question100') }}" href="{{ route('merchant.cancel', $order[0]['id'] ) }}" class="order__canceled">@lang('customer.orders.cancel_the_order')</a>
                             @endif
                            <!-- <div class="order__canceled_title text-center">@lang('customer.orders.with_a_refund')</div> -->
                         </div>

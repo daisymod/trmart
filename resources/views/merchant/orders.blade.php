@@ -40,7 +40,7 @@
                                 <label for="from">
                                     @lang('system.q1')
                                     @if( isset($_GET['from']))
-                                        <input type="date" id="from-data" name="from" class="form-control" value="{{\Carbon\Carbon::parse($_GET['from'])->format('Y-m-d')}}">
+                                        <input type="date" id="from-data" name="from" class="form-control" value="{{  \Carbon\Carbon::parse($_GET['from'])->format('Y-m-d')}}">
                                     @else
                                         <input type="date" id="from-data" name="from" class="form-control" value="{{ \Carbon\Carbon::now()->subDays(7)->format('Y-m-d')}}">
                                     @endif
@@ -59,10 +59,10 @@
                         </div>
                     </form>
                     <form class="load-form-file-form" method="POST" action="{{ route("merchant.exportOrders") }}" enctype="multipart/form-data">
-                            <input type="hidden" id="merchant-export" name="merchant" value="all">
-                            <input type="hidden" id="orders_status-export" name="orders_status" value="all">
-                            <input type="hidden" id="from-data-export" name="from" class="form-control" value="{{ \Carbon\Carbon::now()->subDays(7)->format('Y-m-d')}}">
-                            <input type="hidden" id="to-data-export"  name="to" class="form-control" value="{{ \Carbon\Carbon::now()->format('Y-m-d')}}">
+                            <input type="hidden" id="merchant-export" name="merchant" value="{{  isset($_GET['merchant']) ? $_GET['merchant'] : 'all' }}">
+                            <input type="hidden" id="orders_status-export" name="orders_status" value="{{  isset($_GET['orders_status']) ? $_GET['orders_status'] : 'all' }}">
+                            <input type="hidden" id="from-data-export" name="from" class="form-control" value="{{isset($_GET['from']) ? $_GET['from'] :  \Carbon\Carbon::now()->subDays(7)->format('Y-m-d')}}">
+                            <input type="hidden" id="to-data-export"  name="to" class="form-control" value="{{ isset($_GET['to']) ? $_GET['to'] :  \Carbon\Carbon::now()->format('Y-m-d')}}">
                         {{ csrf_field() }}
                         <button class="green-btn product-btn1">@lang('system.o15') </button>
                     </form>
@@ -128,8 +128,8 @@
                                             <option value="4">@lang('customer.orders.status.status_4')</option>
                                             <option value="5">@lang('customer.orders.status.status_5')</option>
                                             <option value="6">@lang('customer.orders.status.status_6')</option>
-                                            <option value="7">@lang('customer.orders.status.status_0')</option> 
-                                           
+                                            <option value="7">@lang('customer.orders.status.status_0')</option>
+
                                         </select>
                                     </td>
                                     <td>

@@ -2,10 +2,13 @@
 
 namespace App\Services;
 
+use App\Models\CatalogCharacteristicItem;
 use App\Models\CatalogItem;
+use App\Models\ProductItem;
 use App\Models\UserCart;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class CartService
 {
@@ -70,9 +73,34 @@ class CartService
     {
         $cart = session()->get("cart");
         $key = "id{$id}size{$size}color{$color}";
+
         if (!empty($cart[$key])) {
             $count = $cart[$key]["count"] + (int)$count;
+        }else{
+            $count = 1;
         }
+
+        $sizeId = CatalogCharacteristicItem::select('id')
+            ->where('catalog_characteristic_id','=',16)
+            ->where('name_tr','=',request()->get("size"))
+            ->get()->toArray();
+
+        $result = [];
+        array_walk_recursive($sizeId, function ($item, $key) use (&$result) {
+            $result[] = $item;
+        });
+
+
+        $item = ProductItem::where('item_id','=',request()->get("id"))
+            ->whereIn('size',$result)
+            ->where('color','=',request()->get("color"))
+            ->first();
+
+
+        if ($item->count - $count  <= 0){
+            return 422;
+        }
+       
         $cart[$key] = compact("id", "count", "size","color");
         session()->put("cart", $cart);
         return self::getCart(false);
@@ -89,6 +117,20 @@ class CartService
         } else {
             $cart[$key]["count"] = $count;
             $item = CatalogItem::query()->find($cart[$key]["id"]);
+
+            $sizeId = CatalogCharacteristicItem::where('catalog_characteristic_id','=',16)
+                ->where('name_tr','=',$cart[$key]["size"])
+                ->first();
+
+            $item = ProductItem::where('item_id','=',$cart[$key]["id"])
+                ->where('size','=',$sizeId->id)
+                ->where('color','=',$cart[$key]["color"])
+                ->first();
+
+            if ($item->count - $cart[$key]["count"] <= 0){
+                return 422;
+            }
+
             $p = 0;
             if (!empty((float)$item->getAttribute("price_sale"))) {
                 $p = (float)$item->getAttribute("price_sale");

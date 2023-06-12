@@ -37,7 +37,7 @@ class OrderExport implements FromArray,WithColumnWidths,ShouldQueue
             ->when($this->status != 'all' && $this->status != null,function ($q){
                 $q->where('status','=',$this->status);
             })
-            ->whereBetween('created_at',[Carbon::parse($this->from)->format('Y-m-d h:i:s'),Carbon::parse($this->to)->addDays(1)->format('Y-m-d h:i:s')])
+            ->whereBetween('created_at',[Carbon::parse($this->from)->format('Y-m-d 00:00:00'),Carbon::parse($this->to)->format('Y-m-d 23:59:59')])
             ->with(['commission',
                 'items',
                 'items.item',
@@ -55,8 +55,8 @@ class OrderExport implements FromArray,WithColumnWidths,ShouldQueue
         $total_delivery_kz_w = 0;
         $total_delivery_tr_w = 0;
         $total_sale_order = 0 ;
+
         foreach ($orders as $order){
-            $order->price = $order->price * $order->items[0]->count;
             $order->delivery_sum = $order->delivery_price;
 
             $order->delivery_dt_end = Carbon::parse($order->created_at)->addDays(15)->format('Y-m-d');
@@ -65,7 +65,7 @@ class OrderExport implements FromArray,WithColumnWidths,ShouldQueue
             $order->left = $this->num_decline( $order->left, [trans('system.day'), trans('system.day1'), trans('system.day2')] );
 
 
-            $total_price += $order->commission[0]['total_price'] ?? 0;
+            $total_price += $order->price ?? 0;
             $total_commission += $order->commission[0]['commission_price'] ?? 0;
             $total_delivery_kz += $order->delivery_price ?? 0;
             $total_delivery_tr += $order->tr_delivery_price ?? 0;
@@ -73,7 +73,9 @@ class OrderExport implements FromArray,WithColumnWidths,ShouldQueue
             $total_delivery_tr_w += $order->delivery_tr_weighing ?? 0;
             $total_sale_order += $order->sale ?? 0;
         }
+
         $orders->total_price = $total_price;
+
         $orders->total_commission = $total_commission;
 
         $orders->total_delivery_kz = $total_delivery_kz;
@@ -140,7 +142,7 @@ class OrderExport implements FromArray,WithColumnWidths,ShouldQueue
                     $array,
                     $itemArray,
                     $arrayTotal,
-                    [$orders->total_price_without_commission,$orders->total_price]
+                    [$orders->total_price_without_commission,$orders->total_price - $orders->total_commission]
                 ];
             }else{
                 $array = [
@@ -193,7 +195,14 @@ class OrderExport implements FromArray,WithColumnWidths,ShouldQueue
                 }
 
                 $arrayTotal = [
-                    ['общая сумма за все заказы','общая сумма комиссии за все заказы','общая сумма  доставки за все заказы в тенге','общая сумма доставки за все заказы в тенге (из Турции в Казахстан)','общая сумма "доставка КЗ для юзера" (казпочта)','общая сумма "доставка Турция для юзера" (из Турции в Казахстан)','Сумма заказа с доставкой','общая сумма Скидки']
+                    ['общая сумма за все заказы',
+                        'общая сумма комиссии за все заказы',
+                        'общая сумма  доставки за все заказы в тенге',
+                        'общая сумма доставки за все заказы в тенге (из Турции в Казахстан)',
+                        'общая сумма "доставка КЗ для юзера" (казпочта)',
+                        'общая сумма "доставка Турция для юзера" (из Турции в Казахстан)',
+                        'Сумма заказа с доставкой',
+                        'общая сумма Скидки']
                 ];
 
                 return [
@@ -203,7 +212,16 @@ class OrderExport implements FromArray,WithColumnWidths,ShouldQueue
                     ['','',''],
                     ['','',''],
                     $arrayTotal,
-                    [$orders->total_price,$orders->total_commission,$orders->total_delivery_kz,$orders->total_delivery_tr,$orders->total_delivery_kz_w,$orders->total_delivery_tr_w,($orders->total_delivery_kz + $orders->total_price ),$orders->total_sale_order]
+                    [$orders->total_price,
+                        $orders->total_commission,
+                        $orders->total_delivery_kz_w,
+                        $orders->total_delivery_tr_w,
+                        $orders->total_delivery_kz,
+                        $orders->total_delivery_tr,
+
+                        ($orders->total_delivery_kz + $orders->total_delivery_tr + $orders->total_price )
+
+                        ,$orders->total_sale_order]
                 ];
             }
 

@@ -95,7 +95,7 @@ jQuery(document).ready(function () {
                 active = form.children[0].children[1].children[index].innerHTML;
             }
         }
-        i = totalRowCount
+        i = totalRowCount - 1;
 
 
         var compound  = '<td>\n' +

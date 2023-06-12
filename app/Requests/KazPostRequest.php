@@ -23,6 +23,7 @@ class KazPostRequest extends BaseRequest
 
     public function checkStatus($order)
     {
+        //print_r("\n"."https://track.post.kz/api/v2/$order->barcode/events"."\n");
         $this->request = new Request(
             'GET',
             'https://track.post.kz/api/v2/'.$order->barcode.'/events',
@@ -45,6 +46,7 @@ class KazPostRequest extends BaseRequest
         try
         {
             DB::beginTransaction();
+           // print_r($order->barcode);
             $serverResponse = $this->checkStatus($order);
             $this->updateStatus($order, $serverResponse->events);
             $serverResponse->events;
@@ -58,6 +60,7 @@ class KazPostRequest extends BaseRequest
 
     public function updateStatus($order, $events)
     {
+
         switch ($order->status){
             case 4:
                 $this->storeOnWayStatus($order, $events);

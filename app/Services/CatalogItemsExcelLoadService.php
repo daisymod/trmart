@@ -68,23 +68,29 @@ class CatalogItemsExcelLoadService
 
     public static function load($excelArray,$user)
     {
+        $header = $excelArray[0];
         unset($excelArray[0]);
         $characteristicData = array();
         $resultArrayParse = $excelArray;
         $i = 1;
         $resultSuccess = 0;
         $resultError = 0;
+        $flagDeleteBefore = true;
+        $array_update = array();
+
         foreach ($excelArray as $number => $row) {
             if ($row[0] == null && $row[1] == null  && $row[2] == null ){
                 break;
             }
             $images = explode(',', $row[7]);
+
+
             $catalog = str_replace('"]', '', str_replace('["', '', $row[16]));
             $merchant = str_replace('"]', '', str_replace('["', '', $row[17]));
             $getLastId = CatalogItem::orderbyDesc('id')->first();
             $article = substr("0000000000".$getLastId->id + 1, strlen($getLastId->id + 1));
 
-            $imageResult = self::saveParseImage($images[0]);
+            $imageResult = self::saveParseImage(str_replace('[{"file":','',$images[0]));
 
             if ($user->role == 'admin'){
                 $loadUser = empty($merchant) ? 0 : $merchant;
@@ -163,13 +169,21 @@ class CatalogItemsExcelLoadService
             $characteristic = new CharacteristicService($modelCharacteristic);
             $productItemModel = new ProductItem();
             $productItemService = new ProductItemSerice($productItemModel);
+            $compoundModel = new ItemCompound();
+            $compound = new CompoundService($compoundModel);
 
             if (!empty($checkCatalog->id)) {
                 $is_create = false;
-                $catalog_id = $checkCatalog;
-                $item->update($dataItem,$catalog_id->id,$user);
+
+               if (!in_array($checkCatalog->id,$array_update)){
+                   $catalog_id = $checkCatalog;
+                   $item->update($dataItem,$catalog_id->id,$user);
+
+                   $productItemService->delete($catalog_id->id);
+                   array_push($array_update,$checkCatalog->id);
+               }
                 $characteristic->delete($catalog_id->id);
-                $productItemService->delete($catalog_id->id);
+                $compound->delete($catalog_id->id);
             } else {
                 $is_create = true;
                 $catalog_id = $item->create($dataItem,$user);
@@ -179,24 +193,37 @@ class CatalogItemsExcelLoadService
 
 
             foreach ($data as $rowData){
+                
                 $rowArray = str_replace('"]', '', str_replace('["', '', $row[$indexRowCharacteristic] ));
 
-                $rowArray = explode(",", $rowArray);
+                $rowArray = explode("\",\"", $rowArray);
 
-                if (empty($rowArray[0]) && empty($rowArray[1]) && empty($rowArray[2]) ){
+                $characteristicID = CatalogCharacteristic::where('name_ru','=',$header[$indexRowCharacteristic])
+                    ->orWhere('name_tr','=',$header[$indexRowCharacteristic])
+                    ->orWhere('name_kz','=',$header[$indexRowCharacteristic])
+                    ->first();
+                if (!empty($characteristicID->id)){
+                    $characteristic_id = $characteristicID->id;
+                }else{
+                    $characteristic_id = $rowData->id;
+                }
+
+                if ((empty($rowArray[0]) && empty($rowArray[1]) && empty($rowArray[2]))){
+                    $indexRowCharacteristic++;
                     continue;
                 }else{
                     $insert = [
                         'item_id' => $catalog_id->id,
-                        'characteristic_id' => $rowData->id,
+                        'characteristic_id' =>$characteristic_id,
                         'name_ru' => $rowArray[0],
                         'name_tr' => $rowArray[1],
                         'name_kz' => $rowArray[2],
                     ];
 
                     $characteristic->create($insert);
+                    $indexRowCharacteristic++;
                 }
-                $indexRowCharacteristic++;
+
             }
 
 
@@ -244,8 +271,7 @@ class CatalogItemsExcelLoadService
 
 
 
-            $compoundModel = new ItemCompound();
-            $compound = new CompoundService($compoundModel);
+
 
             foreach ($compoundArray as $item) {
                 $compound->create($item, $catalog_id->id);
@@ -308,7 +334,7 @@ class CatalogItemsExcelLoadService
             $i++;
         }
 
-        Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
+        //Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
 
         return $characteristicData;
     }

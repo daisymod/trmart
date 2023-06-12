@@ -498,6 +498,8 @@ $(document).ready(function () {
     $('.home-slider').slick({
         dots: true,
         slidesToShow: 1,
+        autoplay: true,
+        autoplaySpeed: 3000,
         slidesToScroll: 1,
         arrows: true,
         infinite: true,
@@ -529,9 +531,10 @@ $(document).ready(function () {
     $('.colors-slider').slick({
         dots: false,
         slidesToShow: 1,
+        variableWidth: true,
         slidesToScroll: 1,
         arrows: true,
-        infinite: true,
+        infinite: false,
         prevArrow: $('.colors-slider-wrap .slider-navigation .slick-prev'),
         nextArrow: $('.colors-slider-wrap .slider-navigation .slick-next'),
         responsive: [

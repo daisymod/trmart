@@ -18,6 +18,7 @@ use App\Models\CatalogItem;
 use App\Models\Order;
 use App\Models\OrderCommission;
 use App\Models\OrderItem;
+use App\Models\ProductItem;
 use App\Pay\Requests\PaymentRequests;
 use App\Services\CartService;
 use App\Services\OrderService;
@@ -30,6 +31,7 @@ use Illuminate\Http\Request;
 use Illuminate\Queue\Jobs\Job;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class CartController extends Controller
@@ -41,8 +43,21 @@ class CartController extends Controller
 
     public function actionAdd()
     {
-        $data = CartService::add(request()->get("id"), request()->get("count"), request()->get("size"), request()->get("color"));
 
+        $item = ProductItem::where('item_id','=',request()->get("id"))
+                    ->where('size','=',request()->get("size"))
+                    ->where('color','=',request()->get("color"))
+                    ->first();
+
+
+
+        $data = CartService::add(request()->get("id"), request()->get("count"), request()->get("size"), request()->get("color"));
+        if ($data == 422){
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+                trans('system.not-pr-found')
+            ]);
+            throw $error;
+        }
         $this->cart->delete(Auth::user()->id ?? 0);
         $this->cart->create($data);
 
@@ -141,8 +156,15 @@ class CartController extends Controller
 
     public function actionSet()
     {
+
         $data = CartService::set(request()->get("key"), request()->get("count"));
 
+        if ($data == 422){
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+                trans('system.not-pr-found')
+            ]);
+            throw $error;
+        }
         $this->cart->delete(Auth::user()->id ?? 0);
         $this->cart->create($data);
         return CartService::getCart();
@@ -198,11 +220,13 @@ class CartController extends Controller
             if (isset($kps->Sum)) {
                 $test[] = [$count, $product->id, $weight, $price, $kps->Sum];
                 $deliveryPrice   = doubleval($kps->Sum);
-                $deliveryTrPrice = doubleval($product->weight) * $td;
+                $deliveryTrPrice = doubleval($product->weight) * $td * $item['count'];
+                Log::info(print_r('tenge -'.$deliveryPrice,true));
+                Log::info(print_r('tr -'.$deliveryTrPrice,true));
                 $delivery = $delivery + ($deliveryPrice * $item['count']);
                 $deliveryTr = $deliveryTr + ($deliveryTrPrice * $item['count']);
                 $arr['items'][$key] = $deliveryPrice + $deliveryTrPrice;
-                $total = $total + (($deliveryPrice + $deliveryTrPrice) * $item['count']);
+                $total = $total + (($deliveryPrice + $deliveryTrPrice));
             } else {
                 return response()->json(['name' => [$kps->ResponseInfo->ResponseText]], 422);
             }

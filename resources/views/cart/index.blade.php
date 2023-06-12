@@ -56,7 +56,7 @@
                                     <div class="product-count">
                                         <button type="button" class="btn-minus cart-minus"><span class="minus">-</span>
                                         </button>
-                                        <input type="text" class="input-number" value="{{ $i->count }}" min="1">
+                                        <input type="text" readonly class="input-number" value="{{ $i->count }}" min="1">
                                         <button type="button" class="btn-plus cart-plus"><span>+</span></button>
                                     </div>
                                 </td>

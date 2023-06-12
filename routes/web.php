@@ -56,7 +56,7 @@ Route::group(["middleware" => ["auth"]], function () {
         Route::post("/merchant/pays/export", [\App\Http\Controllers\MerchantController::class, "exportOrders"])->name("merchant.exportOrders");
 
         Route::get("/merchant/orders/cancel/{id}", [\App\Http\Controllers\MerchantController::class, "cancelOrder"])->name("merchant.cancel");
-        Route::post("/merchant/orders/onway/{id}", [\App\Http\Controllers\MerchantController::class, "setStatusOnWay"])->name("merchant.onWay");
+        Route::get("/merchant/orders/onway/{id}", [\App\Http\Controllers\MerchantController::class, "setStatusOnWay"])->name("merchant.onWay");
 
         Route::get("/catalog_item/stock", [\App\Http\Controllers\CatalogItemController::class, "actionStockList"])->name("catalog_item.stock.list");
         Route::post("/catalog_item/stock", [\App\Http\Controllers\CatalogItemController::class, "actionStockSave"]);

@@ -1,5 +1,7 @@
 <?php
 return [
+    'question100' =>'Siparişinizin durumunu değiştirmek istediğinizden emin misiniz? Bu eylem değiştirilemez.',
+    'not-pr-found' =>'Üzgünüm, ürün stokta yok.',
     "catalog_product" => 'katalog',
     'admin' => 'Yöneticiler',
     'cancel' => 'İptal',

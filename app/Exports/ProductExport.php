@@ -105,6 +105,13 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
 
             }
 
+            $getImg = json_decode($item->catalogItem->image, true);
+            if (!empty($getImg)) {
+                $image =  $getImg[0]["img"];
+            } else {
+                $image =  "/i/no_image.png";
+            }
+
             array_push($result,array_merge([
                 $item->catalogItem->name_ru,
                 $item->catalogItem->name_kz,
@@ -113,7 +120,7 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
                 $item->catalogItem->body_ru,
                 $item->catalogItem->body_kz,
                 $item->catalogItem->body_tr,
-                $item->catalogItem->image,
+                'https://turkiyemart.com'.$image,
                 $item->catalogItem->article,
                 $item->catalogItem->sale,
                 $item->catalogItem->price,
