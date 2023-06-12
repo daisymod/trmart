@@ -52,12 +52,13 @@ class newOrderJob implements ShouldQueue
         $userOrders = array();
         $merchantOrders = array();
         $adminOrders = array();
+        $client = new KazPost();
         foreach ($cart["items"] as $item) {
             $coefficient = CurrencyRate::where('currency_id','=',2)
                 ->where('currency_to_id','=',1)
                 ->first();
             $rw = CatalogItem::query()->where('id', $item->id)->value('weight');
-            $real_weight = strlen($rw) ? $rw : '200';
+            $real_weight = strlen($rw) ? $rw * $item->count : '200';
             $price = str_replace(" ", '', $item->price);
             $postcode = KPPostCode::query()->where('id', $this->request["postcode_id"])->value('postcode');
             $td = DeliveryPrice::query()->where('id', 1)->value('gr_price');
@@ -89,8 +90,8 @@ class newOrderJob implements ShouldQueue
             $order->time = $this->request["time"] ?? '00:00';
             $order->comment = $this->request["comment"];
             $order->pickup = $this->request["pickup"] ?? "N";
-            $order->delivery_price =  intval($this->request["delivery"]) / count($cart["items"]) * $item->count ?? null;
-            $order->tr_delivery_price = $this->request["deliveryTr"] ?? null;
+
+
             $order->payment = ceil($price * $coefficient->rate_end) * $item->count;
 
             $product = CatalogItem::where('id','=',$item->id)
@@ -102,6 +103,18 @@ class newOrderJob implements ShouldQueue
             $order->sale = ceil($sale * $coefficient->rate_end) * $item->count;
 
             $order->price = ceil($price * $coefficient->rate_end) * $item->count;
+
+
+
+            Log::info(print_r($order->real_weight,true));
+            Log::info(print_r($price,true));
+            Log::info(print_r($order->postcode,true));
+            $kps = $client->getPostRate($order->real_weight, $order->price, $order->postcode);
+            Log::info(print_r($kps->Sum ,true));
+
+            $order->delivery_price =  $kps->Sum  ?? null;
+            $order->tr_delivery_price = (doubleval($real_weight) * $td ) ?? null;
+
             $order->save();
 //                $kpLetter = $client->getAddrLetter($order);
 //                if ($kpLetter->Barcodes) {

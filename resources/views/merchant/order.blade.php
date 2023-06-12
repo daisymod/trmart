@@ -53,7 +53,7 @@
                                     <td><span>{{ $item['size'] }}</span></td>
                                     <td><span>{{  \App\Models\CatalogCharacteristicItem::where('id','=',$item['color'] )->first()->{'name_'.app()->getLocale()} ?? '' }}</span></td>
                                     <td><span>{{ $item['count'] }}</span></td>
-                                        <td><span id="price-product-tr">{{ number_format($item['price'], 2, '.', ' ') }} ₸</span>
+                                        <td><span id="price-product-tr">{{ number_format($item['price'], 2, '.', ' ') }} ₺l</span>
                                         <span id="price-product-kz">{{$item['price_tenge']}} ₸</span></td>
                                     <td>
                                         <a href="{{ route("shop.item", $item['catalog_item_id']) }}" class="arrow"><img src="/img/arrow-right-small.svg" alt=""></a>

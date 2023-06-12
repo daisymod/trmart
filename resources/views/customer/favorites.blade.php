@@ -40,12 +40,12 @@
                 <div class="sale-items" id="sale-items">
                     @foreach($data as $item)
                         <div class="sale-item">
-                            <a href="#" class="img-wrap">
+                            <a href="{{ route('shop.item',['id' => $item['catalog_items_id'] ]) }}" class="img-wrap">
                                 <img src="{{ asset($item['image'][0]['file']) }}" alt="">
                             </a>
                             <a class="delete-product" href="{{ route("customer.del", $item['id']) }}">&times;</a>
                             <p>
-                                <span class="new price-product" data-price="1000">{{ number_format($item['price'], 0, '', ' ') }} ₺l</span>
+                                <span class="new price-product" data-price="{{$item['price']}}">{{ number_format($item['price'], 0, '', ' ') }} ₺l</span>
                             </p>
                             <span class="text">{{ $item['name_ru'] }}</span>
                             <span class="text">{{ $item['brand'] }}</span>

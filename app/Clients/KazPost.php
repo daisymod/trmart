@@ -5,6 +5,7 @@ namespace App\Clients;
 use App\Enums\KazPost\Enums;
 use App\Models\City;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use SoapClient;
 use Throwable;
 
@@ -50,7 +51,7 @@ class KazPost
                     'SndrStreet'        => Enums::SndrStreet,
                     'Weight'            => $order->real_weight / 1000,
                     'DeclaredValue'     => $order->price,
-                    'DeliverySum'       => $order->delivery_kz_weighing + $order->delivery_tr_weighing, //'CashOnDelivery' => $order->delivery_price,
+                    'DeliverySum'       => $order->delivery_kz_weighing, //'CashOnDelivery' => $order->delivery_price,
                     'ProductCode'       => 'P103',
                     'Marks' => [
                         'Mark'          => 'returnAfter'
@@ -100,6 +101,9 @@ class KazPost
 
     public function getPostRate($weight, $price, $postcode)
     {
+        Log::info(print_r($weight,true));
+        Log::info(print_r($price,true));
+        Log::info(print_r($postcode,true));
         try {
             $opts = array(
                 'http' => array(
@@ -128,7 +132,7 @@ class KazPost
                     'To' => $postcode
                 ]
             ];
-
+            Log::info(print_r($client->GetPostRate($body),true));
             return $client->GetPostRate($body);
         }
         catch(Exception $e) {

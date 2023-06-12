@@ -54,14 +54,14 @@ class ShopController
             if (!in_array($item->sizeData->id,$result)){
                 $html .= '<div class="radio-wrap not-active" data-size="'.$item->sizeData->id  .'">
                                     <input type="radio" disabled value="'.$item->sizeData->{'name_'.$request->lang}  .'" id="radio'.$index.'" name="size">
-                                    <label for="radio1">
+                                    <label for="radio'.$index.'">
                                         <b>'.$item->sizeData->{'name_'.$request->lang}  .'</b>
                                     </label>
                                 </div>';
             }else{
                 $html .= '<div class="radio-wrap" data-size="'.$item->sizeData->id  .'">
                                     <input '.$this->checkChecked($checked).' type="radio" value="'.$item->sizeData->{'name_'.$request->lang}  .'" id="radio'.$index.'" name="size">
-                                    <label for="radio1">
+                                    <label for="radio'.$index.'">
                                         <b>'.$item->sizeData->{'name_'.$request->lang}  .'</b>
                                     </label>
                                 </div>';

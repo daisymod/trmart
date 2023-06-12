@@ -23,6 +23,7 @@ class FavoriteResource extends JsonResource
         return [
             'id'            => $this->id,
             'user_id'       => $this->user_id,
+            'catalog_items_id'       => $this->catalog_items_id,
             'catalog_id'    => $product[0]['catalog_id'],
             'name_ru'       => $product[0]['name_ru'],
             'name_kz'       => $product[0]['name_kz'],

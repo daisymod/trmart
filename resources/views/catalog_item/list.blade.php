@@ -162,7 +162,7 @@
                         </table>
 
                         <div class="Pager2">
-                            {{ $records->onEachSide(1)->links( "pagination::bootstrap-4") }}
+                            {{ $records->withQueryString()->links( "pagination::bootstrap-4") }}
                         </div>
 
                     </div>

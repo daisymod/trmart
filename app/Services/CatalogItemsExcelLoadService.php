@@ -100,12 +100,14 @@ class CatalogItemsExcelLoadService
 
             if (empty($row[11])){
                 $resultArrayParse[$i][$getLastRowToResult + 1] = 'Color value cannot be empty';
+                $i++;
                 $resultError++;
                 continue;
             }
 
             if (empty($row[12])){
                 $resultArrayParse[$i][$getLastRowToResult + 1] = 'Size value cannot be empty';
+                $i++;
                 $resultError++;
                 continue;
             }
