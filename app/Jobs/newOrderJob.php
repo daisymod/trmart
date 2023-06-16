@@ -109,7 +109,7 @@ class newOrderJob implements ShouldQueue
             Log::info(print_r($order->real_weight,true));
             Log::info(print_r($price,true));
             Log::info(print_r($order->postcode,true));
-            $kps = $client->getPostRate($order->real_weight, $order->price, $order->postcode);
+            $kps = $client->getPostRate($order->real_weight, $order->payment, $order->postcode);
             Log::info(print_r($kps->Sum ,true));
 
             $order->delivery_price =  $kps->Sum  ?? null;

@@ -27,9 +27,7 @@ class ItemService
         $data['country_title'] = $attributes['country_title'] ?? null;
         $data['city_id'] = $attributes['city_id'] ?? null;
         $data['country_id'] = $attributes['country_id'] ?? null;
-        $data['equipment_ru'] = $attributes['equipment']['ru'];
-        $data['equipment_tr'] = $attributes['equipment']['tr'];
-        $data['equipment_kz'] = $attributes['equipment']['kz'];
+
         $data['body_ru'] = $attributes['body']['ru'];
         $data['body_tr'] = $attributes['body']['tr'];
         $data['body_kz'] = $attributes['body']['kz'];
@@ -43,7 +41,7 @@ class ItemService
         $data['size'] = $attributes['size'] ?? null;
         $data['sale'] = $attributes['sale'] ?? 0;
         $data['length'] = $attributes['length'] ?? null;
-        $data['price'] = $attributes['price'] ?? 0 ;
+        $data['price'] = ceil($attributes['price']) ?? 0 ;
         $data['count'] = $attributes['count'] ?? 1;
         $data['catalog_id'] = $attributes['catalog'][0] ?? 1;
         $data['user_id'] = $attributes['user'][0] ?? $user->id;
@@ -73,9 +71,7 @@ class ItemService
         $data['country_title'] = $attributes['country_title'] ?? null;
         $data['city_id'] = $attributes['city_id'] ?? null;
         $data['country_id'] = $attributes['country_id'] ?? null;
-        $data['equipment_ru'] = $attributes['equipment']['ru'];
-        $data['equipment_tr'] = $attributes['equipment']['tr'];
-        $data['equipment_kz'] = $attributes['equipment']['kz'];
+
         $data['body_ru'] = $attributes['body']['ru'];
         $data['body_tr'] = $attributes['body']['tr'];
         $data['body_kz'] = $attributes['body']['kz'];
@@ -89,7 +85,7 @@ class ItemService
         $data['size'] = $attributes['size'] ?? null;
         $data['sale'] = $attributes['sale'] ?? 0;
         $data['length'] = $attributes['length'] ?? null;
-        $data['price'] = $attributes['price'] ?? 0 ;
+        $data['price'] = ceil($attributes['price']) ?? 0 ;
         $data['count'] = $attributes['count'] ?? 1;
         $data['catalog_id'] = $attributes['catalog'][0] ?? 1;
         $data['user_id'] = $attributes['user'][0] ?? $user->id;

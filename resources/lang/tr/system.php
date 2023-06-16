@@ -348,4 +348,6 @@ Türkiye'nin tanıdığınız tüm markaları tek bir marketplace'te.",
 
 
     'del' => 'Sil',
+
+    'newColor1' => 'Renk, boyut eklemek',
 ];

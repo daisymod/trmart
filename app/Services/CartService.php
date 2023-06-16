@@ -97,10 +97,10 @@ class CartService
             ->first();
 
 
-        if ($item->count - $count  <= 0){
+        if ($item->count - $count  < 0){
             return 422;
         }
-       
+
         $cart[$key] = compact("id", "count", "size","color");
         session()->put("cart", $cart);
         return self::getCart(false);
@@ -127,7 +127,7 @@ class CartService
                 ->where('color','=',$cart[$key]["color"])
                 ->first();
 
-            if ($item->count - $cart[$key]["count"] <= 0){
+            if ($item->count - $cart[$key]["count"] < 0){
                 return 422;
             }
 

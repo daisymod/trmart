@@ -28,7 +28,7 @@ class CatalogItemMerchantForm extends BasicForm
     public static array $formFields = [
         "name" => [LanguageTextboxField::class],
         "catalog" => [CatalogField::class, "selectParent" => false],
-        "brand" => [TextboxField::class],
+        "brand" => [BrandField::class],
         "article" => [TextboxField::class,'readOnly' => true],
         "barcode" => [TextboxField::class],
         //"country" => [CountryField::class, "find" => true],
@@ -36,7 +36,7 @@ class CatalogItemMerchantForm extends BasicForm
         "weight" => [TextboxField::class],
         "sale" => [TextboxField::class],
         "stock" => [TextboxField::class,'readOnly' => true],
-        "equipment" => [LanguageTextboxField::class, "find" => false],
+       // "equipment" => [LanguageTextboxField::class, "find" => false],
         "image" => [ImagesField::class, "width" => 800, "height" => 1200, "find" => false],
 
 

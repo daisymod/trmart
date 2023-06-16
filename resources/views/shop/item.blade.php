@@ -40,6 +40,7 @@
                             <a href="#">{{$count_feedback}} @lang('products.feedbacks')</a>
                         </div>
 
+
                     </div>
                 </div>
                 <a
@@ -128,7 +129,7 @@
                     </div>
                     <div class="price-wrap">
                         <div style="display: flex; align-items: center;">
-                            <span id="new-price" class="new-price price-product" data-price="{{ $record->new_price }}">{{ number_format($record->new_price, 0, ".", " ") }} {{$turkeyCurrency->symbol ?? '₺l'}}</span>
+                            <span id="new-price" class="new-price price-product" data-price="{{ round($record->new_price,2) }}">{{ number_format($record->new_price, 0, ".", " ") }} {{$turkeyCurrency->symbol ?? '₺l'}}</span>
                             @if($i->sale > 0)
                                 <span class="old-price" style="text-decoration: line-through; margin-left: 10px" data-old-price="{{ $record->price }}">{{ $record->price }}</span>
                             @endif
@@ -165,11 +166,17 @@
 
 
                     </div>
-                    <div class="compound">
-                        <div class="top">
+                    <div class="compound" style="max-width: 384px;
+width: 100%;
+display: flex;
+flex-wrap: wrap;">
+                        <div class="top" style="max-width: 384px;
+width: 100%;
+display: flex;
+flex-wrap: wrap;">
                             <span>@lang('products.squad'):</span>
                             @foreach($record->compound as $items)
-                                <span class="text">{{ $items->{'name_'.app()->getLocale()} }}  {{ $items->percent . '%' }}</span>
+                                <span style="display: flex;width: 100%" class="text">{{ $items->{'name_'.app()->getLocale()} }}  {{ $items->percent . '%' }}</span>
                             @endforeach
 
                         </div>

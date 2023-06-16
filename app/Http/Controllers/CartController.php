@@ -214,8 +214,8 @@ class CartController extends Controller
             $count = $count + $item['count'];
             $product = CatalogItem::find($item['id']);
             $weight  = $product->weight * $item['count'];
-            $price   = ceil($product->price * $coefficent->rate_end) * $item['count'];
-
+            $price   = ceil(($product->price - ($product->price * $product->sale) / 100) * $coefficent->rate_end) * $item['count'];
+            Log::info(print_r('price-'.$price,true));
             $kps = $client->getPostRate($weight, $price, Auth::user()->postcode);
             if (isset($kps->Sum)) {
                 $test[] = [$count, $product->id, $weight, $price, $kps->Sum];

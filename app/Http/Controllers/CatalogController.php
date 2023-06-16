@@ -80,11 +80,13 @@ class CatalogController
                                     ->delete();
 
         foreach ($array as $category){
-            foreach (request()->characteristics as $item){
-                CatalogCatalogCharacteristic::firstOrCreate([
-                    'catalog_id' => $category,
-                    'catalog_characteristic_id' => $item,
-                ]);
+            if (request()->characteristics != null){
+                foreach (request()->characteristics as $item){
+                    CatalogCatalogCharacteristic::firstOrCreate([
+                        'catalog_id' => $category,
+                        'catalog_characteristic_id' => $item,
+                    ]);
+                }
             }
         }
 

@@ -43,8 +43,10 @@ $(document).ready(function () {
 
                         var obj = JSON.parse(this.response);
                         var stringError = '';
+
+
                         Object.keys(obj).forEach(function(key) {
-                            stringError += '  <h3>' +obj[key][0]+'</h3>\n'
+                            stringError = '  <h3>' +obj[key]+'</h3>\n'
                             //'  <h3>' +obj[key]+'</h3>\n'
                         })
 

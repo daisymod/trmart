@@ -53,7 +53,10 @@
                                     &nbsp;&nbsp;&nbsp;
                                 @endcan
                                 @can("catalog-characteristic-del", $i)
-                                    <a data-question="Удалить {{ $i->name }}?" href="{{ route("catalog_characteristic.del", $i->id) }}"><i class="fas fa-trash"></i></a>
+                                    @if($i->id != 15 && $i->id != 16)
+                                            <a data-question="Удалить {{ $i->name }}?" href="{{ route("catalog_characteristic.del", $i->id) }}"><i class="fas fa-trash"></i></a>
+                                    @endif
+
                                 @endcan
                             </td>
                         </tr>

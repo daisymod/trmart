@@ -3,8 +3,13 @@
 namespace App\Services;
 
 use App\Models\Catalog;
+use App\Models\CatalogCatalogCharacteristic;
+use App\Models\CatalogCharacteristic;
 use App\Models\CatalogItem;
+use App\Models\CatalogItemDynamicCharacteristic;
+use App\Models\CurrencyRate;
 use App\Models\Favorites;
+use App\Models\ProductItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,25 +37,85 @@ class ShopService
             }
         }
 
+        if (\request()->currency_id == 1){
+            $coefficient = CurrencyRate::where('id','=',2)->first()->rate_end;
+        }else{
+            $coefficient = 1;
+        }
+
+
+
         $items = CatalogItem::query()
             ->whereIn("catalog_id",$array)
-            ->when(!empty($request->price_from),function ($query) use ($request) {
-                $query->where("price",'>',$request->price_from);
+            ->when(!empty(request()->price_from),function ($query) use ($coefficient){
+                $query->where("price",'>',request()->price_from  / $coefficient);
             })
-            ->when(!empty($request->price_to),function ($query) use ($request) {
-                $query->where("price",'<',$request->price_to);
+            ->when(!empty(request()->price_to),function ($query) use ($coefficient){
+                $query->where("price",'<',request()->price_to / $coefficient);
             })
-            ->when(!empty($request->brand),function ($query) use ($request) {
-                $query->where("brand", "=", $request->brand);
+            ->when(!empty(request()->brand),function ($query) {
+                $query->whereIn("brand",request()->brand);
+            })
+
+            ->when(!empty(request()->size),function ($query) {
+                $query->whereHas('productsData',function ($q){
+                    $q->whereIn("size",request()->size);
+                });
+            })
+            ->when(!empty(request()->item),function ($query) {
+                foreach (request()->item as $key => $value){
+                    $query->whereHas('dynamic',function ($q) use ($key,$value){
+                        $q->where('characteristic_id','=',$key);
+                        $q->where('name_ru','=',$value);
+                        $q->orWhere('name_tr','=',$value);
+                        $q->orWhere('name_kz','=',$value);
+                    });
+                }
+            })
+            ->when(!empty(request()->color),function ($query) {
+                $query->whereHas('productsData',function ($q){
+                    $q->whereIn("color",request()->color);
+                });
             })
             ->where("status", 2)
             ->where("active", "Y");
+
+        $searchIds = array();
+
+
+        foreach($items->get()->toArray() as $item){
+            array_push($searchIds,$item['id']);
+        }
+
+        $uniqueBrand = CatalogItem::query()
+            ->whereIn("id", $searchIds)
+            ->get()->unique('brand');
+
+
+        $uniqueColor = ProductItem::query()
+            ->whereIn("item_id", $searchIds)
+            ->with('colorData')
+            ->get()->unique('color');
+
+        $uniqueSize = ProductItem::query()
+            ->whereIn("item_id", $searchIds)
+            ->with('SizeData')
+            ->get()->unique('size');
+
 
         $count = $items->count();
         $items = $items->paginate(50);
 
 
-        return compact("record", "breadcrumbs", "items", "count");
+        $filter = CatalogCharacteristic::where('id','!=',15)
+            ->where('id','!=',16)
+            ->with('dynamicCharacteristic')
+            ->whereHas('dynamicCharacteristic',function ($q) use ($searchIds){
+                $q->whereIn("item_id", $searchIds);
+            })
+            ->get();
+
+        return compact("record", "breadcrumbs", "items", "count",'uniqueBrand','uniqueColor','uniqueSize','filter');
     }
 
     public static function actionItem($id)
@@ -81,27 +146,85 @@ class ShopService
 
     public static function actionFind($find)
     {
+        if (\request()->currency_id == 1){
+            $coefficient = CurrencyRate::where('id','=',2)->first()->rate_end;
+        }else{
+            $coefficient = 1;
+        }
+
         $items = CatalogItem::query()
             ->where("status", 2)
             ->where("active", "Y")
-            ->when(!empty(request()->price_from),function ($query){
-                $query->where("price",'>',request()->price_from);
+            ->when(!empty(request()->price_from),function ($query) use ($coefficient){
+                $query->where("price",'>',request()->price_from  / $coefficient);
             })
-            ->when(!empty(request()->price_to),function ($query){
-                $query->where("price",'<',request()->price_to);
+            ->when(!empty(request()->price_to),function ($query) use ($coefficient){
+                $query->where("price",'<',request()->price_to / $coefficient);
             })
             ->when(!empty(request()->brand),function ($query) {
-                $query->where("brand", "=", request()->brand);
+                $query->whereIn("brand",request()->brand);
             })
+
+            ->when(!empty(request()->size),function ($query) {
+                $query->whereHas('productsData',function ($q){
+                    $q->whereIn("size",request()->size);
+                });
+            })
+            ->when(!empty(request()->item),function ($query) {
+                foreach (request()->item as $key => $value){
+                    $query->whereHas('dynamic',function ($q) use ($key,$value){
+                        $q->where('characteristic_id','=',$key);
+                        $q->where('name_ru','=',$value);
+                        $q->orWhere('name_tr','=',$value);
+                        $q->orWhere('name_kz','=',$value);
+                    });
+                }
+            })
+            ->when(!empty(request()->color),function ($query) {
+                $query->whereHas('productsData',function ($q){
+                    $q->whereIn("color",request()->color);
+                });
+            })
+
             ->where("name_" . LanguageService::getLang(), "LIKE", "%$find%");
 
+        $searchIds = array();
+
+
+        foreach($items->get()->toArray() as $item){
+            array_push($searchIds,$item['id']);
+        }
+
+        $uniqueBrand = CatalogItem::query()
+            ->whereIn("id", $searchIds)
+            ->get()->unique('brand');
+
+
+        $uniqueColor = ProductItem::query()
+            ->whereIn("item_id", $searchIds)
+            ->with('colorData')
+            ->get()->unique('color');
+
+        $uniqueSize = ProductItem::query()
+            ->whereIn("item_id", $searchIds)
+            ->with('SizeData')
+            ->get()->unique('size');
 
         $count = $items->count();
         $items = $items->paginate(150);
         foreach ($items as $item){
             $item->new_price = $item->price - ($item->price * $item->sale / 100) ;
         }
-        return compact("items", "count", "find");
+
+        $filter = CatalogCharacteristic::where('id','!=',15)
+            ->where('id','!=',16)
+            ->with('dynamicCharacteristic')
+            ->whereHas('dynamicCharacteristic',function ($q) use ($searchIds){
+                $q->whereIn("item_id", $searchIds);
+            })
+            ->get();
+
+        return compact("items", "count", "find",'uniqueBrand','uniqueColor','uniqueSize','filter');
     }
 
 }

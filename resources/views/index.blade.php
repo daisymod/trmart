@@ -73,7 +73,9 @@
                 @foreach($newItems as $item)
                     @if(!empty($item->main_img))
                     <a href="{{ route('shop.item',['id' => $item->id]) }}" class="sale-item">
-                    <span class="img-wrap"><img src="{{$item->main_img }}" alt=""><b>{{$item->{'name_'.app()->getLocale()} }}</b></span>
+                    <span class="img-wrap"><img src="{{$item->main_img }}" alt="">
+
+                    </span>
                     <p>
                         <span class="new price-product" data-price="{{$item->new_price}}"></span>
                         @if($item->sale > 0)

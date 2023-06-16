@@ -35,7 +35,7 @@ class CatalogItemController
 
     public function actionListGet(CatalogItemActionService $service,Request $request)
     {
-        
+
         Gate::authorize("catalog-item-list");
         return view("catalog_item.list", $service->actionList($request));
     }
@@ -262,6 +262,7 @@ class CatalogItemController
     public function actionExcelExport(Request $request){
         $user = User::where('id','=',$request->user_id)
                 ->first();
+        header("Content-type: application/vnd.ms-excel;charset:UTF-8");
         $response =  Excel::download(new ProductExport($user,$request->category_id ?? null), 'Items.xlsx', \Maatwebsite\Excel\Excel::XLSX);
         ob_end_clean();
         return $response;

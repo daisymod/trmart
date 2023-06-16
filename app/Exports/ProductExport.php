@@ -59,7 +59,7 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
             trans('system.name_ru'),
             trans('system.name_tr'),
             trans('system.name_kz'),
-            trans('system.equipment'),
+            trans('system.equipment'). 'TR',
             trans('system.body_ru'),
             trans('system.body_tr'),
             trans('system.body_kz'),
@@ -85,22 +85,31 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
         array_push($result,array_merge($headers,$itemsData));
 
         foreach ($items as $item){
-            $compoundItem = '';
-
+            $compoundItemTr = '[';
+            $compoundItemRu = '[';
+            $compoundItemKz = '[';
             foreach ($item->catalogItem->compound as $compoundData){
-                $compoundItem .= " ". $compoundData->percent . ' '. $compoundData->name_tr;
+                $compoundItemTr .= $compoundData->name_tr.",".$compoundData->percent.",";
+                $compoundItemRu .= $compoundData->name_ru.",".$compoundData->percent.",";
+                $compoundItemKz .= $compoundData->name_kz.",".$compoundData->percent.",";
             }
-
+            $compoundItemTr .= ']';
+            $compoundItemRu .= ']';
+            $compoundItemKz .= ']';
             $item_characteristic = array();
+
             foreach ($characteristics as $itemDataCharacteristic){
+                $item_string = '';
                 $value = CatalogItemDynamicCharacteristic::where('item_id',$item->catalogItem->id)
                         ->where('characteristic_id','=',$itemDataCharacteristic->id)
                         ->first();
 
                 if (empty($value->id)){
-                    array_push($item_characteristic,['','','']);
+                    $item_string = "['','','']";
+                    array_push($item_characteristic,$item_string);
                 }else{
-                    array_push($item_characteristic,[$value->name_ru == null ? '' : $value->name_ru,$value->name_tr == null ? '' : $value->name_tr,$value->name_kz== null ? '' : $value->name_kz]);
+                    $item_string = "[".$value->name_ru.",".$value->name_tr.",".$value->name_kz."]";
+                    array_push($item_characteristic,$item_string);
                 }
 
             }
@@ -114,12 +123,12 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
 
             array_push($result,array_merge([
                 $item->catalogItem->name_ru,
-                $item->catalogItem->name_kz,
                 $item->catalogItem->name_tr,
-                $compoundItem,
+                $item->catalogItem->name_kz,
+                $compoundItemTr,
                 $item->catalogItem->body_ru,
-                $item->catalogItem->body_kz,
                 $item->catalogItem->body_tr,
+                $item->catalogItem->body_kz,
                 'https://turkiyemart.com'.$image,
                 $item->catalogItem->article,
                 $item->catalogItem->sale,
@@ -132,8 +141,8 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
                 $item->catalogItem->catalog_id,
                 $item->catalogItem->user_id,
                 $item->catalogItem->brand,
-                $compoundItem,
-                $compoundItem,
+                $compoundItemRu,
+                $compoundItemKz,
                 $item->catalogItem->weight,
             ],$item_characteristic));
         }

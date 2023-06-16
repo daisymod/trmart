@@ -218,6 +218,9 @@ $(document).ready(function () {
                             }
 
                             let img = JSON.parse(element.image);
+                            if (img[0].file == ''){
+                                return;
+                            }
                             let html = "<a href=\"https://turkiyemart.com/shop/"+element.id+".html\" class=\"sale-item\">\n" +
                                 "                    <span class=\"img-wrap\"><img src="+img[0].file+" alt=\"\"></span>\n" +
                                 "                    <p>\n" +
@@ -584,6 +587,13 @@ $(document).ready(function () {
         $("body, html").toggleClass("overflow");
     });
 
+    $(".search-menu").click(function (e) {
+        e.stopPropagation();
+        $(this).toggleClass("is-active");
+        $(".search-menu-wrapper").toggleClass("open");
+        $("body, html").toggleClass("overflow");
+    });
+
     $(".add-item").on("click", function (e) {
         e.preventDefault();
         $(this).closest(".add-item-wrap").find(".add-item-content").toggleClass("open");
@@ -783,6 +793,7 @@ $(document).ready(function () {
     $(".filter-drop-wrap h3").on("click", function () {
         $(this).find("img").toggleClass("rotate");
         $(this).closest(".filter-drop-wrap").find(".hide-wrap").toggleClass("open");
+        $(this).closest(".filter-drop-wrap").find(".hide-wrap-2").toggleClass("open");
     })
 
     var langArray = [];

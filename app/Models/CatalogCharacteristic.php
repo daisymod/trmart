@@ -21,4 +21,9 @@ class CatalogCharacteristic extends Model
     {
         return $this->hasMany(CatalogCatalogCharacteristic::class);
     }
+
+    public function dynamicCharacteristic()
+    {
+        return $this->hasMany(CatalogItemDynamicCharacteristic::class,'characteristic_id','id');
+    }
 }

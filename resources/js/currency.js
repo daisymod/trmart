@@ -45,6 +45,10 @@ jQuery(document).ready(function () {
                     localStorage.setItem('coefficient',data.data);
                     var price = processed * data.data;
 
+                    console.log(Math.ceil(price.toFixed(0)))
+                    console.log(price)
+                    console.log(resultPrice)
+
                     var priceProduct = $( "#new-price" ).text();
 
                     var processedProduct = priceProduct.replace(/ /g, '');
@@ -53,7 +57,7 @@ jQuery(document).ready(function () {
 
 
 
-                    $('#cart-price').html(Math.ceil(price.toFixed(0)));
+                    $('#cart-price').html(Math.ceil(price));
                     //$('input[name="price"]').val(Math.ceil(price.toFixed(0)));
 
 

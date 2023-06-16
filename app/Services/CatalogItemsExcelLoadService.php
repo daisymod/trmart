@@ -14,6 +14,7 @@ use App\Models\Color;
 use App\Models\ItemCompound;
 use App\Models\MarketplaceBrands;
 use App\Models\ProductItem;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -138,8 +139,8 @@ class CatalogItemsExcelLoadService
                 ],
                 'body' => [
                     'ru' => $row[4],
-                    'tr' => $row[5],
                     'kz' => $row[6],
+                    'tr' => $row[5],
                 ],
                 'active' => $row[15],
                 'status' => $row[14],
@@ -193,10 +194,11 @@ class CatalogItemsExcelLoadService
 
 
             foreach ($data as $rowData){
-                
-                $rowArray = str_replace('"]', '', str_replace('["', '', $row[$indexRowCharacteristic] ));
 
-                $rowArray = explode("\",\"", $rowArray);
+                $rowArray = str_replace("]", '', str_replace("[", '', $row[$indexRowCharacteristic] ));
+                $rowArray = str_replace("\"", '', str_replace("'", '', $rowArray ));
+                print_r($rowArray);
+                $rowArray = explode(",", $rowArray);
 
                 $characteristicID = CatalogCharacteristic::where('name_ru','=',$header[$indexRowCharacteristic])
                     ->orWhere('name_tr','=',$header[$indexRowCharacteristic])
@@ -208,16 +210,17 @@ class CatalogItemsExcelLoadService
                     $characteristic_id = $rowData->id;
                 }
 
-                if ((empty($rowArray[0]) && empty($rowArray[1]) && empty($rowArray[2]))){
+                if ((empty($rowArray[0]) && empty($rowArray[1]) && empty($rowArray[2])) || ($rowArray[0] == '' && $rowArray[1]== '' && $rowArray[2]== '')){
                     $indexRowCharacteristic++;
                     continue;
                 }else{
+                    print_r($rowArray);
                     $insert = [
                         'item_id' => $catalog_id->id,
                         'characteristic_id' =>$characteristic_id,
-                        'name_ru' => $rowArray[0],
-                        'name_tr' => $rowArray[1],
-                        'name_kz' => $rowArray[2],
+                        'name_ru' => $rowArray[0] ?? '',
+                        'name_tr' => $rowArray[1] ?? '',
+                        'name_kz' => $rowArray[2] ?? '',
                     ];
 
                     $characteristic->create($insert);
@@ -248,34 +251,38 @@ class CatalogItemsExcelLoadService
             $brandService->create($row[18]);
 
 
-            $compoundData = explode(" ", $row[3]);
+            $compoundData =  str_replace(']', '', str_replace('[', '', $row[3]));
+            $compoundDataRu = str_replace(']', '', str_replace('[', '', $row[19]));
+            $compoundDataKz = str_replace(']', '', str_replace('[', '', $row[20]));
+            $compoundData = explode(",", $compoundData);
+            $compoundDataRu = explode(",", $compoundDataRu);
+            $compoundDataKz = explode(",", $compoundDataKz);
 
-            $compoundArray = array();
-            $index = 0;
 
-            if (count($compoundData) % 2 == 1) {
-                array_push($compoundData, '');
-            }
+            $indexForCreate = 0;
 
-            foreach ($compoundData as $compoundItem) {
+            Log::info(print_r($compoundData,true));
+            Log::info(print_r($compoundDataRu,true));
+            Log::info(print_r($compoundDataKz,true));
 
-                if ($index == 0 || $index % 2 == 0) {
-                    $index++;
+            foreach ($compoundDataRu as $compoundItem) {
+                if ($indexForCreate % 2 == 1 || empty($compoundItem)) {
+                    $indexForCreate++;
                     continue;
                 } else {
-                    array_push($compoundArray, ['percent' => intval(str_replace('%', '', $compoundData[$index])) ?? 100, 'name_ru' => str_replace('p>', '', $compoundData[$index -1]), 'name_tr' => str_replace('p>', '', $compoundData[$index - 1]), 'name_kz' => str_replace('p>', '', $compoundData[$index -1])]);
+                    $attribute = [
+                        'item_id' =>  $catalog_id->id,
+                        'name_ru' =>  $compoundDataRu[$indexForCreate] ?? '',
+                        'name_tr' =>  $compoundData[$indexForCreate] ?? '',
+                        'percent' =>  $compoundData[$indexForCreate + 1] ?? '0',
+                        'name_kz' =>  $compoundDataKz[$indexForCreate] ?? '',
+                    ];
+                    Log::info(print_r($attribute,true));
+                    $compound->create($attribute, $catalog_id->id);
+                    $indexForCreate++;
                 }
-
-                $index++;
             }
 
-
-
-
-
-            foreach ($compoundArray as $item) {
-                $compound->create($item, $catalog_id->id);
-            }
 
             $color = CatalogCharacteristicItem::where('catalog_characteristic_id', '=', 15)
                 ->where('name_tr', '=', $row[11])
@@ -334,8 +341,12 @@ class CatalogItemsExcelLoadService
             $i++;
         }
 
-        //Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
+        Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
 
+        $adminUser = User::where('id','=',1)
+                ->first();
+
+        Mail::to($adminUser->email)->send(new ResultImportMail($adminUser,$resultArrayParse,$adminUser->lang,$resultSuccess,$resultError));
         return $characteristicData;
     }
 

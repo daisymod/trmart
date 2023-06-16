@@ -58,6 +58,7 @@ class ParserController extends Controller
 
             foreach ($pageResponse['data']['products'] as $product){
                 $dataProduct = $this->service->getDataProduct($product['customUrl']);
+
                 $images = array();
                 foreach ($dataProduct['data']['images'] as $image){
                     array_push($images, $image['url']);
@@ -72,7 +73,7 @@ class ParserController extends Controller
                     $data = CatalogCharacteristic::all();
                     $characteristicArray = array();
                     foreach ($data as $rowData){
-                        array_push($characteristicArray,',,');
+                        array_push($characteristicArray,'["","",""]');
                     }
                     if (isset($dataProduct['data']['variantOptions'])){
                         foreach ($dataProduct['data']['variantOptions'] as $values){
@@ -81,7 +82,7 @@ class ParserController extends Controller
                                     $dataProduct['data']['name'],
                                     $dataProduct['data']['name'],
                                     $dataProduct['data']['name'],
-                                    $compound,
+                                    ["",0],
                                     $descriptionProduct,
                                     $descriptionProduct,
                                     $descriptionProduct,
@@ -97,38 +98,44 @@ class ParserController extends Controller
                                     request()->catalog ?? 0,
                                     request()->user ?? 0,
                                     $product['brand'],
-                                    $compound,
-                                    $compound,
+                                    ["",0],
+                                    ["",0],
                                     1
                                 ],$characteristicArray)
                             );
                         }
                     }else{
-                        array_push($productExcel,
-                            array_merge([
-                                $dataProduct['data']['name'],
-                                $dataProduct['data']['name'],
-                                $dataProduct['data']['name'],
-                                $compound,
-                                $descriptionProduct,
-                                $descriptionProduct,
-                                $descriptionProduct,
-                                implode(',',$images),
-                                $product['code'] ?? '',
-                                $product['discountRate'] ?? 0,
-                                $product['price']['value'] ?? 0 ,
-                                0,
-                                0,
-                                $product['variantCount'] ?? 0 ,
-                                request()->status ?? 1,
-                                request()->active ?? 'N',
-                                request()->catalog ?? 0,
-                                request()->user ?? 0,
-                                $product['brand'] ?? null,
-                                $compound,
-                                $compound,
-                                1
-                            ],$characteristicArray));
+
+                        foreach ($dataProduct['data']['baseOptions'] as $values) {
+                            foreach ($values['options'] as $item) {
+                                
+                                array_push($productExcel,
+                                    array_merge([
+                                        $dataProduct['data']['name'],
+                                        $dataProduct['data']['name'],
+                                        $dataProduct['data']['name'],
+                                        ["",0],
+                                        $descriptionProduct,
+                                        $descriptionProduct,
+                                        $descriptionProduct,
+                                        implode(',',$images),
+                                        $item['code'],
+                                        $item['discountRate'] ?? 0,
+                                        $item['listPrice']['value'] ?? $item['priceData']['value'],
+                                        $item['variantOptionQualifiers'][0]['value'],
+                                        $item['variantOptionQualifiers'][1]['value'] ?? 'standart',
+                                        $item['stock']['stockLevel'] ?? $product['variantCount'],
+                                        request()->status ?? 1,
+                                        request()->active ?? 'N',
+                                        request()->catalog ?? 0,
+                                        request()->user ?? 0,
+                                        $product['brand'],
+                                        ["",0],
+                                        ["",0],
+                                        1
+                                    ], $characteristicArray));
+                            }
+                        }
                     }
 
                }

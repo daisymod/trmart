@@ -44,7 +44,7 @@ class CatalogItem extends Model
 
     public function productsData()
     {
-        return $this->belongsTo(ProductItem::class, "item_id");
+        return $this->belongsTo(ProductItem::class, 'id',"item_id");
     }
 
 
@@ -66,6 +66,12 @@ class CatalogItem extends Model
     public function order()
     {
         return $this->belongsTo(OrderItem::class, "catalog_item_id");
+    }
+
+
+    public function dynamic()
+    {
+        return $this->belongsTo(CatalogItemDynamicCharacteristic::class, 'id',"item_id");
     }
 
 

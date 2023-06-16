@@ -20,4 +20,10 @@ class CatalogCatalogCharacteristic extends Model
     {
         return $this->belongsTo(CatalogCharacteristic::class,'catalog_characteristic_id');
     }
+
+
+    public function dynamicCharacteristic()
+    {
+        return $this->belongsTo(CatalogItemDynamicCharacteristic::class,'catalog_characteristic_id','characteristic_id');
+    }
 }

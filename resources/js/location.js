@@ -53,8 +53,17 @@ jQuery(document).ready(function () {
                         localStorage.setItem('symbol','₽');
                         localStorage.setItem('country_id', '1')
                         document.cookie = "currency_id=3";
+                        if (document.getElementById('currency_id') != undefined) {
+                            document.getElementById('currency_id').value = 3;
+                        }
                         break;
                     case '2':
+                        if (document.getElementById('currency_id') != undefined) {
+                            document.getElementById('currency_id').value = 2;
+                        }
+                        if (document.getElementById('currency_symbol') != undefined) {
+                            document.getElementById('currency_symbol').innerHTML = '₺l';
+                        }
                         document.cookie = "currency_id=2";
                         localStorage.setItem('currency_id','2');
                         localStorage.setItem('symbol','₺l');
@@ -71,6 +80,12 @@ jQuery(document).ready(function () {
                         }
                         break;
                     case '3':
+                        if (document.getElementById('currency_id') != undefined) {
+                            document.getElementById('currency_id').value = 1;
+                        }
+                        if (document.getElementById('currency_symbol') != undefined) {
+                            document.getElementById('currency_symbol').innerHTML = '₸';
+                        }
                         if (document.getElementById('price-product-tr') != undefined) {
                             document.getElementById('price-product-tr').style.display = 'none';
                             document.getElementById('price-product-kz').style.display = 'block';
@@ -364,8 +379,18 @@ jQuery(document).ready(function () {
                 localStorage.setItem('currency_id','3');
                 localStorage.setItem('symbol','₽');
                 localStorage.setItem('country_id', '1')
+                if (document.getElementById('currency_id') != undefined) {
+                    document.getElementById('currency_id').value = 3;
+                }
                 break;
             case '2':
+                if (document.getElementById('currency_id') != undefined) {
+                    document.getElementById('currency_id').value = 2;
+                }
+                if (document.getElementById('currency_symbol') != undefined) {
+                    document.getElementById('currency_symbol').innerHTML = "₺l";
+                }
+
                 if (document.getElementById('price-product-tr') != undefined) {
                     document.getElementById('price-product-tr').style.display = 'block';
                     document.getElementById('price-product-kz').style.display = 'none';
@@ -382,6 +407,9 @@ jQuery(document).ready(function () {
                 localStorage.setItem('country_id', '2')
                 break;
             case '3':
+                if (document.getElementById('currency_id') != undefined) {
+                    document.getElementById('currency_id').value = 1;
+                }
                 if (document.getElementById('price-product-tr') != undefined){
                     document.getElementById('price-product-tr').style.display = 'none';
                     document.getElementById('price-product-kz').style.display = 'block';
@@ -392,7 +420,9 @@ jQuery(document).ready(function () {
                     document.getElementById('total-with-delivery-price-product-tr').style.display = 'none';
                     document.getElementById('total-with-delivery-price-product-kz').style.display = 'block';
                 }
-
+                if (document.getElementById('currency_symbol') != undefined) {
+                    document.getElementById('currency_symbol').innerHTML = "₸";
+                }
                 document.cookie = "currency_id=1";
                 localStorage.setItem('currency_id','1');
                 localStorage.setItem('symbol','₸');

@@ -5,7 +5,7 @@
             <th>@lang('products.color')</th>
             <!-- <th>@lang('system.m15')</th> -->
             <th>@lang('cart.count')</th>
-            <th>@lang('cart.sale')</th>
+            <!--<th>@lang('cart.sale')</th>-->
             <td></td>
         </tr>
         @if(count($product) == 0)
@@ -28,7 +28,7 @@
                 <td><input type="text" name="addmore[0][count]" class="form-control" /></td>
                 <!--<td><input type="text" name="addmore[0][sale]"  class="form-control" /></td>-->
 
-                <td><button type="button" id="add-btn-product" class="btn green-btn">@lang('system.y1')</button></td>
+                <td><button type="button" id="add-btn-product" class="btn green-btn">@lang('system.newColor1')</button></td>
             </tr>
         @else
             @php $index = 0; @endphp

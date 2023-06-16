@@ -105,9 +105,24 @@
                 <a href="{{ route("cart.index") }}">@lang('body.toCart')</a>
             </div>
             <div class="mobile-icons">
-                <a href="#"><img src="/img/user-icon.svg" alt=""></a>
-                <a href="#"><img src="/img/search-icon.svg" alt=""></a>
-                <a href="#"><img src="/img/basket-icon-mobile.svg" alt=""></a>
+                @auth
+                    <a href="{{ route("user.lk") }}"><img src="/img/user-icon.svg" alt=""></a>
+                    <a href="{{ route("user.exit") }}" class="green-btn sign-btn"><img src="/img/sign-up-icon.svg" alt=""></a>
+                @else
+                    <a href="#entrance-popup" onclick="openPopUpLogin()" id="UserLogin" class="popup"><img src="/img/user-icon.svg" alt=""></a>
+                @endauth
+
+                <a href="#" class="search-menu"><img src="/img/search-icon.svg" alt=""></a>
+                <a href="{{ route("cart.index") }}"><img src="/img/basket-icon-mobile.svg" alt=""></a>
+            </div>
+            <div class="search-menu-wrapper">
+                <form class="search-menu-wrapper-form" action="{{ route("shop.find") }}">
+                    <input id="search-item" autocomplete="off" class="form-control" type="text" list="search-items-result"  name="find" placeholder="@lang('search.searchProduct')">
+                    <div style="display: none" id="search-result">
+
+                    </div>
+                    <button type="submit"><img src="/img/loop.svg" alt=""></button>
+                </form>
             </div>
             <div class="menu-wrapper">
                 <ul class="tab-menu">

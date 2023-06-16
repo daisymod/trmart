@@ -88,11 +88,8 @@ class ShopController
 
     public function actionList(Request $request, $id)
     {
-        $filter = CatalogCatalogCharacteristic::where('catalog_id','=',$id)
-                    ->with('items.items')
-                    ->get();
         $checkProducts = $this->showProductService->getAll();
-        return view("shop.list", ShopService::actionList($request,$id),['checkProducts' => $checkProducts,'filter' => $filter]);
+        return view("shop.list", ShopService::actionList($request,$id),['checkProducts' => $checkProducts]);
     }
 
     public function actionItem($id)
@@ -189,6 +186,7 @@ class ShopController
 
     public function actionFind()
     {
+
         $checkProducts = $this->showProductService->getAll();
         $compact  = ShopService::actionFind(request()->get("find", ""));
         return view("shop.find", array_merge($compact,['checkProducts' =>$checkProducts]));

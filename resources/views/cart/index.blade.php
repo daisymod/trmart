@@ -29,10 +29,13 @@
                         @foreach($cart["items"] as $k=>$i)
                             <tr class="line" data-key="{{ $i->key }}color{{$i->color}}">
                                 <td>
-                                    <div class="big-img"><img src="{{ $i->image() }}" alt=""></div>
+                                    <div class="big-img">
+                                        <img src="{{ $i->image() }}" alt="">
+                                    </div>
                                 </td>
                                 <td>
                                     <div class="brand">
+
                                         <b>{{$i->lang("name")}}</b>
                                         {{--                                        <p><span>Цвет: серо-синий</span><span>Бренд: Colin’s</span></p>--}}
                                         <div class="texts">
@@ -67,7 +70,8 @@
                                 <td>
                                     <div class="buttons">
                                         <a class="cart-del"><img src="/img/close-icon.svg" alt=""></a>
-                                        <a href="#" class="arrow"><img src="/img/arrow-right-small.svg" alt=""></a>
+
+                                        <a href="{{route('shop.item',['id'=>$i->id])}}" class="arrow"><img src="/img/arrow-right-small.svg" alt=""></a>
                                     </div>
                                 </td>
                             </tr>
