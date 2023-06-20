@@ -421,7 +421,16 @@ class MerchantController extends Controller
 
 
     public function cancelOrder(Order $id){
-
+        $request = new \Iyzipay\Request\CreateRefundToBalanceRequest();
+        $options = new \Iyzipay\Options();
+        $options->setApiKey("bndv9YASgfDvKS6ZWzPiq3J4Ow3wU4q2");
+        $options->setSecretKey("ixAzd6UNXi1vhRpVZ2tUe5kcAO6Pl4Fd");
+        $options->setBaseUrl("https://api.iyzipay.com");
+        $request->setLocale(\Iyzipay\Model\Locale::EN);
+        $request->setPaymentId($id->payment_id);
+        $request->setCallbackUrl("https://turkiyemart.com/merchant/order/".$id->id);
+        $refundToBalance = \Iyzipay\Model\RefundToBalance::create($request, $options);
+       
         $orderItem = OrderItem::where('order_id','=',$id->id)
             ->first();
 

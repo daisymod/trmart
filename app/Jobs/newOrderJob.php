@@ -43,7 +43,7 @@ class newOrderJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
 
-    public function __construct(public $hash)
+    public function __construct(public $hash,public $payment_id)
     {
 
     }
@@ -69,6 +69,7 @@ class newOrderJob implements ShouldQueue
 
             unset($item['id']);
             unset($item['hash']);
+            $item['payment_id'] = $this->payment_id;
             $newOrder  =  Order::query()->create($item);
 
             foreach ($orderItems as $orderItem){

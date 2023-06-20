@@ -15,7 +15,7 @@ class Order extends Model
         'region_id','region_name','area_id','area_name','country_id','city_name','city_id',
         'street','house_number','room','time','comment','price','pickup','delivery_price',
         'tr_delivery_price','delivery_dt_start','delivery_dt_end','payment','delivery_kz_weighing',
-        'delivery_tr_weighing','sale'
+        'delivery_tr_weighing','sale','payment_id'
     ];
 
 

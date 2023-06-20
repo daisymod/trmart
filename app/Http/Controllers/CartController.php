@@ -255,7 +255,7 @@ class CartController extends Controller
 
     public function actionCallback(Request $request)
     {
-       
+
         $response = new \Iyzipay\Request\RetrieveCheckoutFormRequest();
         $response->setLocale(\Iyzipay\Model\Locale::EN);
         $response->setConversationId(rand(0,99999999));
@@ -268,9 +268,9 @@ class CartController extends Controller
 
         $checkoutForm = \Iyzipay\Model\CheckoutForm::retrieve($response, $options);
         Log::info(print_r($checkoutForm,true));
-
+       
         if ($checkoutForm->getPaymentStatus() == 'success'){
-            newOrderJob::dispatch($request->get('hash'));
+            newOrderJob::dispatch($request->get('hash'), $checkoutForm->getPaymentId());
             return redirect(route("cart.done"));
         }else{
             return redirect(route("cart.error"));
