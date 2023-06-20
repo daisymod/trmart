@@ -28,6 +28,7 @@ use App\Models\Customer;
 use App\Models\KPLocation;
 use App\Models\KPPostCode;
 use App\Models\Merchant;
+use App\Models\MerchantKey;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ProductItem;
@@ -152,6 +153,7 @@ class MerchantController extends Controller
         Gate::authorize("merchant-edit", $record);
         $this->company->update($request->all(),$id);
         $this->user->updateMerchant($request->all(),$id);
+
 
         if ($request->status == 3 && !empty($request->reason) && Auth::user()->role == 'admin'){
             $user = User::where('id','=',$id)

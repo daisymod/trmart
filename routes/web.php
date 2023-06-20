@@ -339,3 +339,4 @@ Route::any('{page}', [\App\Http\Controllers\ErrorController::class, "error404"])
  Route::get('/color/shop', [\App\Http\Controllers\ShopController::class, "getColorBySize"]);
 
 
+Route::get('/callback', [\App\Http\Controllers\CartController::class, "actionCallback"])->name("cart.done");
