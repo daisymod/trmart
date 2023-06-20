@@ -7,7 +7,10 @@ namespace App\Http\Controllers;
 use App\Clients\KazPost;
 use App\Http\Requests\CartOderPostRequest;
 use App\Jobs\newOrderJob;
+use App\Models\Basket;
+use App\Models\Catalog;
 use App\Models\City;
+use App\Models\Company;
 use App\Models\Country;
 use App\Models\CurrencyRate;
 use App\Models\DeliveryPrice;
@@ -15,10 +18,12 @@ use App\Models\KPLocation;
 use App\Models\KPPostCode;
 use App\Mail\NewOrderMail;
 use App\Models\CatalogItem;
+use App\Models\MerchantKey;
 use App\Models\Order;
 use App\Models\OrderCommission;
 use App\Models\OrderItem;
 use App\Models\ProductItem;
+use App\Models\User;
 use App\Pay\Requests\PaymentRequests;
 use App\Services\CartService;
 use App\Services\OrderService;
@@ -132,13 +137,102 @@ class CartController extends Controller
 
     public function actionIndexPost(CartOderPostRequest $request)
     {
+       $cart = CartService::getCart();
 
-        //$token = $this->paymentService->authToken();
-        //var_dump($token);
-        //$url = $this->paymentService->makePayment(null,$request->all());
-        //var_dump($url);
+       $hash = uniqid();
 
-        newOrderJob::dispatch($request->all(),CartService::getCart(),Auth::user());
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        $basket = new Basket();
+        $basket->save();
+        $rates = CurrencyRate::where('id','=',2)
+                ->first();
+
+        $priceDelivery = ($request->get('delivery') + $request->get('deliveryTr')) / $rates->rate_end;
+
+        $options = new \Iyzipay\Options();
+        $options->setApiKey("bndv9YASgfDvKS6ZWzPiq3J4Ow3wU4q2");
+        $options->setSecretKey("ixAzd6UNXi1vhRpVZ2tUe5kcAO6Pl4Fd");
+        $options->setBaseUrl("https://api.iyzipay.com");
+
+        $requestPay = new \Iyzipay\Request\CreateCheckoutFormInitializeRequest();
+        $requestPay->setLocale(\Iyzipay\Model\Locale::EN);
+        $requestPay->setConversationId(rand(0,9999999999));
+        $requestPay->setPrice($cart['price']);
+        $requestPay->setPaidPrice($cart['price'] + ceil($priceDelivery));
+        $requestPay->setCurrency(\Iyzipay\Model\Currency::TL);
+        $requestPay->setBasketId($basket->id);
+        $requestPay->setBasketItems($cart['count']);
+        $requestPay->setPaymentGroup(\Iyzipay\Model\PaymentGroup::PRODUCT);
+        $requestPay->setCallbackUrl("https://turkiyemart.com/callback?hash=".$hash);
+        $requestPay->setEnabledInstallments(array(2, 3, 6, 9));
+
+        $buyer = new \Iyzipay\Model\Buyer();
+        $buyer->setId(Auth::user()->id);
+        $buyer->setName($request->get('name'));
+        $buyer->setSurname($request->get('surname'));
+        $buyer->setGsmNumber('+'.$request->get('phone'));
+        $buyer->setEmail($request->get('email'));
+        $buyer->setIdentityNumber(rand(10000,99999999));
+        $buyer->setLastLoginDate(Carbon::now()->format('Y-m-d h:i:s'));
+        $buyer->setRegistrationDate(Auth::user()->created_at->format('Y-m-d h:i:s'));
+        $buyer->setRegistrationAddress(Auth::user()->address_invoice.' '.Auth::user()->house_number.' '.Auth::user()->room);
+        $buyer->setIp($ip);
+        $buyer->setCity(Auth::user()->city_title);
+        $buyer->setCountry(Auth::user()->country_title);
+        $buyer->setZipCode(Auth::user()->postcode);
+        $requestPay->setBuyer($buyer);
+
+        $merchant = Company::where('user_id','=',$cart['items'][0]['user_id'])
+            ->first();
+
+        $merchantUser = User::where('id','=',$cart['items'][0]['user_id'])
+            ->first();
+        $shippingAddress = new \Iyzipay\Model\Address();
+        $shippingAddress->setContactName($merchant->first_name.' '.$merchant->last_name);
+        $shippingAddress->setCity($merchant->city);
+        $shippingAddress->setCountry('Turkey');
+        $shippingAddress->setAddress($merchant->city.' '.$merchant->street.' '.$merchant->number.' '.$merchant->office);
+        $shippingAddress->setZipCode($merchantUser->postcode);
+        $requestPay->setShippingAddress($shippingAddress);
+
+        $billingAddress = new \Iyzipay\Model\Address();
+        $billingAddress->setContactName($merchant->first_name.' '.$merchant->last_name);
+        $billingAddress->setCity($merchant->city);
+        $billingAddress->setCountry('Turkey');
+        $billingAddress->setAddress($merchant->city.' '.$merchant->street.' '.$merchant->number.' '.$merchant->office);
+        $billingAddress->setZipCode($merchantUser->postcode);
+        $requestPay->setBillingAddress($billingAddress);
+        $index = 0;
+        foreach ($cart['items'] as $item) {
+            $basketItems = array();
+            $firstBasketItem = new \Iyzipay\Model\BasketItem();
+            $firstBasketItem->setId($index);
+            $firstBasketItem->setSubMerchantKey('+nPmcvksgu5VDMAFwgfT8N7689I=');
+            $firstBasketItem->setSubMerchantPrice($item['price']);
+            $firstBasketItem->setName($item['name_tr']);
+            $category = Catalog::where('id','=',$item['catalog_id'])
+                ->first();
+            $firstBasketItem->setCategory1($category->name_ru);
+            $firstBasketItem->setItemType(\Iyzipay\Model\BasketItemType::PHYSICAL);
+            $firstBasketItem->setPrice($cart['price']);
+            $basketItems[$index] = $firstBasketItem;
+        }
+
+
+        $requestPay->setBasketItems($basketItems);
+
+        $checkoutFormInitialize = \Iyzipay\Model\CheckoutFormInitialize::create($requestPay, $options);
+        newOrderCopyJob::dispatch($request->all(),CartService::getCart(),Auth::user(),$hash);
+        return ["redirect" => $checkoutFormInitialize->getPaymentPageUrl()];
+
+
+        //newOrderJob::dispatch($request->all(),CartService::getCart(),Auth::user());
 
         if (Auth::check()){
             $this->service->update($request->all());
@@ -147,8 +241,9 @@ class CartController extends Controller
         return ["redirect" => route("cart.done")];
     }
 
-    public function actionDone()
+    public function actionDone(Request $request)
     {
+        log::info(print_r($request->all(),true));
         $this->cart->delete(Auth::user()->id ?? 0);
         CartService::clear();
         return view("cart.done");

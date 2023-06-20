@@ -4,8 +4,59 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a523e9b0b899471cce80aa7a0027bcc3",
+    "content-hash": "4ec893aefd78cec2dbcb84ba71650923",
     "packages": [
+        {
+            "name": "adonisventocilla/bagisto-izipay-payment",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/adonisventocilla/bagisto-izipay-payment.git",
+                "reference": "1ed2d51f8382d1ead628511ed714d029caa0f8fa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/adonisventocilla/bagisto-izipay-payment/zipball/1ed2d51f8382d1ead628511ed714d029caa0f8fa",
+                "reference": "1ed2d51f8382d1ead628511ed714d029caa0f8fa",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "AVS\\Izipay\\Providers\\IzipayServiceProvider"
+                    ],
+                    "aliases": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "AVS\\Izipay\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adonis Ventocilla",
+                    "email": "ventocilla.adonis@gmail.com"
+                }
+            ],
+            "description": "Bagisto Izipay Payment add-on allow customers to pay for others using Izipay payment gateway.",
+            "keywords": [
+                "bagisto",
+                "izipay",
+                "izipay payment"
+            ],
+            "support": {
+                "issues": "https://github.com/adonisventocilla/bagisto-izipay-payment/issues",
+                "source": "https://github.com/adonisventocilla/bagisto-izipay-payment/tree/main"
+            },
+            "time": "2022-10-06T17:54:19+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.9.3",
@@ -1576,6 +1627,62 @@
                 }
             ],
             "time": "2022-05-21T17:30:32+00:00"
+        },
+        {
+            "name": "iyzico/iyzipay-php",
+            "version": "v2.0.52",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/iyzico/iyzipay-php.git",
+                "reference": "630c02750ccf9428dbd2fa7658e7a5deb7989639"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/iyzico/iyzipay-php/zipball/630c02750ccf9428dbd2fa7658e7a5deb7989639",
+                "reference": "630c02750ccf9428dbd2fa7658e7a5deb7989639",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0",
+                "satooshi/php-coveralls": "~0.6.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Iyzipay\\": "src/Iyzipay/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "iyzico and contributors",
+                    "homepage": "https://github.com/iyzico/iyzipay-php/contributors"
+                }
+            ],
+            "description": "iyzipay api php client",
+            "homepage": "https://www.iyzico.com",
+            "keywords": [
+                "iyzico",
+                "iyzico.com",
+                "iyzipay",
+                "iyzipay api",
+                "iyzipay api php",
+                "iyzipay api php client",
+                "iyzipay php",
+                "payment processing"
+            ],
+            "support": {
+                "issues": "https://github.com/iyzico/iyzipay-php/issues",
+                "source": "https://github.com/iyzico/iyzipay-php/tree/v2.0.52"
+            },
+            "time": "2023-06-06T10:16:55+00:00"
         },
         {
             "name": "laravel/framework",
@@ -9424,5 +9531,5 @@
         "ext-soap": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
