@@ -34,6 +34,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+
         if (request()->getHost() ==  "turkiyemart.com") {
             URL::forceScheme("https");
         }

@@ -255,6 +255,7 @@ class CartController extends Controller
 
     public function actionCallback(Request $request)
     {
+       
         $response = new \Iyzipay\Request\RetrieveCheckoutFormRequest();
         $response->setLocale(\Iyzipay\Model\Locale::EN);
         $response->setConversationId(rand(0,99999999));
