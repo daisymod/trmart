@@ -64,7 +64,7 @@
                 <div class="left">
                     <div class="detail-slider-wrap">
                         <div class="big-slider-wrap">
-                            <button type="button" class="arrow arrow-prev">
+                            <button style="left:-13px !important;" type="button" class="arrow arrow-prev">
                                 <img src="/img/slider-arrow-left.png" alt="">
                             </button>
                             <div class="big-slider">
@@ -77,17 +77,13 @@
                             </button>
                         </div>
                         <div class="small-slider-wrap">
-                            <button type="button" class="arrow arrow-prev">
-                                <img src="/img/arr-right.svg" alt="">
-                            </button>
+
                             <div class="small-slider">
                                 @foreach($record->images() as $image)
                                     <div class="slide-item"><img src="{{ $image["img"] }}" alt=""></div>
                                 @endforeach
                             </div>
-                            <button type="button" class="arrow arrow-next">
-                                <img src="/img/arr-right.svg" alt="">
-                            </button>
+
                         </div>
                     </div>
                 </div>

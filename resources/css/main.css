@@ -705,7 +705,7 @@ span#top {
     position: absolute;
     content: '';
     top: 50%;
-    width: 100%;
+    width: 35px;
     height: 1px;
     box-shadow: 0 0 2px red;
     background-color: red;

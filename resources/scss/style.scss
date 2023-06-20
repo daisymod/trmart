@@ -3416,7 +3416,6 @@ footer {
             @include flex;
             @include justify-between;
             width: 100%;
-            margin-bottom: 90px;
 
             @media(max-width: 1024px) {
                 @include dir-col;
@@ -3458,7 +3457,8 @@ footer {
                             z-index: 100;
 
                             &.arrow-next {
-                                right: 30px;
+                                display: none;
+                                right: -13px;
 
                                 @media(max-width: 767px) {
                                     right: 10px;
@@ -3466,7 +3466,8 @@ footer {
                             }
 
                             &.arrow-prev {
-                                left: 30px;
+                                display: none;
+                                left: -13px;
 
                                 @media(max-width: 767px) {
                                     left: 10px;
@@ -3481,8 +3482,8 @@ footer {
 
                             .item {
                                 img {
-                                    width: 65%;
-                                    height: 65%;
+                                    width: 484px;
+                                    height: 600px;
                                     object-fit: cover;
                                 }
                             }
@@ -4576,3 +4577,5 @@ button[disabled]{
         align-items: center;
     }
 }
+
+

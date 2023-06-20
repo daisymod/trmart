@@ -25,18 +25,31 @@
                     </div>
                 </div>
                 <div class="table-top merchant-goods-table-top">
-                    <div class="buttons-1" style="display: flex">
+                    <div class="buttons-1" style="display: flex;width: 700px">
                         @can("catalog-item-add")
-                            <a href="{{ route("catalog_item.add") }}" class="green-btn product-btn1">@lang('system.addProduct')</a>
+                            <div class="d-flex flex-wrap" style="flex-wrap: wrap;width: 233px">
+                                <a href="{{ route("catalog_item.add") }}" class="green-btn product-btn1">@lang('system.addProduct')</a>
+                            </div>
                         @endcan
 
                         @can("catalog-item-excel-load")
-                                <input id="fileUpload" type="file" required name="file" accept=".xlsx">
-                                <button id="upload" class="green-btn product-btn1">@lang('system.loadTable') </button>
+                                <div class="d-flex flex-wrap" style="flex-wrap: wrap;width: 233px">
+                                    <form style="width: 100%;display: flex;justify-content: center" method="POST" enctype="multipart/form-data">
+                                        <div class="image-upload">
+                                            <label for="avatar">
+                                                <div class="upload-photo" ></div>
+                                            </label>
+                                            <input type="file" name="file" id="fileUpload" accept=".xlsx" >
+                                        </div>
+                                    </form>
+
+                                    <button id="upload" class="green-btn product-btn1">@lang('system.loadTable') </button>
+                                </div>
+
 
                         @endcan
-                            <div class="d-flex flex-wrap">
-                                <span>@lang('system.exportTable') </span>
+                            <div class="d-flex flex-wrap" style="flex-wrap: wrap;width: 233px">
+                                <span style="width: 100%">@lang('system.exportTable') </span>
                                 <form class="load-form-file-form" method="POST" action="{{ route("catalog_item.export") }}" enctype="multipart/form-data">
                                     {{ csrf_field() }}
                                     <input type="hidden" readonly name="category_id" id="category_id_form">
@@ -91,9 +104,10 @@
                             <span>@lang('item.showList')</span>
                             <div class="select-wrap dark">
                                 <select id="pagination-list" >
-                                    <option value="10">@lang('system.i6') 10</option>
+                                    <option   value="100" >@lang('system.i6')  100</option>
+                                    <option @if(isset($_GET['limit']) && $_GET['limit'] == 10) selected @endif value="10">@lang('system.i6') 10</option>
                                     <option @if(isset($_GET['limit']) && $_GET['limit'] ==50) selected @endif value="50">@lang('system.i6')  50</option>
-                                    <option @if(isset($_GET['limit']) && $_GET['limit'] == 100) selected @endif  value="100" >@lang('system.i6')  100</option>
+
                                 </select>
                             </div>
                         </div>

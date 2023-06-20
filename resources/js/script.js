@@ -762,14 +762,14 @@ $(document).ready(function () {
 
     if (!$('.small-slider').hasClass('slick-initialized')) {
         $('.small-slider').slick({
-            slidesToShow: 4,
+            slidesToShow: 2,
             slidesToScroll: 1,
             vertical: true,
-            infinite: true,
+            infinite: false,
             focusOnSelect: true,
             asNavFor: '.big-slider',
-            nextArrow: $('.small-slider-wrap .arrow-next'),
-            prevArrow: $('.small-slider-wrap .arrow-prev'),
+           // nextArrow: $('.small-slider-wrap .arrow-next'),
+           // prevArrow: $('.small-slider-wrap .arrow-prev'),
             responsive: [
                 {
                     breakpoint: 768,

@@ -66,7 +66,24 @@ class ParserController extends Controller
 
                     $html = strip_tags($dataProduct['data']['description'],'<p>');
                     $description  = explode('<',$html);
-                    $compound =  str_replace('p>Kumaş:', '', $description[1] ?? $description);
+
+
+                    $textTag = str_replace('<',' ',$dataProduct['data']['description']);
+                    $text = explode(' ',$textTag);
+                    $compound_text = '';
+                    $index = 0;
+
+
+
+                    foreach ($text as $item){
+                        if (str_contains($item,'%')){
+                            $compound_text .= '"'. $text[$index+1] .'","'.str_replace('%','',$text[$index]).'",';
+                            $index++;
+                        }else{
+                            $index++;
+                        }
+                    }
+
                     $descriptionProduct =  str_replace('p>Tanımlama:', '', $description[3] ?? $description);
 
 
@@ -75,6 +92,13 @@ class ParserController extends Controller
                     foreach ($data as $rowData){
                         array_push($characteristicArray,'["","",""]');
                     }
+
+                    if ($compound_text == ''){
+                        $compound_text = "['',0]";
+                    }else{
+                        $compound_text = "[$compound_text]";
+                    }
+
                     if (isset($dataProduct['data']['variantOptions'])){
                         foreach ($dataProduct['data']['variantOptions'] as $values){
                             array_push($productExcel,
@@ -82,7 +106,7 @@ class ParserController extends Controller
                                     $dataProduct['data']['name'],
                                     $dataProduct['data']['name'],
                                     $dataProduct['data']['name'],
-                                    ["",0],
+                                    str_replace('"','',$compound_text),
                                     $descriptionProduct,
                                     $descriptionProduct,
                                     $descriptionProduct,
@@ -108,13 +132,13 @@ class ParserController extends Controller
 
                         foreach ($dataProduct['data']['baseOptions'] as $values) {
                             foreach ($values['options'] as $item) {
-                                
+
                                 array_push($productExcel,
                                     array_merge([
                                         $dataProduct['data']['name'],
                                         $dataProduct['data']['name'],
                                         $dataProduct['data']['name'],
-                                        ["",0],
+                                        str_replace('"','',$compound_text),
                                         $descriptionProduct,
                                         $descriptionProduct,
                                         $descriptionProduct,

@@ -245,6 +245,8 @@ return [
     'sort4' => 'Azalan Fiyat',
     'sort5' => 'Durum Artıyor',
     'sort6' => 'Durum Azalan',
+    'sort7' => 'Yaratılış tarihi Artıyor',
+    'sort8' => 'Yaratılış tarihi Azalan',
 
     'i20' => 'Haberler',
     'i21' => 'Promosyon',

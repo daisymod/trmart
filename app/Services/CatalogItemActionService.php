@@ -22,10 +22,45 @@ class CatalogItemActionService
     {
         if (!empty($request->limit)){
             session()->put('limit_catalog_item',$request->limit);
+        }else{
+            session()->put('limit_catalog_item',100);
         }
 
         $lang = LanguageService::getLang();
-        $form = $this->getFormSearch(new CatalogItem());
+
+        $item = new CatalogItem();
+
+        if (!empty($request->user)){
+            $item->user_id =  $request->user;
+        }
+
+        if (!empty($request->catalog)){
+            $item->catalog_id =  $request->catalog;
+        }
+
+        if (!empty($request->brand)){
+            $item->brand =  $request->brand;
+        }
+
+        if (!empty($request->name)){
+            $item->name =  $request->name;
+        }
+
+        if (!empty($request->price_from)){
+            $item->price_from =  $request->price_from;
+        }
+
+        if (!empty($request->price_to)){
+            $item->price_to =  $request->price_to;
+        }
+
+        if (!empty($request->user)){
+            $item->user =  $request->user;
+        }
+
+        $form = $this->getFormSearch($item);
+
+
         $sort = explode(".", request("sort_by", "name_{$lang}.asc"));
         $records = CatalogItem::query()->orderBy($sort[0], $sort[1]);
         if (Auth::user()->role == "merchant") {
@@ -73,7 +108,7 @@ class CatalogItemActionService
         }
         //$records = $form->formCreateFind($records, request()->all());
 
-        $records = $records->paginate( session()->get('limit_catalog_item') ?? 10);
+        $records = $records->paginate( session()->get('limit_catalog_item') ?? 100);
 
 
         $records->getCollection()->transform(function ($product) {
@@ -91,6 +126,8 @@ class CatalogItemActionService
             "price.desc" => trans('system.sort4'),
             "status.asc" => trans('system.sort5'),
             "status.desc" => trans('system.sort6'),
+            "created_at.asc" => trans('system.sort7'),
+            "created_at.desc" => trans('system.sort8'),
         ];
 
         $color = CatalogCharacteristicItem::where('catalog_characteristic_id','=',15)

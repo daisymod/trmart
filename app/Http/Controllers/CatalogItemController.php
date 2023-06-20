@@ -35,7 +35,7 @@ class CatalogItemController
 
     public function actionListGet(CatalogItemActionService $service,Request $request)
     {
-
+        
         Gate::authorize("catalog-item-list");
         return view("catalog_item.list", $service->actionList($request));
     }

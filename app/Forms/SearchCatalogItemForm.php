@@ -6,6 +6,7 @@ namespace App\Forms;
 use App\Fields\MerchantField;
 use App\Fields\SelectField;
 use App\Fields\TextareaField;
+use App\Fields\TextboxField;
 use App\Traits\FormModelTrait;
 
 class SearchCatalogItemForm extends CatalogItemMerchantForm
@@ -20,6 +21,8 @@ class SearchCatalogItemForm extends CatalogItemMerchantForm
                 "2" => trans('system.verif3'),
                 "3" => trans('system.verif4')
             ]],
+
+            "brand" => [TextboxField::class,'value' => '' ],
 
             "active" => [SelectField::class, "data" => [
                 "Y" => trans('system.active1'),
