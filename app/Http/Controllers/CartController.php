@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Clients\KazPost;
 use App\Http\Requests\CartOderPostRequest;
+use App\Jobs\newOrderCopyJob;
 use App\Jobs\newOrderJob;
 use App\Models\Basket;
 use App\Models\Catalog;
@@ -229,24 +230,50 @@ class CartController extends Controller
 
         $checkoutFormInitialize = \Iyzipay\Model\CheckoutFormInitialize::create($requestPay, $options);
         newOrderCopyJob::dispatch($request->all(),CartService::getCart(),Auth::user(),$hash);
+        if (Auth::check()){
+            $this->service->update($request->all());
+        }
         return ["redirect" => $checkoutFormInitialize->getPaymentPageUrl()];
 
 
         //newOrderJob::dispatch($request->all(),CartService::getCart(),Auth::user());
 
-        if (Auth::check()){
-            $this->service->update($request->all());
-        }
 
-        return ["redirect" => route("cart.done")];
     }
 
-    public function actionDone(Request $request)
+    public function actionDone()
     {
-        log::info(print_r($request->all(),true));
         $this->cart->delete(Auth::user()->id ?? 0);
         CartService::clear();
         return view("cart.done");
+    }
+
+    public function actionError()
+    {
+        return view("cart.error");
+    }
+
+    public function actionCallback(Request $request)
+    {
+        $response = new \Iyzipay\Request\RetrieveCheckoutFormRequest();
+        $response->setLocale(\Iyzipay\Model\Locale::EN);
+        $response->setConversationId(rand(0,99999999));
+        $response->setToken($request->get('token'));
+        $options = new \Iyzipay\Options();
+
+        $options->setApiKey("bndv9YASgfDvKS6ZWzPiq3J4Ow3wU4q2");
+        $options->setSecretKey("ixAzd6UNXi1vhRpVZ2tUe5kcAO6Pl4Fd");
+        $options->setBaseUrl("https://api.iyzipay.com");
+
+        $checkoutForm = \Iyzipay\Model\CheckoutForm::retrieve($response, $options);
+        Log::info(print_r($checkoutForm,true));
+
+        if ($checkoutForm->getPaymentStatus() == 'success'){
+            newOrderJob::dispatch($request->get('hash'));
+            return redirect(route("cart.done"));
+        }else{
+            return redirect(route("cart.error"));
+        }
     }
 
     public function actionSet()

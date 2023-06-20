@@ -15,4 +15,6 @@ class OrderItem extends Model
         return $this->belongsTo(CatalogItem::class, "catalog_item_id");
     }
 
+    protected $fillable = ['order_id','user_id','user_name','catalog_item_id','image','name','article','size','count','price','color','price_tenge'];
+
 }

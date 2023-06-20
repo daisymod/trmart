@@ -129,6 +129,7 @@ class newOrderCopyJob implements ShouldQueue
             $orderItem->price_tenge = ceil($price * $coefficient->rate_end) * $item->count;
 
             $order->items()->save($orderItem);
+            
             $calculateCommission = new OrderComissionCopy();
             $calculateCommission->order_id = $order->id;
             $calculateCommission->product_id = $orderItem->catalog_item_id;

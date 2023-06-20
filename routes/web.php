@@ -311,6 +311,8 @@ Route::group(['middleware' => 'role-user'], function () {
     Route::post('/cart', [\App\Http\Controllers\CartController::class, "actionIndexPost"])->name('cart.newOrder');
     Route::get('/cart/calculate', [\App\Http\Controllers\CartController::class, "actionCalculate"])->name('cart.calculate');
     Route::get('/cart/done', [\App\Http\Controllers\CartController::class, "actionDone"])->name("cart.done");
+    Route::get('/cart/fail', [\App\Http\Controllers\CartController::class, "actionError"])->name("cart.error");
+    Route::post('/callback', [\App\Http\Controllers\CartController::class, "actionCallback"])->name("callback");
 });
 
 
@@ -339,4 +341,4 @@ Route::any('{page}', [\App\Http\Controllers\ErrorController::class, "error404"])
  Route::get('/color/shop', [\App\Http\Controllers\ShopController::class, "getColorBySize"]);
 
 
-Route::get('/callback', [\App\Http\Controllers\CartController::class, "actionCallback"])->name("cart.done");
+
