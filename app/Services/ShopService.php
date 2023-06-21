@@ -54,7 +54,7 @@ class ShopService
                 $query->where("price",'<',request()->price_to / $coefficient);
             })
             ->when(!empty(request()->brand),function ($query) {
-                $query->whereIn("brand",request()->brand);
+                $query->whereIn("brand",gettype(request()->brand) == 'array' ? request()->brand : [request()->brand]);
             })
 
             ->when(!empty(request()->size),function ($query) {
@@ -162,7 +162,7 @@ class ShopService
                 $query->where("price",'<',request()->price_to / $coefficient);
             })
             ->when(!empty(request()->brand),function ($query) {
-                $query->whereIn("brand",request()->brand);
+                $query->whereIn("brand",gettype(request()->brand) == 'array' ? request()->brand : [request()->brand]);
             })
 
             ->when(!empty(request()->size),function ($query) {

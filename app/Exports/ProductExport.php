@@ -34,6 +34,9 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
                     $query->where('user_id','=',$this->user->id);
                 });
             })
+            ->whereHas('catalogItem',function ($query){
+                $query->where('id','>',1);
+            })
             ->get();
 
         $result = array();
@@ -88,11 +91,18 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
             $compoundItemTr = '[';
             $compoundItemRu = '[';
             $compoundItemKz = '[';
-            foreach ($item->catalogItem->compound as $compoundData){
-                $compoundItemTr .= $compoundData->name_tr.",".$compoundData->percent.",";
-                $compoundItemRu .= $compoundData->name_ru.",".$compoundData->percent.",";
-                $compoundItemKz .= $compoundData->name_kz.",".$compoundData->percent.",";
+            try{
+                foreach ($item->catalogItem->compound as $compoundData){
+                    $compoundItemTr .= $compoundData->name_tr.",".$compoundData->percent.",";
+                    $compoundItemRu .= $compoundData->name_ru.",".$compoundData->percent.",";
+                    $compoundItemKz .= $compoundData->name_kz.",".$compoundData->percent.",";
+                }
+            }catch (\Exception $e){
+                $compoundItemTr = '"",0';
+                $compoundItemRu = '"",0';
+                $compoundItemKz = '"",0';
             }
+
             $compoundItemTr .= ']';
             $compoundItemRu .= ']';
             $compoundItemKz .= ']';
@@ -100,6 +110,7 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
 
             foreach ($characteristics as $itemDataCharacteristic){
                 $item_string = '';
+
                 $value = CatalogItemDynamicCharacteristic::where('item_id',$item->catalogItem->id)
                         ->where('characteristic_id','=',$itemDataCharacteristic->id)
                         ->first();

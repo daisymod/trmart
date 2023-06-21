@@ -65,8 +65,6 @@ class CatalogItemsExcelLoadService
     }
 
 
-
-
     public static function load($excelArray,$user)
     {
         $header = $excelArray[0];
@@ -83,6 +81,18 @@ class CatalogItemsExcelLoadService
             if ($row[0] == null && $row[1] == null  && $row[2] == null ){
                 break;
             }
+            $data = CatalogCharacteristic::all();
+
+            $indexRowCharacteristic = 22;
+            $getLastRowToResult = 22 + count($data);
+
+            if (empty($row[7])){
+                $resultArrayParse[$i][$getLastRowToResult + 1] = 'IMG value cannot be empty';
+                $i++;
+                $resultError++;
+                continue;
+            }
+
             $images = explode(',', $row[7]);
 
 
@@ -91,7 +101,26 @@ class CatalogItemsExcelLoadService
             $getLastId = CatalogItem::orderbyDesc('id')->first();
             $article = substr("0000000000".$getLastId->id + 1, strlen($getLastId->id + 1));
 
-            $imageResult = self::saveParseImage(str_replace('[{"file":','',$images[0]));
+
+            if (filter_var(str_replace('[{"file":','',$images[0]), FILTER_VALIDATE_URL)){
+                if(substr(get_headers(str_replace('[{"file":','',$images[0]))[0], 9, 3) != "200"){
+                    $imageResult =
+                                '{"file":"\/img\/no_img.jpeg",
+                                "name":"\/img\/no_img.jpeg",
+                                "img":"\/img\/no_img.jpeg",
+                                "small":"\/img\/no_img.jpeg"}';
+                }else{
+                    $imageResult = self::saveParseImage(str_replace('[{"file":','',$images[0]));
+                    log::info(print_r($imageResult,true));
+                }
+            }else{
+                $imageResult = '{"file":"\/img\/no_img.jpeg",
+                                "name":"\/img\/no_img.jpeg",
+                                "img":"\/img\/no_img.jpeg",
+                                "small":"\/img\/no_img.jpeg"}';
+            }
+
+
 
             if ($user->role == 'admin'){
                 $loadUser = empty($merchant) ? 0 : $merchant;
@@ -100,10 +129,7 @@ class CatalogItemsExcelLoadService
             }
 
 
-            $data = CatalogCharacteristic::all();
 
-            $indexRowCharacteristic = 22;
-            $getLastRowToResult = 22 + count($data);
 
             if (empty($row[11])){
                 $resultArrayParse[$i][$getLastRowToResult + 1] = 'Color value cannot be empty';
@@ -111,6 +137,7 @@ class CatalogItemsExcelLoadService
                 $resultError++;
                 continue;
             }
+
 
             if (empty($row[12])){
                 $resultArrayParse[$i][$getLastRowToResult + 1] = 'Size value cannot be empty';
@@ -261,9 +288,6 @@ class CatalogItemsExcelLoadService
 
             $indexForCreate = 0;
 
-            Log::info(print_r($compoundData,true));
-            Log::info(print_r($compoundDataRu,true));
-            Log::info(print_r($compoundDataKz,true));
 
             foreach ($compoundDataRu as $compoundItem) {
                 if ($indexForCreate % 2 == 1 || empty($compoundItem)) {
@@ -277,7 +301,7 @@ class CatalogItemsExcelLoadService
                         'percent' =>  $compoundData[$indexForCreate + 1] ?? '0',
                         'name_kz' =>  $compoundDataKz[$indexForCreate] ?? '',
                     ];
-                    Log::info(print_r($attribute,true));
+
                     $compound->create($attribute, $catalog_id->id);
                     $indexForCreate++;
                 }
@@ -286,6 +310,8 @@ class CatalogItemsExcelLoadService
 
             $color = CatalogCharacteristicItem::where('catalog_characteristic_id', '=', 15)
                 ->where('name_tr', '=', $row[11])
+                ->orWhere('name_kz', '=', $row[11])
+                ->orWhere('name_ru', '=', $row[11])
                 ->first();
 
             if (!empty($color->id)) {
@@ -332,8 +358,12 @@ class CatalogItemsExcelLoadService
                                 ->where('size','=',$sizeData)
                                 ->where('item_id','=',$catalog_id->id)
                                 ->first();
-            if (!empty($checkProductItem->id)){
-                $productItemService->update($productData, $catalog_id->id);
+
+            if (!empty($checkProductItem->size)){
+                Log::info(print_r($checkProductItem->id,true));
+                Log::info(print_r($productData,true));
+                Log::info(print_r($catalog_id->id,true));
+                $productItemService->update($productData, $checkProductItem->id);
             }else{
                 $productItemService->create($productData, $catalog_id->id);
             }

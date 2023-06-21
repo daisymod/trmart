@@ -33,13 +33,13 @@
                         @endcan
 
                         @can("catalog-item-excel-load")
-                                <div class="d-flex flex-wrap" style="flex-wrap: wrap;width: 233px">
-                                    <form style="width: 100%;display: flex;justify-content: center" method="POST" enctype="multipart/form-data">
+                                <div class="d-flex flex-wrap" style="flex-wrap: wrap;width: 233px;justify-content: center">
+                                    <form style="width: 175px; margin: 15px 0px;" enctype="multipart/form-data">
                                         <div class="image-upload">
-                                            <label for="avatar">
+                                            <label for="file">
                                                 <div class="upload-photo" ></div>
                                             </label>
-                                            <input type="file" name="file" id="fileUpload" accept=".xlsx" >
+                                            <input type="file" name="file" id="fileUpload" accept=".xlsx" />
                                         </div>
                                     </form>
 
@@ -49,7 +49,7 @@
 
                         @endcan
                             <div class="d-flex flex-wrap" style="flex-wrap: wrap;width: 233px">
-                                <span style="width: 100%">@lang('system.exportTable') </span>
+                                <span style="width: 135px; margin: 18px 0px;display: flex;justify-content: center;">@lang('system.exportTable') </span>
                                 <form class="load-form-file-form" method="POST" action="{{ route("catalog_item.export") }}" enctype="multipart/form-data">
                                     {{ csrf_field() }}
                                     <input type="hidden" readonly name="category_id" id="category_id_form">
@@ -62,7 +62,7 @@
 
 
                     <form method="GET" action="{{route('catalog_item.list')}}" class="mini-search-form">
-                        <input type="hidden" id="limit-catalog-item" name="limit" value="{{$_GET['limit'] ?? 10}}">
+                        <input type="hidden" id="limit-catalog-item" name="limit" value="{{$_GET['limit'] ?? 100}}">
                         @foreach($form as $k=>$i)
                             {!! $i !!}
                         @endforeach

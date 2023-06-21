@@ -24,6 +24,7 @@ use App\Models\CatalogItem;
 use App\Models\City;
 use App\Models\Company;
 use App\Models\Country;
+use App\Models\CurrencyRate;
 use App\Models\Customer;
 use App\Models\KPLocation;
 use App\Models\KPPostCode;
@@ -45,6 +46,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Maatwebsite\Excel\Facades\Excel;
@@ -421,16 +423,34 @@ class MerchantController extends Controller
 
 
     public function cancelOrder(Order $id){
-        $request = new \Iyzipay\Request\CreateRefundToBalanceRequest();
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        $rates = CurrencyRate::where('id','=',2)
+            ->first();
+
+        $price = intval($id->price / $rates->rate_end) + ceil(($id->delivery_price + $id->tr_delivery_price) / $rates->rate_end) ;
+
+        $request = new \Iyzipay\Request\CreateRefundRequest();
+        $request->setLocale(\Iyzipay\Model\Locale::EN);
+        $request->setConversationId(rand(0,9999999999));
+        $request->setPaymentTransactionId($id->payment_id);
+        $request->setPrice(intval($price));
+        $request->setCurrency(\Iyzipay\Model\Currency::TL);
+        $request->setIp($ip);
+
         $options = new \Iyzipay\Options();
         $options->setApiKey("bndv9YASgfDvKS6ZWzPiq3J4Ow3wU4q2");
         $options->setSecretKey("ixAzd6UNXi1vhRpVZ2tUe5kcAO6Pl4Fd");
         $options->setBaseUrl("https://api.iyzipay.com");
         $request->setLocale(\Iyzipay\Model\Locale::EN);
-        $request->setPaymentId($id->payment_id);
-        $request->setCallbackUrl("https://turkiyemart.com/merchant/order/".$id->id);
-        $refundToBalance = \Iyzipay\Model\RefundToBalance::create($request, $options);
-       
+
+        $refundToBalance = \Iyzipay\Model\Refund::create($request, $options);
+        log::info(print_r($refundToBalance,true));
         $orderItem = OrderItem::where('order_id','=',$id->id)
             ->first();
 

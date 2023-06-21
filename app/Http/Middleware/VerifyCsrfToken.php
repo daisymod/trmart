@@ -14,19 +14,8 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        '/callback'
+        '/callback',
+
     ];
-
-
-
-    public function handle($request, Closure $next)
-    {
-        if($request->route()->named('callback')) {
-            if (!Auth::check() || Auth::guard()->viaRemember()) {
-                $this->except[] = route('callback');
-            }
-        }
-
-        return parent::handle($request, $next);
-    }
+    
 }

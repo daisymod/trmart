@@ -154,7 +154,7 @@ class CartController extends Controller
         $rates = CurrencyRate::where('id','=',2)
                 ->first();
 
-        $priceDelivery = ($request->get('delivery') + $request->get('deliveryTr')) / $rates->rate_end;
+        $priceDelivery =  ($request->get('delivery') + $request->get('deliveryTr')) / $rates->rate_end;
 
         $options = new \Iyzipay\Options();
         $options->setApiKey("bndv9YASgfDvKS6ZWzPiq3J4Ow3wU4q2");
@@ -268,9 +268,9 @@ class CartController extends Controller
 
         $checkoutForm = \Iyzipay\Model\CheckoutForm::retrieve($response, $options);
         Log::info(print_r($checkoutForm,true));
-       
-        if ($checkoutForm->getPaymentStatus() == 'success'){
-            newOrderJob::dispatch($request->get('hash'), $checkoutForm->getPaymentId());
+
+        if ($checkoutForm->getPaymentStatus() == 'SUCCESS'){
+            newOrderJob::dispatch($request->get('hash'),$checkoutForm->getPaymentItems()[0]->paymentTransactionId ?? $checkoutForm->getPaymentId());
             return redirect(route("cart.done"));
         }else{
             return redirect(route("cart.error"));

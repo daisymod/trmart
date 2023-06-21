@@ -168,7 +168,7 @@ return [
     |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE'),
+    'secure' => env('SESSION_SECURE_COOKIE', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -180,8 +180,8 @@ return [
     | the HTTP protocol. You are free to modify this option if needed.
     |
     */
-    
-    'http_only' => false,
+
+    'http_only' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -195,6 +195,8 @@ return [
     | Supported: "lax", "strict", "none", null
     |
     */
+
+
 
     'same_site' => "none",
 

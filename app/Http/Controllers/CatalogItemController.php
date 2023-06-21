@@ -11,6 +11,7 @@ use App\Mail\RejectNewItemMail;
 use App\Mail\ResultImportMail;
 use App\Models\CatalogCharacteristicItem;
 use App\Models\CatalogItem;
+use App\Models\MarketplaceBrands;
 use App\Models\User;
 use App\Services\CatalogItemActionService;
 use App\Services\CatalogItemsExcelLoadService;
@@ -19,6 +20,7 @@ use App\Services\CharacteristicService;
 use App\Services\ColorService;
 use App\Services\CompoundService;
 use App\Services\ItemService;
+use App\Services\MarketPlaceBrandService;
 use App\Services\ProductItemSerice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,7 +37,7 @@ class CatalogItemController
 
     public function actionListGet(CatalogItemActionService $service,Request $request)
     {
-        
+
         Gate::authorize("catalog-item-list");
         return view("catalog_item.list", $service->actionList($request));
     }
@@ -77,6 +79,17 @@ class CatalogItemController
     {
 
         Gate::authorize("catalog-item-add");
+
+
+        $brand = MarketplaceBrands::where('name','=',$request->get('brand'))
+                    ->first();
+
+        if (empty($brand->name)){
+            $marketBrandModel = new MarketplaceBrands();
+            $brandService = new MarketPlaceBrandService($marketBrandModel);
+            $brandService->create($request->get('brand'));
+        }
+
         $data  = $this->item->create($request->all(),Auth::user());
         for ($index=0;$index<count($request->compound['ru']);$index++){
             if (isset($request->percent[$index])){
@@ -136,6 +149,15 @@ class CatalogItemController
         $record = CatalogItem::query()->findOrFail($id);
         Gate::authorize("catalog-item-edit", $record);
 
+        $brand = MarketplaceBrands::where('name','=',$request->get('brand'))
+            ->first();
+
+        if (empty($brand->name)){
+            $marketBrandModel = new MarketplaceBrands();
+            $brandService = new MarketPlaceBrandService($marketBrandModel);
+            $brandService->create($request->get('brand'));
+        }
+        
         $this->item->update($request->all(),$id,Auth::user());
 
         $this->compound->delete($id);

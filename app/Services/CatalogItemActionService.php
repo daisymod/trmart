@@ -61,7 +61,7 @@ class CatalogItemActionService
         $form = $this->getFormSearch($item);
 
 
-        $sort = explode(".", request("sort_by", "name_{$lang}.asc"));
+        $sort = explode(".", request("sort_by", "updated_at.desc"));
         $records = CatalogItem::query()->orderBy($sort[0], $sort[1]);
         if (Auth::user()->role == "merchant") {
             $records = $records->where("user_id", Auth::user()->id);

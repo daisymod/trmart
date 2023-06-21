@@ -217,6 +217,7 @@
             <div class="tab-content">
                 <div id="register-tab-content" class="tab-content-item active form-ajax">
                     <form class="main-form2" method="POST" action="{{ route("user.login") }}">
+                        @csrf
                         <div class="inputs-wrap">
                             <span>@lang('body.phone')</span>
                             <div class="input-box">
@@ -241,6 +242,7 @@
                 <div id="login-tab-content" class="tab-content-item">
                     <div class="form-wrap form-ajax-reg-user">
                         <form class="main-form3" method="POST" action="{{ route("user.reg") }}">
+                            @csrf
                             <div class="inputs-wrap">
                                 <span>@lang('body.name')</span>
                                 <div class="input-box">
@@ -289,6 +291,7 @@
             <h3>@lang('body.writeCode')</h3>
             <div class="form-ajax">
                 <form action="{{ route("user.reg.sms") }}">
+                    @csrf
                     <p class="top"@lang('body.CodePhone') <span></span></p>
                     <input name="sms" required type="text" placeholder="• • • • • •">
                     <div class="error-field-text error-sms"></div>
@@ -326,6 +329,7 @@
             <h3>@lang('body.writeCode')</h3>
             <div class="form-ajax form-ajax-sms-user">
                 <form action="{{ route("user.checkSMS") }}">
+                    @csrf
                     <p class="top"@lang('body.CodePhone') <span></span></p>
                     <input name="sms" required type="text" placeholder="• • • • • •">
                     <div class="error-field-text error-sms"></div>
@@ -341,6 +345,7 @@
             <h3>@lang('body.resetPasswordText')</h3>
             <div class="form-wrap form-ajax-sms-user-reset">
                 <form action="{{ route("user.reset-password") }}">
+                    @csrf
                     <input type="hidden" name="phone" id="phone-data-for-reset" value="">
                     <div class="inputs-wrap">
                         <span>@lang('body.password')</span>
@@ -411,6 +416,7 @@
             <h3>@lang('body.writeCode')</h3>
             <div class="form-ajax">
                 <form action="{{ route("merchant.reg.sms") }}">
+                    @csrf
                     <p class="top"@lang('body.CodePhone') <span></span></p>
                     <input name="first_name" id="first_name_merchant"  type="hidden" >
                     <input name="last_name" id="last_name_merchant"  type="hidden" >

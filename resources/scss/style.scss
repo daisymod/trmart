@@ -3484,7 +3484,7 @@ footer {
                                 img {
                                     width: 484px;
                                     height: 600px;
-                                    object-fit: cover;
+                                    object-fit: contain;
                                 }
                             }
                         }
@@ -4578,4 +4578,6 @@ button[disabled]{
     }
 }
 
+.image-upload>input {
 
+}
