@@ -30,6 +30,7 @@ class ProductItemSerice
         $data['count'] = empty($attributes['count']) ? 0 : $attributes['count'];
         $data['price'] = empty($attributes['price']) ? 0 : $attributes['price'];
         $data['sale'] = empty($attributes['sale']) ? 0 : $attributes['sale'];
+        $data['image'] =  gettype($attributes['image']) == 'string' ?  '['.$attributes['image'] .']' : '['.implode(",",$attributes['image']).']';
         $item = $this->model->query()->create($data);
 
         return $item;
@@ -43,7 +44,7 @@ class ProductItemSerice
         $attributes['count'] = empty($attributes['count']) ? 0 : $attributes['count'];
         $attributes['price'] = empty($attributes['price']) ? 0 : $attributes['price'];
         $attributes['sale'] = empty($attributes['sale']) ? 0 : $attributes['sale'];
-
+        $data['image'] =  gettype($attributes['image']) == 'string' ?  '['.$attributes['image'] .']' : '['.implode(",",$attributes['image']).']';
         return $item->update($attributes);
     }
 

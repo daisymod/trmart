@@ -104,7 +104,6 @@ class ShopController
         $coefficient =  Cookie::get('currency') == 2 ? 1 : $this->rates->getRateTurkey(Cookie::get('currency'));
         $compact  = ShopService::actionItem($id);
 
-
         $size = ProductItem::where('item_id','=',$id)
             ->with('sizeData')
             ->whereHas('sizeData',function ($q){
@@ -128,6 +127,9 @@ class ShopController
         }
 
         foreach ($color as $item){
+            if ($item->image == []){
+                $item->image = $item->colorData->image;
+            }
             $image = json_decode($item->colorData->image, true);
             if (!empty($image)) {
                 $item['img'] =  $image[0]["img"];

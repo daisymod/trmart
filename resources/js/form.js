@@ -27,10 +27,78 @@ jQuery(document).ready(function () {
 
             '                <td><input type="text" name="addmore['+j+'][count]" class="form-control" /></td>\n' +
             //'                <td><input type="text" name="addmore['+j+'][sale]"  class="form-control" /></td>' +
+            '<td>\n' +
+            '                    <div id="image-load-box-'+j+'" class="field-images-box " data-style="" data-width="250" data-height="250" data-filed="addmore['+j+'][image]">\n' +
+            '                        <div class="images-list-box ui-sortable">\n' +
+            '                            <div class="image-box image-load ui-sortable-handle" style="display: none;">\n' +
+            '                                <div class="image">\n' +
+            '                                    <img src="/i/6.gif" style="width: 70px;">\n' +
+            '                                </div>\n' +
+            '                                <div class="name">Загрузка изображения</div>\n' +
+            '                            </div>\n' +
+            '                                                    </div>\n' +
+            '                        <div id="image-load-'+j+'" class="select-file btn btn-primary btn-sm" >Загрузить изображения</div>\n' +
+            '                    </div>\n' +
+            '                </td>' +
             '<td><button type="button" onclick="$(this).parents(\'tr\').remove()" class="btn red-btn remove-tr">-</button></td></tr>');
+        document.getElementById('image-load-'+ j +'').addEventListener('click', function(e) {
+            const imageUrl = "/system/image";
+
+            let imageBox = document.getElementById($(this).parent()[0].attributes[0].nodeValue);
+            console.log(imageBox);
+            let inputFileLoad = jQuery("<input>", {
+                "type": "file",
+                multiple: 1,
+                accept: ".jpeg,.jpg,.png",
+                change: function (e) {
+                    for (let i = 0; i < e.target.files.length; i++) {
+                        loadFile(e.target.files[i],imageBox);
+                    }
+                }
+            });
+            inputFileLoad.click();
+
+            function loadFile(file, imagesBox) {
+                console.log(imagesBox);
+                let imageWidth = jQuery(imagesBox).attr("data-width");
+                let imageHeight = jQuery(imagesBox).attr("data-height");
+                let imageField = jQuery(imagesBox).attr("data-filed");
+
+                let loadBox = jQuery(imagesBox).find(".image-load").clone();
+                loadBox.removeClass("image-load");
+                loadBox.css("display", "block");
+                loadBox.find(".name").text(file.name);
+                jQuery(".images-list-box", imagesBox).append(loadBox);
+
+                let dataArray = new FormData();
+                dataArray.append('file', file);
+                dataArray.append('width', imageWidth);
+                dataArray.append('height', imageHeight);
+                dataArray.append('field', imageField);
+                console.log(dataArray);
+                jQuery.ajax({
+                    type: "POST",
+                    enctype: 'multipart/form-data',
+                    url: imageUrl + "/load",
+                    data: dataArray,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 600000,
+                    dataType: 'text',
+                    success: function (data) {
+                        jQuery(loadBox).after(data);
+                        jQuery(loadBox).remove();
+                    },
+                    error: function (e) {
+                        jQuery(loadBox).remove();
+                    }
+                });
+            }
+        });
+
+
     });
-
-
 
 
     jQuery("#add-btn-characteristic").click(function () {

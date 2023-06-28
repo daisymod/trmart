@@ -9,7 +9,7 @@ class ProductItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['item_id','color','size','price','count','sale'];
+    protected $fillable = ['item_id','color','size','price','count','sale','image'];
 
 
     public function sizeData()
@@ -27,4 +27,9 @@ class ProductItem extends Model
         return $this->belongsTo(CatalogItem::class, "item_id");
     }
 
+
+    public function images()
+    {
+        return json_decode($this->image, true);
+    }
 }

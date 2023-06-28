@@ -42,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
 
         Carbon::setLocale(app()->getLocale());
 
-        view()->share("location", ['country_id'=> 2, 'city_id' => 2]);
+        view()->share("location", ['country_id'=> 1, 'city_id' => 2]);
         view()->share("langList", LanguageService::$lang);
         view()->share("catalogMenu", Catalog::query()->where("parent_id", 0)->orderBy("name_ru")->get());
         view()->composer("*", function ($view) {

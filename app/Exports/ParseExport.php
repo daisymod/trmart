@@ -41,7 +41,7 @@ class ParseExport implements FromArray,WithColumnWidths,ShouldQueue
             trans('system.body_ru'),
             trans('system.body_tr'),
             trans('system.body_kz'),
-            trans('system.images'),
+            trans('system.images').' Main photo',
             trans('catalog_item.form.barcode'),
             trans('system.sale'),
             trans('system.price'),
@@ -56,6 +56,12 @@ class ParseExport implements FromArray,WithColumnWidths,ShouldQueue
             trans('system.equipment'). 'RUS',
             trans('system.equipment'). 'KZ',
             trans('catalog_item.form.weight'),
+            trans('system.images').' Gallery photo - 1',
+            trans('system.images').' Gallery photo - 2',
+            trans('system.images').' Gallery photo - 3',
+            trans('system.images').' Gallery photo - 4',
+            trans('system.images').' Gallery photo - 5',
+            trans('system.images').' Gallery photo - 6',
         ];
 
 

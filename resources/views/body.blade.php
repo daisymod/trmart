@@ -21,7 +21,21 @@
     <script src="https://unpkg.com/imask"></script>
 </head>
 <body>
-<p id="country_id" style="display: none">{{$location['country_id']}}</p>
+<p id="country_id" style="display: none">
+@switch(Lang::locale())
+        @case('ru')
+            1
+            @break
+
+        @case('tr')
+            2
+            @break
+
+        @case('kz')
+            3
+            @break
+@endswitch
+</p>
 <p id="city_id" style="display: none">{{$location['city_id']}}</p>
 <p id="card_price_turkey" style="display: none">{{$cart["price"]}}</p>
 

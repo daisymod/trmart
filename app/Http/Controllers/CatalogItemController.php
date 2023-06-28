@@ -12,6 +12,7 @@ use App\Mail\ResultImportMail;
 use App\Models\CatalogCharacteristicItem;
 use App\Models\CatalogItem;
 use App\Models\MarketplaceBrands;
+use App\Models\ProductItem;
 use App\Models\User;
 use App\Services\CatalogItemActionService;
 use App\Services\CatalogItemsExcelLoadService;
@@ -77,9 +78,7 @@ class CatalogItemController
 
     public function actionAddPost(CatalogItemEditPostRequest $request, CatalogItemActionService $service)
     {
-
         Gate::authorize("catalog-item-add");
-
 
         $brand = MarketplaceBrands::where('name','=',$request->get('brand'))
                     ->first();
@@ -141,11 +140,13 @@ class CatalogItemController
         $record = CatalogItem::query()->findOrFail($id);
         Gate::authorize("catalog-item-edit", $record);
         $color = $this->color->getAll();
+
         return view("catalog_item.edit", $service->actionEditGet($record));
     }
 
     public function actionEditPost($id, CatalogItemEditPostRequest $request, CatalogItemActionService $service)
     {
+
         $record = CatalogItem::query()->findOrFail($id);
         Gate::authorize("catalog-item-edit", $record);
 
@@ -157,7 +158,7 @@ class CatalogItemController
             $brandService = new MarketPlaceBrandService($marketBrandModel);
             $brandService->create($request->get('brand'));
         }
-        
+
         $this->item->update($request->all(),$id,Auth::user());
 
         $this->compound->delete($id);
@@ -200,7 +201,17 @@ class CatalogItemController
                 if (!isset($request->addmore[$index])) {
                     continue;
                 } else {
-                    $this->product->create($request->addmore[$index], $id);
+
+                    $array = $request->addmore[$index];
+
+                    $result = [];
+                    array_walk_recursive($array, function ($item, $key) use (&$result) {
+                        if (str_contains($item, 'file')) {
+                            $result[] = $item;
+                        }
+                    });
+                    $array['image'] = $result;
+                    $this->product->create($array, $id);
                 }
             }
         }
@@ -284,6 +295,7 @@ class CatalogItemController
     public function actionExcelExport(Request $request){
         $user = User::where('id','=',$request->user_id)
                 ->first();
+
         header("Content-type: application/vnd.ms-excel;charset:UTF-8");
         $response =  Excel::download(new ProductExport($user,$request->category_id ?? null), 'Items.xlsx', \Maatwebsite\Excel\Excel::XLSX);
         ob_end_clean();

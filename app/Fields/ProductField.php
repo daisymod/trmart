@@ -28,6 +28,26 @@ class ProductField extends RelationField
             $product = [];
         }
 
+        $field = 'image';
+        $value = [];
+        $index = 0;
+
+        foreach ($product as $item){
+            if (!empty($item->{$field}) and is_string($item->{$field})) {
+                $value[$index] = json_decode($item->{$field}, true);
+            }
+
+            if (!empty($item->{$field}) and is_array($item->{$field})) {
+
+                foreach ($item->{$field} as $k => $i) {
+                    $value[$index] = json_decode($i, true);
+                }
+            }
+            $index++;
+        }
+
+
+        $class = $this;
 
         $color = CatalogCharacteristicItem::where('catalog_characteristic_id','=',15)
             ->get();
@@ -35,6 +55,19 @@ class ProductField extends RelationField
         $size = CatalogCharacteristicItem::where('catalog_characteristic_id','=',16)
             ->get();
 
-        return view("fields." . class_basename($this), compact("product",'color','size'))->render();
+        return view("fields." . class_basename($this), compact("product",'color','size',"value", "class", "field"))->render();
+    }
+
+    public function save(array $data)
+    {
+        if (array_key_exists($this->field, $data)) {
+            $data = $data[$this->field];
+            foreach ($data as $k=>$i) {
+                $data[$k] = json_decode($i);
+            }
+            return [$this->field =>  json_encode($data)];
+        } else {
+            return [];
+        }
     }
 }

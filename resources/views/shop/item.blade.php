@@ -60,95 +60,101 @@
                     <span>@lang('products.toFavorite')</span>
                 </a>
             </div>
-            <div class="detail-sliders">
-                <div class="left">
-                    <div class="detail-slider-wrap">
-                        <div class="big-slider-wrap">
-                            <button style="left:-13px !important;" type="button" class="arrow arrow-prev">
-                                <img src="/img/slider-arrow-left.png" alt="">
-                            </button>
-                            <div class="big-slider">
-                                @foreach($record->images() as $image)
-                                    <div class="item"><img src="{{ $image["img"] }}" alt=""></div>
-                                @endforeach
-                            </div>
-                            <button type="button" class="arrow arrow-next">
-                                <img src="/img/slider-arrow-right.png" alt="">
-                            </button>
-                        </div>
-                        <div class="small-slider-wrap">
 
-                            <div class="small-slider">
-                                @foreach($record->images() as $image)
-                                    <div class="slide-item"><img src="{{ $image["img"] }}" alt=""></div>
-                                @endforeach
+                <div class="detail-sliders" id="details-slider">
+                    @foreach($color as $gallery)
+                    <div class="left slider-left">
+                        <div class="detail-slider-wrap">
+                            <div class="big-slider-wrap">
+                                <button style="left:-13px !important;" type="button" class="arrow arrow-prev">
+                                    <img src="/img/slider-arrow-left.png" alt="">
+                                </button>
+                                <div class="big-slider">
+                                    @foreach($gallery->images() as $image)
+                                        <div class="item"><img src="{{ $image["img"] }}" alt=""></div>
+                                    @endforeach
+                                </div>
+                                <button type="button" class="arrow arrow-next">
+                                    <img src="/img/slider-arrow-right.png" alt="">
+                                </button>
                             </div>
+                            <div class="small-slider-wrap">
 
+                                <div class="small-slider">
+                                    @foreach($gallery->images() as $image)
+                                        <div class="slide-item"><img src="{{ $image["img"] }}" alt=""></div>
+                                    @endforeach
+                                </div>
+
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="right">
+                    @endforeach
+                    <div class="right">
 
-                    <p class="color-info">@lang('products.color'): <span id="color-text">{{$color[0]->colorData->{'name_'.app()->getLocale()} }} </span></p>
-                    <div class="colors-slider-wrap"   >
-                        <div class="slider-navigation">
-                            <button type="button" class="slick-next" id="color-slick-next"><img src="/img/arr-right.svg" alt=""></button>
-                            <button type="button" class="slick-prev" id="color-slick-prev"><img src="/img/arr-right.svg" alt=""></button>
+                        <p class="color-info">@lang('products.color'): <span id="color-text">{{$color[0]->colorData->{'name_'.app()->getLocale()} }} </span></p>
+                        <div class="colors-slider-wrap"   >
+                            <div class="slider-navigation">
+                                <button type="button" class="slick-next" id="color-slick-next"><img src="/img/arr-right.svg" alt=""></button>
+                                <button type="button" class="slick-prev" id="color-slick-prev"><img src="/img/arr-right.svg" alt=""></button>
+                            </div>
+                            <div class="colors-slider">
+                                @php $colorIndex = 0; @endphp
+                                @foreach($color as $colorItem)
+                                    <div class="item color-data-active" data-colorId="{{$colorItem->colorData->id}}" data-index="{{$colorIndex}}" data-color="{{$colorItem->colorData->{'name_'.app()->getLocale() } }}">
+                                        @if(!empty($colorItem->img ))
+                                            <img src="{{$colorItem->img}}" alt="">
+                                        @endif
+                                    </div>
+                                    @php $colorIndex++; @endphp
+                                @endforeach
+                            </div>
                         </div>
-                        <div class="colors-slider">
-                            @foreach($color as $colorItem)
-                                <div class="item color-data-active" data-colorId="{{$colorItem->colorData->id}}" data-color="{{$colorItem->colorData->{'name_'.app()->getLocale() } }}">
-                                    @if(!empty($colorItem->img ))
-                                        <img src="{{$colorItem->img}}" alt="">
+                        <div class="size-table">
+                            <p>@lang('products.tableSize')</p>
+                            <div class="variants-radios">
+
+                                @php $index = 1; @endphp
+                                @foreach($size as $itemSize)
+                                    @if($itemSize->sizeData->{'name_'.app()->getLocale()} != '')
+                                        <div @if($itemSize->sizeData->exist) class="radio-wrap" @else class="radio-wrap not-active" @endif  data-size="{{$itemSize->sizeData->id}}">
+                                            <input @if(!$itemSize->sizeData->exist) disabled="disabled" @endif type="radio" value="{{$itemSize->sizeData->{'name_'.app()->getLocale() } }}" id="radio{{$index}}" name="size">
+                                            <label for="radio{{$index}}">
+                                                <b>{{$itemSize->sizeData->{'name_'.app()->getLocale() } }}</b>
+                                            </label>
+                                        </div>
                                     @endif
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                    <div class="size-table">
-                        <p>@lang('products.tableSize')</p>
-                        <div class="variants-radios">
-
-                            @php $index = 1; @endphp
-                            @foreach($size as $itemSize)
-                                @if($itemSize->sizeData->{'name_'.app()->getLocale()} != '')
-                                <div @if($itemSize->sizeData->exist) class="radio-wrap" @else class="radio-wrap not-active" @endif  data-size="{{$itemSize->sizeData->id}}">
-                                    <input @if(!$itemSize->sizeData->exist) disabled="disabled" @endif type="radio" value="{{$itemSize->sizeData->{'name_'.app()->getLocale() } }}" id="radio{{$index}}" name="size">
-                                    <label for="radio{{$index}}">
-                                        <b>{{$itemSize->sizeData->{'name_'.app()->getLocale() } }}</b>
-                                    </label>
-                                </div>
-                                @endif
-                                @php $index++; @endphp
-                            @endforeach
-                        </div>
-                    </div>
-                    <div class="price-wrap">
-                        <div style="display: flex; align-items: center;">
-                            <span id="new-price" class="new-price price-product" data-price="{{ round($record->new_price,2) }}">{{ number_format($record->new_price, 0, ".", " ") }} {{$turkeyCurrency->symbol ?? '₺l'}}</span>
-                            @if($i->sale > 0)
-                                <span class="old-price" style="text-decoration: line-through; margin-left: 10px" data-old-price="{{ $record->price }}">{{ $record->price }}</span>
-                            @endif
-                        </div>
-
-                       </div>
-                    <div class="buttons">
-                        <div class="green-wrap">
-                            <a class="green-btn add-to-cart-many" data-id="{{ $record->id }}">@lang('products.addToCart')</a>
-                            <div class="product-count">
-                                <input type="text" class="input-number-item"  id="input-number-item" value="1" min="1">
-                                <div class="btns">
-                                    <button type="button" class="btn-minus-item"><img src="/img/arr-right.svg" alt="">
-                                    </button>
-                                    <button type="button" class="btn-plus-item"><img src="/img/arr-right.svg" alt="">
-                                    </button>
-                                </div>
+                                    @php $index++; @endphp
+                                @endforeach
                             </div>
                         </div>
-                        <a  class="black-btn add-to-cart-many go-now" data-id="{{ $record->id }}">@lang('products.buyNow')</a>
+                        <div class="price-wrap">
+                            <div style="display: flex; align-items: center;">
+                                <span id="new-price" class="new-price price-product" data-price="{{ round($record->new_price,2) }}">{{ number_format($record->new_price, 0, ".", " ") }} {{$turkeyCurrency->symbol ?? '₺l'}}</span>
+                                @if($i->sale > 0)
+                                    <span class="old-price" style="text-decoration: line-through; margin-left: 10px" data-old-price="{{ $record->price }}">{{ $record->price }}</span>
+                                @endif
+                            </div>
+
+                        </div>
+                        <div class="buttons">
+                            <div class="green-wrap">
+                                <a class="green-btn add-to-cart-many" data-id="{{ $record->id }}">@lang('products.addToCart')</a>
+                                <div class="product-count">
+                                    <input type="text" class="input-number-item"  id="input-number-item" value="1" min="1">
+                                    <div class="btns">
+                                        <button type="button" class="btn-minus-item"><img src="/img/arr-right.svg" alt="">
+                                        </button>
+                                        <button type="button" class="btn-plus-item"><img src="/img/arr-right.svg" alt="">
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <a  class="black-btn add-to-cart-many go-now" data-id="{{ $record->id }}">@lang('products.buyNow')</a>
+                        </div>
                     </div>
                 </div>
-            </div>
+
             <div class="about-product">
                 <h3>@lang('products.about')</h3>
                 <div class="about-product-info">

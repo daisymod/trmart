@@ -31,6 +31,15 @@ class CartService
                     $item->size = 0;
                 }
 
+
+                $size = CatalogCharacteristicItem::where('catalog_characteristic_id','=',16)
+                    ->where('name_tr','=',$i["size"])
+                    ->first();
+                $image = ProductItem::where('item_id','=',$i["id"])
+                            ->where('size','=',$size->id)
+                            ->where('color','=',$i["color"])
+                            ->first();
+
                 if (!empty($i["color"])) {
                     $item->key = "id{$i["id"]}size{$i["size"]}color{$i["color"]}";
                     $item->color = $i["color"];
@@ -61,6 +70,7 @@ class CartService
                 $item->price = number_format($p, 2, ".", " ");
                 $item->count = $i["count"];
                 $item->total = number_format($thisPrice, 2, ".", " ");
+                $item->image = $image->image ?? null;
                 $items[] = $item;
             }
         }

@@ -63,11 +63,14 @@ class ParserController extends Controller
 
             foreach ($pageResponse['data']['products'] as $product){
                 $dataProduct = $this->service->getDataProduct($product['customUrl']);
-
-                $images = array();
-                foreach ($dataProduct['data']['images'] as $image){
-                    array_push($images, $image['url']);
-                }
+                    $images = array();
+                    $gallery = array();
+                    foreach ($dataProduct['data']['images'] as $image){
+                        if (str_contains($image['url'], '1200/1200')) {
+                            array_push($gallery, $image['url']);
+                        }
+                        array_push($images, $image['url']);
+                    }
 
                     $html = strip_tags($dataProduct['data']['description'],'<p>');
                     $description  = explode('<',$html);
@@ -129,7 +132,13 @@ class ParserController extends Controller
                                     $product['brand'],
                                     ["",0],
                                     ["",0],
-                                    1
+                                    1,
+                                    $gallery[0] ?? '',
+                                    $gallery[1] ?? '',
+                                    $gallery[2] ?? '',
+                                    $gallery[3] ?? '',
+                                    $gallery[4] ?? '',
+                                    $gallery[5] ?? '',
                                 ],$characteristicArray)
                             );
                         }
@@ -161,7 +170,13 @@ class ParserController extends Controller
                                         $product['brand'],
                                         ["",0],
                                         ["",0],
-                                        1
+                                        1,
+                                        $gallery[0] ?? '',
+                                        $gallery[1] ?? '',
+                                        $gallery[2] ?? '',
+                                        $gallery[3] ?? '',
+                                        $gallery[4] ?? '',
+                                        $gallery[5] ?? '',
                                     ], $characteristicArray));
                             }
                         }
