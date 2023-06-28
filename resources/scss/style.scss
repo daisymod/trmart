@@ -3930,7 +3930,7 @@ footer {
                     max-width: 280px;
                     width: 100%;
                     margin-top: 20px;
-
+                    position: relative;
                     .seller-wrap {
                         background: #FFFFFF;
                         border: 1px solid rgba(#A0A0A0, .4);
@@ -4562,7 +4562,8 @@ button[disabled]{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-
+    height: 57px;
+    overflow-y: scroll;
     .label-checkbox-text-2{
         color: #868686;
         cursor: pointer;

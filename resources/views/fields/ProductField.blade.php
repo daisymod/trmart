@@ -27,7 +27,40 @@
                 <!--<td><input type="text" name="addmore[0][price]"  class="form-control" /></td>-->
                 <td><input type="text" name="addmore[0][count]" class="form-control" /></td>
                 <!--<td><input type="text" name="addmore[0][sale]"  class="form-control" /></td>-->
-
+                <td>
+                    <div class="field-images-box {{ $class->class ?? "" }}" data-style="{{ $class->style ?? "" }}" data-width="{{ $class->width ?? 250 }}" data-height="{{$class->height ?? 250}}" data-filed="addmore[0][image]">
+                        <div class="images-list-box">
+                            <div class="image-box image-load" style="display: none">
+                                <div class="image">
+                                    <img src="/i/6.gif" style="width: 70px;">
+                                </div>
+                                <div class="name">Загрузка изображения</div>
+                            </div>
+                            @foreach($value as $info)
+                                @php $j = 0; @endphp
+                                @foreach($value[$j] as $info)
+                                    <div class="image-box" data-file="{{$info["file"]}}" data-name="{{$info["name"]}}">
+                                        <div class="image">
+                                            <img src="{{$info["small"]}}">
+                                        </div>
+                                        <div class="name">
+                                            {{$info["name"]}}
+                                        </div>
+                                        <div class="del">
+                                            <i class="fas fa-trash"></i>
+                                        </div>
+                                        <div class="edit">
+                                            <i class="fas fa-edit"></i>
+                                        </div>
+                                        <input  type="hidden" name="addmore[{{$index}}][{{$j}}][image]" value="{{json_encode($info)}}">
+                                    </div>
+                                    @php $j++; @endphp
+                                @endforeach
+                            @endforeach
+                        </div>
+                        <div class="select-file btn btn-primary btn-sm">@lang('system.f5')</div>
+                    </div>
+                </td>
                 <td><button type="button" id="add-btn-product" class="btn green-btn">@lang('system.newColor1')</button></td>
             </tr>
         @else
@@ -51,6 +84,40 @@
                     <!--<td><input type="text" name="addmore[{{$index}}][price]" value="{{$product[$index]->price}}" class="form-control" /></td>-->
                     <td><input type="text" name="addmore[{{$index}}][count]"  value="{{$product[$index]->count}}" class="form-control" /></td>
                     <!--<td><input type="text" name="addmore[{{$index}}][sale]" value="{{$product[$index]->sale}}" class="form-control" /></td>-->
+
+                    <td>
+                        <div class="field-images-box {{ $class->class ?? "" }}" data-style="{{ $class->style ?? "" }}" data-width="{{ $class->width ?? 250 }}" data-height="{{$class->height ?? 250}}" data-filed="addmore[{{$index}}][image]">
+                            <div class="images-list-box">
+                                <div class="image-box image-load" style="display: none">
+                                    <div class="image">
+                                        <img src="/i/6.gif" style="width: 70px;">
+                                    </div>
+                                    <div class="name">Загрузка изображения</div>
+                                </div>
+                                @php $j = 0; @endphp
+                                @foreach($value[$index] as $info)
+                                    <div class="image-box" data-file="{{$info["file"]}}" data-name="{{$info["name"]}}">
+                                        <div class="image">
+                                            <img src="{{$info["small"]}}">
+                                        </div>
+                                        <div class="name">
+                                            {{$info["name"]}}
+                                        </div>
+                                        <div class="del">
+                                            <i class="fas fa-trash"></i>
+                                        </div>
+                                        <div class="edit">
+                                            <i class="fas fa-edit"></i>
+                                        </div>
+                                        <input  type="hidden" name="addmore[{{$index}}][{{$j}}][image]" value="{{json_encode($info)}}">
+                                    </div>
+                                    @php $j++; @endphp
+                                @endforeach
+
+                            </div>
+                            <div class="select-file btn btn-primary btn-sm">@lang('system.f5')</div>
+                        </div>
+                    </td>
                     @if($index == 0)
                         <td><button  type="button" name="add" id="add-btn-product" class="btn green-btn">+</button></td>
                     @else

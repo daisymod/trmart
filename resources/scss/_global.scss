@@ -378,7 +378,8 @@ button {
 .select2-results__options {
     border: none;
     border-top: 1px solid #7C7C7C;
-    max-height: inherit !important;
+    max-height: 200px;
+    overflow-y: scroll;
     border-radius: 0 0 15px 15px;
 }
 

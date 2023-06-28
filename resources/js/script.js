@@ -12,14 +12,34 @@ $(document).ready(function () {
         $.fn.customFile = function() {
 
             return this.each(function() {
+              console.log(document.getElementById('country_id').textContent);
 
-                var $file = $(this).addClass('custom-file-upload-hidden'), // the original file input
-                    $wrap = $('<div class="file-upload-wrapper">'),
-                    $input = $('<input type="text" readonly="readonly" class="file-upload-input" />'),
-                    // Button that will be used in non-IE browsers
-                    $button = $('<button type="button" class="file-upload-button">Select a File</button>'),
-                    // Hack for IE
-                    $label = $('<label class="file-upload-button" for="'+ $file[0].id +'">Select a File</label>');
+              switch(parseInt(document.getElementById('country_id').textContent)) {
+                case 1:
+                    var $file = $(this).addClass('custom-file-upload-hidden'), // the original file input
+                        $wrap = $('<div class="file-upload-wrapper">'),
+                        $input = $('<input type="text" readonly="readonly" class="file-upload-input" />'),
+                        $button = $('<button type="button" class="file-upload-button">Выберите файл</button>'),
+                        $label = $('<label class="file-upload-button" for="'+ $file[0].id +'">Выберите файл</label>');
+                    break
+                case 3:
+                    var $file = $(this).addClass('custom-file-upload-hidden'), // the original file input
+                        $wrap = $('<div class="file-upload-wrapper">'),
+                        $input = $('<input type="text" readonly="readonly" class="file-upload-input" />'),
+                        $button = $('<button type="button" class="file-upload-button">Файлды таңдаңыз</button>'),
+                        $label = $('<label class="file-upload-button" for="'+ $file[0].id +'">Файлды таңдаңыз</label>');
+                    break
+
+                case 2:
+                    var $file = $(this).addClass('custom-file-upload-hidden'), // the original file input
+                        $wrap = $('<div class="file-upload-wrapper">'),
+                        $input = $('<input type="text" readonly="readonly" class="file-upload-input" />'),
+                        $button = $('<button type="button" class="file-upload-button"> Dosya seçin</button>'),
+                        $label = $('<label class="file-upload-button" for="'+ $file[0].id +'"> Dosya seçin</label>');
+                    break
+
+                }
+
 
                 // Hide by shifting to the left so we
                 // can still trigger events
@@ -641,19 +661,31 @@ $(document).ready(function () {
 
 
     $(".colors-slider").on("afterChange", function (){
-        let color = document.getElementsByClassName('color-data-active slick-active');
+        var color = document.getElementsByClassName('color-data-active slick-active');
         document.getElementById('color-text').innerHTML = color[0].dataset.color;
+        $('.big-slider').slick("slickGoTo", 0, true);
+        $('.small-slider').slick("slickGoTo", 0, true);
+        let indexSlide = color[0].dataset.index;
+        var left  = document.getElementsByClassName('slider-left');
+
+        for (let index = 0; index < left.length; index ++){
+            if (index !== indexSlide){
+                left[index].style.display = 'none';
+            }
+        };
+        left[indexSlide].style.display = 'flex';
+
         $.ajax({
             type: "GET",
             url: "/api/product/color-size",
             data: {
                 'item_id': window.location.pathname.split("/").pop(),
                 'color': color[0].dataset.colorid,
-                'lang': 'tr',
+                'lang': 'tr'
             },
             cache: false,
-            success: function (data) {
-                let radios = document.getElementsByClassName('variants-radios');
+            success: function success(data) {
+                var radios = document.getElementsByClassName('variants-radios');
                 radios[0].innerHTML = data;
             }
         });
@@ -1183,6 +1215,15 @@ $(document).ready(function () {
     })
 
 
+    $("#details-slider").init(function() {
+       var left  = document.getElementsByClassName('slider-left');
+       for (let index = 0; index < left.length; index ++){
+           if (index > 0){
+                left[index].style.display = 'none';
+           }
+       };
+
+    });
 
     $('#acceptance-checked_all').on('click', function () {
         $('.acceptance-add').prop( "checked", true )

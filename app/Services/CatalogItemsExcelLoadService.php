@@ -83,8 +83,8 @@ class CatalogItemsExcelLoadService
             }
             $data = CatalogCharacteristic::all();
 
-            $indexRowCharacteristic = 22;
-            $getLastRowToResult = 22 + count($data);
+            $indexRowCharacteristic = 28;
+            $getLastRowToResult = 28 + count($data);
 
             if (empty($row[7])){
                 $resultArrayParse[$i][$getLastRowToResult + 1] = 'IMG value cannot be empty';
@@ -94,7 +94,19 @@ class CatalogItemsExcelLoadService
             }
 
             $images = explode(',', $row[7]);
-
+            $galleryResult = null;
+            $gallery = [$row[22],$row[23],$row[24],$row[25],$row[26],$row[27]];
+            foreach ($gallery as $item){
+                if (filter_var(str_replace('[{"file":','',$item), FILTER_VALIDATE_URL)){
+                    if(substr(get_headers(str_replace('[{"file":','',$images[0]))[0], 9, 3) != "200"){
+                        continue;
+                    }else{
+                        $galleryResult .= self::saveParseImage($item).',';
+                    }
+                }else{
+                    continue;
+                }
+            }
 
             $catalog = str_replace('"]', '', str_replace('["', '', $row[16]));
             $merchant = str_replace('"]', '', str_replace('["', '', $row[17]));
@@ -351,6 +363,7 @@ class CatalogItemsExcelLoadService
                 'price' => $row[10],
                 'count' => empty($row[13]) ? 0 : $row[13],
                 'sale' => empty($row[9]) ? 0 : $row[9],
+                'image' => substr($galleryResult, 0, -1),
             ];
 
 

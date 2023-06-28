@@ -11,5 +11,5 @@
     <div class="edit">
         <i class="fas fa-edit"></i>
     </div>
-    <input type="hidden" name="{{$field}}[]" value="{{json_encode($info)}}">
+    <input  type="hidden" name="{{$field}}[]" value="{{json_encode($info)}}">
 </div>

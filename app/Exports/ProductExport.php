@@ -62,11 +62,11 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
             trans('system.name_ru'),
             trans('system.name_tr'),
             trans('system.name_kz'),
-            trans('system.equipment'). 'TR',
+            trans('system.equipment'),
             trans('system.body_ru'),
             trans('system.body_tr'),
             trans('system.body_kz'),
-            trans('system.images'),
+            trans('system.images').' Main photo',
             trans('catalog_item.form.barcode'),
             trans('system.sale'),
             trans('system.price'),
@@ -81,6 +81,12 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
             trans('system.equipment'). 'RUS',
             trans('system.equipment'). 'KZ',
             trans('catalog_item.form.weight'),
+            trans('system.images').' Gallery photo - 1',
+            trans('system.images').' Gallery photo - 2',
+            trans('system.images').' Gallery photo - 3',
+            trans('system.images').' Gallery photo - 4',
+            trans('system.images').' Gallery photo - 5',
+            trans('system.images').' Gallery photo - 6',
         ];
 
 
@@ -132,6 +138,9 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
                 $image =  "/i/no_image.png";
             }
 
+
+            $gallery = json_decode($item->image, true);
+
             array_push($result,array_merge([
                 $item->catalogItem->name_ru,
                 $item->catalogItem->name_tr,
@@ -155,6 +164,12 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
                 $compoundItemRu,
                 $compoundItemKz,
                 $item->catalogItem->weight,
+                !empty($gallery[0]["img"]) ? 'https://turkiyemart.com'.str_replace('/files','',$gallery[0]["img"]) : '',
+                !empty($gallery[1]["img"]) ? 'https://turkiyemart.com'.str_replace('/files','',$gallery[1]["img"]) : '',
+                !empty($gallery[2]["img"]) ? 'https://turkiyemart.com'.str_replace('/files','',$gallery[2]["img"]) : '',
+                !empty($gallery[3]["img"]) ? 'https://turkiyemart.com'.str_replace('/files','',$gallery[3]["img"]) : '',
+                !empty($gallery[4]["img"]) ? 'https://turkiyemart.com'.str_replace('/files','',$gallery[4]["img"]) : '',
+                !empty($gallery[5]["img"]) ? 'https://turkiyemart.com'.str_replace('/files','',$gallery[5]["img"]) : '',
             ],$item_characteristic));
         }
 

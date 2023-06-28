@@ -68,6 +68,7 @@ jQuery(document).ready(function () {
             }
 
             this.each(function () {
+
                 main(jQuery(this));
             });
             return this;
