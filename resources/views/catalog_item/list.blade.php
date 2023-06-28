@@ -33,16 +33,10 @@
                         @endcan
 
                         @can("catalog-item-excel-load")
-                                <div class="d-flex flex-wrap" style="flex-wrap: wrap;width: 233px;justify-content: center">
-                                    <form style="width: 175px; margin: 15px 0px;" enctype="multipart/form-data">
-                                        <div class="image-upload">
-                                            <label for="file">
-                                                <div class="upload-photo" ></div>
-                                            </label>
+                                <div class="d-flex flex-wrap" style="flex-wrap: wrap;width: 233px;">
+                                        <div class="custom-file-upload" style="display: flex;justify-content: flex-start;flex-wrap: wrap;">
                                             <input type="file" name="file" id="fileUpload" accept=".xlsx" />
                                         </div>
-                                    </form>
-
                                     <button id="upload" class="green-btn product-btn1">@lang('system.loadTable') </button>
                                 </div>
 

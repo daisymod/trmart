@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Maatwebsite\Excel\Facades\Excel;
+use Nette\Schema\ValidationException;
 
 
 class ParserController extends Controller
@@ -45,11 +46,15 @@ class ParserController extends Controller
     public function actionExcelExport(Request $request){
         ini_set('max_execution_time', 600);
 
+        if (!str_contains(request()->url, "www.ozdilekteyim.com")) {
+            throw \Illuminate\Validation\ValidationException::withMessages(['Site Is wrong']);
+        }
+
         $link_array = explode('/',request()->url);
         $category = end($link_array);
         $response = $this->service->getData($category,0);
 
-        $totalPages = $response['data']['pagination']['totalPages'];
+        $totalPages = $response['data']['pagination']['totalPages'] ?? 1;
         $productExcel = array();
 
 
