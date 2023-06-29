@@ -34,7 +34,27 @@ class CatalogItemsExcelLoadService
     public static function saveParseImage($image){
 
         try {
-            $file = file_get_contents($image);
+            if (empty($image)){
+                return json_encode([
+                    "file" => '',
+                    "name" => '',
+                    'img' => '',
+                    'small' => '',
+                ]);
+            }
+
+            $file = @file_get_contents($image);
+
+            if($file === FALSE) {
+                return json_encode([
+                    "file" => '',
+                    "name" => '',
+                    'img' => '',
+                    'small' => '',
+                ]);
+            }
+
+
             $md5 = md5($file);
             $ext ='png';
             $fileName = "/$md5.$ext";
@@ -96,17 +116,13 @@ class CatalogItemsExcelLoadService
             $images = explode(',', $row[7]);
             $galleryResult = null;
             $gallery = [$row[22],$row[23],$row[24],$row[25],$row[26],$row[27]];
+
             foreach ($gallery as $item){
-                if (filter_var(str_replace('[{"file":','',$item), FILTER_VALIDATE_URL)){
-                    if(substr(get_headers(str_replace('[{"file":','',$images[0]))[0], 9, 3) != "200"){
-                        continue;
-                    }else{
-                        $galleryResult .= self::saveParseImage($item).',';
-                    }
-                }else{
-                    continue;
+                if (!empty($item)){
+                    $galleryResult .= self::saveParseImage($item).',';
                 }
             }
+
 
             $catalog = str_replace('"]', '', str_replace('["', '', $row[16]));
             $merchant = str_replace('"]', '', str_replace('["', '', $row[17]));
@@ -123,7 +139,7 @@ class CatalogItemsExcelLoadService
                                 "small":"\/img\/no_img.jpeg"}';
                 }else{
                     $imageResult = self::saveParseImage(str_replace('[{"file":','',$images[0]));
-                    log::info(print_r($imageResult,true));
+
                 }
             }else{
                 $imageResult = '{"file":"\/img\/no_img.jpeg",
@@ -233,39 +249,38 @@ class CatalogItemsExcelLoadService
 
 
             foreach ($data as $rowData){
+                if (!empty($row[$indexRowCharacteristic])){
+                    $rowArray = str_replace("]", '', str_replace("[", '', $row[$indexRowCharacteristic] ));
+                    $rowArray = str_replace("\"", '', str_replace("'", '', $rowArray ));
+                    $rowArray = explode(",", $rowArray);
+                    $characteristicID = CatalogCharacteristic::where('name_ru','=',$header[$indexRowCharacteristic])
+                        ->orWhere('name_tr','=',$header[$indexRowCharacteristic])
+                        ->orWhere('name_kz','=',$header[$indexRowCharacteristic])
+                        ->first();
+                    if (!empty($characteristicID->id)){
+                        $characteristic_id = $characteristicID->id;
+                    }else{
+                        $characteristic_id = $rowData->id;
+                    }
 
-                $rowArray = str_replace("]", '', str_replace("[", '', $row[$indexRowCharacteristic] ));
-                $rowArray = str_replace("\"", '', str_replace("'", '', $rowArray ));
-                print_r($rowArray);
-                $rowArray = explode(",", $rowArray);
+                    if ((empty($rowArray[0]) && empty($rowArray[1]) && empty($rowArray[2])) || ($rowArray[0] == '' && $rowArray[1]== '' && $rowArray[2]== '')){
+                        $indexRowCharacteristic++;
+                        continue;
+                    }else{
+                        $insert = [
+                            'item_id' => $catalog_id->id,
+                            'characteristic_id' =>$characteristic_id,
+                            'name_ru' => $rowArray[0] ?? '',
+                            'name_tr' => $rowArray[1] ?? '',
+                            'name_kz' => $rowArray[2] ?? '',
+                        ];
 
-                $characteristicID = CatalogCharacteristic::where('name_ru','=',$header[$indexRowCharacteristic])
-                    ->orWhere('name_tr','=',$header[$indexRowCharacteristic])
-                    ->orWhere('name_kz','=',$header[$indexRowCharacteristic])
-                    ->first();
-                if (!empty($characteristicID->id)){
-                    $characteristic_id = $characteristicID->id;
+                        $characteristic->create($insert);
+                        $indexRowCharacteristic++;
+                    }
                 }else{
-                    $characteristic_id = $rowData->id;
+                    break;
                 }
-
-                if ((empty($rowArray[0]) && empty($rowArray[1]) && empty($rowArray[2])) || ($rowArray[0] == '' && $rowArray[1]== '' && $rowArray[2]== '')){
-                    $indexRowCharacteristic++;
-                    continue;
-                }else{
-                    print_r($rowArray);
-                    $insert = [
-                        'item_id' => $catalog_id->id,
-                        'characteristic_id' =>$characteristic_id,
-                        'name_ru' => $rowArray[0] ?? '',
-                        'name_tr' => $rowArray[1] ?? '',
-                        'name_kz' => $rowArray[2] ?? '',
-                    ];
-
-                    $characteristic->create($insert);
-                    $indexRowCharacteristic++;
-                }
-
             }
 
 
@@ -291,6 +306,10 @@ class CatalogItemsExcelLoadService
 
 
             $compoundData =  str_replace(']', '', str_replace('[', '', $row[3]));
+            if (substr($compoundData, -1) == ','){
+                $compoundData = substr($compoundData, 0, -1);
+            }
+
             $compoundDataRu = str_replace(']', '', str_replace('[', '', $row[19]));
             $compoundDataKz = str_replace(']', '', str_replace('[', '', $row[20]));
             $compoundData = explode(",", $compoundData);
@@ -310,7 +329,7 @@ class CatalogItemsExcelLoadService
                         'item_id' =>  $catalog_id->id,
                         'name_ru' =>  $compoundDataRu[$indexForCreate] ?? '',
                         'name_tr' =>  $compoundData[$indexForCreate] ?? '',
-                        'percent' =>  $compoundData[$indexForCreate + 1] ?? '0',
+                        'percent' =>  intval($compoundData[$indexForCreate + 1]) ?? '0',
                         'name_kz' =>  $compoundDataKz[$indexForCreate] ?? '',
                     ];
 
@@ -366,16 +385,12 @@ class CatalogItemsExcelLoadService
                 'image' => substr($galleryResult, 0, -1),
             ];
 
-
             $checkProductItem = ProductItem::where('color','=',$colorData)
                                 ->where('size','=',$sizeData)
                                 ->where('item_id','=',$catalog_id->id)
                                 ->first();
 
             if (!empty($checkProductItem->size)){
-                Log::info(print_r($checkProductItem->id,true));
-                Log::info(print_r($productData,true));
-                Log::info(print_r($catalog_id->id,true));
                 $productItemService->update($productData, $checkProductItem->id);
             }else{
                 $productItemService->create($productData, $catalog_id->id);

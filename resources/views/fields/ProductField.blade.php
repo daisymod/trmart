@@ -36,27 +36,29 @@
                                 </div>
                                 <div class="name">Загрузка изображения</div>
                             </div>
-                            @foreach($value as $info)
-                                @php $j = 0; @endphp
-                                @foreach($value[$j] as $info)
-                                    <div class="image-box" data-file="{{$info["file"]}}" data-name="{{$info["name"]}}">
-                                        <div class="image">
-                                            <img src="{{$info["small"]}}">
+                            @if($value != null)
+                                @foreach($value as $info)
+                                    @php $j = 0; @endphp
+                                    @foreach($value[$j] as $info)
+                                        <div class="image-box" data-file="{{$info["file"]}}" data-name="{{$info["name"]}}">
+                                            <div class="image">
+                                                <img src="{{$info["small"]}}">
+                                            </div>
+                                            <div class="name">
+                                                {{$info["name"]}}
+                                            </div>
+                                            <div class="del">
+                                                <i class="fas fa-trash"></i>
+                                            </div>
+                                            <div class="edit">
+                                                <i class="fas fa-edit"></i>
+                                            </div>
+                                            <input  type="hidden" name="addmore[{{$index}}][{{$j}}][image]" value="{{json_encode($info)}}">
                                         </div>
-                                        <div class="name">
-                                            {{$info["name"]}}
-                                        </div>
-                                        <div class="del">
-                                            <i class="fas fa-trash"></i>
-                                        </div>
-                                        <div class="edit">
-                                            <i class="fas fa-edit"></i>
-                                        </div>
-                                        <input  type="hidden" name="addmore[{{$index}}][{{$j}}][image]" value="{{json_encode($info)}}">
-                                    </div>
-                                    @php $j++; @endphp
+                                        @php $j++; @endphp
+                                    @endforeach
                                 @endforeach
-                            @endforeach
+                            @endif
                         </div>
                         <div class="select-file btn btn-primary btn-sm">@lang('system.f5')</div>
                     </div>
@@ -94,26 +96,32 @@
                                     </div>
                                     <div class="name">Загрузка изображения</div>
                                 </div>
+                                @if($value != null)
                                 @php $j = 0; @endphp
-                                @foreach($value[$index] as $info)
-                                    <div class="image-box" data-file="{{$info["file"]}}" data-name="{{$info["name"]}}">
-                                        <div class="image">
-                                            <img src="{{$info["small"]}}">
-                                        </div>
-                                        <div class="name">
-                                            {{$info["name"]}}
-                                        </div>
-                                        <div class="del">
-                                            <i class="fas fa-trash"></i>
-                                        </div>
-                                        <div class="edit">
-                                            <i class="fas fa-edit"></i>
-                                        </div>
-                                        <input  type="hidden" name="addmore[{{$index}}][{{$j}}][image]" value="{{json_encode($info)}}">
-                                    </div>
-                                    @php $j++; @endphp
-                                @endforeach
+                                @if($value[$index] != null)
+                                        @foreach($value[$index] as $info)
+                                            <div class="image-box" data-file="{{$info["file"]?? '#'}}" data-name="{{$info["name"]?? '#'}}">
+                                                <div class="image">
+                                                    <img src="{{$info["small"]?? '#'}}">
+                                                </div>
+                                                <div class="name">
+                                                    {{$info["name"] ?? '#'}}
+                                                </div>
+                                                <div class="del">
+                                                    <i class="fas fa-trash"></i>
+                                                </div>
+                                                <div class="edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </div>
+                                                <input  type="hidden" name="addmore[{{$index}}][{{$j}}][image]" value="{{json_encode($info)}}">
+                                            </div>
+                                            @php $j++; @endphp
+                                        @endforeach
+                                    @else
+                                        @php $j++; @endphp
+                                @endif
 
+                                @endif
                             </div>
                             <div class="select-file btn btn-primary btn-sm">@lang('system.f5')</div>
                         </div>

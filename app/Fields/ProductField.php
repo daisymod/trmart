@@ -43,6 +43,7 @@ class ProductField extends RelationField
                     $value[$index] = json_decode($i, true);
                 }
             }
+            
             $index++;
         }
 

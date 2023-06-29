@@ -35,9 +35,9 @@
                                     <label class="label-checkbox-text-2" for="brand[{{$brand->id}}]">
                                         {{$brand->brand }}
                                         @if(isset($_GET['brand'][$brand->id] ) && (in_array($brand->brand,$_GET['brand'])) )
-                                            <input  checked style="height: 15px!important; cursor: pointer"  class="small-checkbox" type="checkbox" name="brand[{{$brand->id}}]" value="{{$brand->brand}}">
+                                            <input  checked style="margin-right:10px;height: 15px!important; cursor: pointer"  class="small-checkbox" type="checkbox" name="brand[{{$brand->id}}]" value="{{$brand->brand}}">
                                         @else
-                                            <input  class="small-checkbox" style="height: 15px!important;cursor: pointer"    type="checkbox" name="brand[{{$brand->id}}]" value="{{$brand->brand}}">
+                                            <input  class="small-checkbox" style="margin-right:10px;height: 15px!important;cursor: pointer"    type="checkbox" name="brand[{{$brand->id}}]" value="{{$brand->brand}}">
                                         @endif
                                     </label>
                                 @endforeach
@@ -56,9 +56,9 @@
                                         @endif
 
                                         @if(isset($_GET['color'][$color->color] ) && (in_array($color->color,$_GET['color'])) )
-                                            <input  checked style="height: 15px!important; cursor: pointer"  class="small-checkbox" type="checkbox" name="color[{{$color->color}}]" value="{{$color->color}}">
+                                            <input  checked style="margin-right:10px; height: 15px!important; cursor: pointer"  class="small-checkbox" type="checkbox" name="color[{{$color->color}}]" value="{{$color->color}}">
                                         @else
-                                            <input  class="small-checkbox" style="height: 15px!important;cursor: pointer"    type="checkbox" name="color[{{$color->color}}]" value="{{$color->color}}">
+                                            <input  class="small-checkbox" style="margin-right:10px;height: 15px!important;cursor: pointer"    type="checkbox" name="color[{{$color->color}}]" value="{{$color->color}}">
                                         @endif
                                     </label>
                                 @endforeach
@@ -78,9 +78,9 @@
                                         @endif
 
                                         @if(isset($_GET['size'][$size->size]) && (in_array($size->size,$_GET['size'])) )
-                                            <input  checked style="height: 15px!important; cursor: pointer"  class="small-checkbox" type="checkbox" name="size[{{$size->size}}]" value="{{$size->size}}">
+                                            <input  checked style="margin-right:10px;height: 15px!important; cursor: pointer"  class="small-checkbox" type="checkbox" name="size[{{$size->size}}]" value="{{$size->size}}">
                                         @else
-                                            <input  class="small-checkbox" style="height: 15px!important;cursor: pointer"    type="checkbox" name="size[{{$size->size}}]" value="{{$size->size}}">
+                                            <input  class="small-checkbox" style="margin-right:10px;height: 15px!important;cursor: pointer"    type="checkbox" name="size[{{$size->size}}]" value="{{$size->size}}">
                                         @endif
                                     </label>
                                 @endforeach
@@ -97,9 +97,9 @@
                                             <label class="label-checkbox-text-2" for="item[{{$item->id}}]">
                                                 {{$option->{'name_'.app()->getLocale()} }}
                                                 @if(isset($_GET['item'][$item->id] ) && (in_array($option->{'name_'.app()->getLocale()},$_GET['item'])) )
-                                                    <input  checked style="height: 15px!important; cursor: pointer"  class="small-checkbox" type="checkbox" name="item[{{$item->id}}]" value="{{$option->{'name_'.app()->getLocale()} }}">
+                                                    <input  checked style="margin-right:10px;height: 15px!important; cursor: pointer"  class="small-checkbox" type="checkbox" name="item[{{$item->id}}]" value="{{$option->{'name_'.app()->getLocale()} }}">
                                                 @else
-                                                    <input  class="small-checkbox" style="height: 15px!important;cursor: pointer"    type="checkbox" name="item[{{ $item->id}}]" value="{{$option->{'name_'.app()->getLocale()} }}">
+                                                    <input  class="small-checkbox" style="margin-right:10px;height: 15px!important;cursor: pointer"    type="checkbox" name="item[{{ $item->id}}]" value="{{$option->{'name_'.app()->getLocale()} }}">
                                                 @endif
                                             </label>
                                             @php array_push($arrayUnique,$option->{'name_'.app()->getLocale()}) @endphp

@@ -70,9 +70,12 @@
                                     <img src="/img/slider-arrow-left.png" alt="">
                                 </button>
                                 <div class="big-slider">
-                                    @foreach($gallery->images() as $image)
-                                        <div class="item"><img src="{{ $image["img"] }}" alt=""></div>
-                                    @endforeach
+                                    @if($gallery->image != null && $gallery->images() != null)
+                                        @foreach($gallery->images() as $image)
+                                            <div class="item"><img src="{{ $image["img"] ?? '#' }}" alt=""></div>
+                                        @endforeach
+                                    @endif
+
                                 </div>
                                 <button type="button" class="arrow arrow-next">
                                     <img src="/img/slider-arrow-right.png" alt="">
@@ -81,9 +84,11 @@
                             <div class="small-slider-wrap">
 
                                 <div class="small-slider">
-                                    @foreach($gallery->images() as $image)
-                                        <div class="slide-item"><img src="{{ $image["img"] }}" alt=""></div>
-                                    @endforeach
+                                    @if($gallery->image != null && $gallery->images() != null)
+                                        @foreach($gallery->images() as $image)
+                                            <div class="slide-item"><img src="{{ $image["img"] ?? '#' }}" alt=""></div>
+                                        @endforeach
+                                    @endif
                                 </div>
 
                             </div>
@@ -102,8 +107,11 @@
                                 @php $colorIndex = 0; @endphp
                                 @foreach($color as $colorItem)
                                     <div class="item color-data-active" data-colorId="{{$colorItem->colorData->id}}" data-index="{{$colorIndex}}" data-color="{{$colorItem->colorData->{'name_'.app()->getLocale() } }}">
-                                        @if(!empty($colorItem->img ))
-                                            <img src="{{$colorItem->img}}" alt="">
+                                        @if($colorItem->image != null && $colorItem->images() != null)
+                                            @foreach($colorItem->images() as $image)
+                                                <div class="slide-item"><img src="{{ $image["img"] ?? '#' }}" alt=""></div>
+                                                @php break; @endphp
+                                            @endforeach
                                         @endif
                                     </div>
                                     @php $colorIndex++; @endphp
