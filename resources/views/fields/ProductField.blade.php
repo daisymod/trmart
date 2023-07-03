@@ -1,5 +1,6 @@
 <div style="width: 100%;" class="form-group">
-    <table class="table table-bordered" id="productTable">
+    <button type="button" id="add-btn-product" class="btn green-btn">@lang('system.newColor1')</button>
+    <table style="border-collapse: collapse; margin-top: 20px;" class="table table-bordered" id="productTable">
         <tr>
             <th>@lang('cart.size')</th>
             <th>@lang('products.color')</th>
@@ -9,7 +10,7 @@
             <td></td>
         </tr>
         @if(count($product) == 0)
-            <tr>
+            <tr style="border: 3px solid #cccccc">
                 <td id="size-data">
                     <select name="addmore[0][size]" id="size-data"  class="form-control">
                         @foreach($size as $item)
@@ -25,10 +26,10 @@
                     </select>
                 </td>
                 <!--<td><input type="text" name="addmore[0][price]"  class="form-control" /></td>-->
-                <td><input type="text" name="addmore[0][count]" class="form-control" /></td>
+                <td><input type="number" step="1" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" name="addmore[0][count]" class="form-control" /></td>
                 <!--<td><input type="text" name="addmore[0][sale]"  class="form-control" /></td>-->
                 <td>
-                    <div class="field-images-box {{ $class->class ?? "" }}" data-style="{{ $class->style ?? "" }}" data-width="{{ $class->width ?? 250 }}" data-height="{{$class->height ?? 250}}" data-filed="addmore[0][image]">
+                    <div class="field-images-box {{ $class->class ?? "" }}" data-style="{{ $class->style ?? "" }}" data-width="{{ $class->width ?? 800 }}" data-height="{{$class->height ?? 1200}}" data-filed="addmore[0][image]">
                         <div class="images-list-box">
                             <div class="image-box image-load" style="display: none">
                                 <div class="image">
@@ -63,12 +64,12 @@
                         <div class="select-file btn btn-primary btn-sm">@lang('system.f5')</div>
                     </div>
                 </td>
-                <td><button type="button" id="add-btn-product" class="btn green-btn">@lang('system.newColor1')</button></td>
+                <td></td>
             </tr>
         @else
             @php $index = 0; @endphp
             @foreach($product as $item)
-                <tr>
+                <tr style="border: 3px solid #cccccc">
                     <td id="size-data" >
                         <select name="addmore[{{$index}}][size]" class="form-control">
                             @foreach($size as $item)
@@ -84,11 +85,11 @@
                         </select>
                     </td>
                     <!--<td><input type="text" name="addmore[{{$index}}][price]" value="{{$product[$index]->price}}" class="form-control" /></td>-->
-                    <td><input type="text" name="addmore[{{$index}}][count]"  value="{{$product[$index]->count}}" class="form-control" /></td>
+                    <td><input type="number" step="1" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"  name="addmore[{{$index}}][count]"  value="{{$product[$index]->count}}" class="form-control" /></td>
                     <!--<td><input type="text" name="addmore[{{$index}}][sale]" value="{{$product[$index]->sale}}" class="form-control" /></td>-->
 
                     <td>
-                        <div class="field-images-box {{ $class->class ?? "" }}" data-style="{{ $class->style ?? "" }}" data-width="{{ $class->width ?? 250 }}" data-height="{{$class->height ?? 250}}" data-filed="addmore[{{$index}}][image]">
+                        <div class="field-images-box {{ $class->class ?? "" }}" data-style="{{ $class->style ?? "" }}" data-width="{{ $class->width ?? 800 }}" data-height="{{$class->height ?? 1200}}" data-filed="addmore[{{$index}}][image]">
                             <div class="images-list-box">
                                 <div class="image-box image-load" style="display: none">
                                     <div class="image">
@@ -126,11 +127,9 @@
                             <div class="select-file btn btn-primary btn-sm">@lang('system.f5')</div>
                         </div>
                     </td>
-                    @if($index == 0)
-                        <td><button  type="button" name="add" id="add-btn-product" class="btn green-btn">+</button></td>
-                    @else
-                        <td><button type="button" onclick="$(this).parents('tr').remove()" class="btn red-btn remove-tr">-</button></td>
-                    @endif
+
+                   <td><button type="button" onclick="$(this).parents('tr').remove()" class="btn red-btn remove-tr">-</button></td>
+
 
                     @php $index++; @endphp
                 </tr>

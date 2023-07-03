@@ -26,12 +26,7 @@ class ParseExport implements FromArray,WithColumnWidths,ShouldQueue
 
         app()->setLocale($this->locale);
         $lang = $this->locale;
-        $characteristics = CatalogCharacteristic::all();
-        $itemsData = array();
 
-        foreach ($characteristics as $item){
-            array_push($itemsData,$item->{'name_'.$lang});
-        }
 
         $headers = [
             trans('system.name_ru'),
@@ -65,7 +60,7 @@ class ParseExport implements FromArray,WithColumnWidths,ShouldQueue
         ];
 
 
-        array_push($result,array_merge($headers,$itemsData));
+        array_push($result,$headers);
         array_push($result,$this->data);
 
       return $result;

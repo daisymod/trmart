@@ -32,9 +32,9 @@ class CatalogItemMerchantForm extends BasicForm
         "article" => [TextboxField::class,'readOnly' => true],
         "barcode" => [TextboxField::class],
         //"country" => [CountryField::class, "find" => true],
-        "price" => [TextboxField::class],
-        "weight" => [TextboxField::class],
-        "sale" => [TextboxField::class],
+        "price" => [IntegerField::class,'type' => 'number'],
+        "weight" => [IntegerField::class],
+        "sale" => [IntegerField::class],
         "stock" => [TextboxField::class,'readOnly' => true],
        // "equipment" => [LanguageTextboxField::class, "find" => false],
         "image" => [ImagesField::class, "width" => 800, "height" => 1200, "find" => false],
@@ -45,7 +45,7 @@ class CatalogItemMerchantForm extends BasicForm
 
         'product' => [ProductField::class, "find" => false],
 
-        'characteristic' => [DynamicCharacteristicField::class, "find" => false],
+        //'characteristic' => [DynamicCharacteristicField::class, "find" => false],
 
         "body" => [LanguageTextareaField::class, "find" => false],
 

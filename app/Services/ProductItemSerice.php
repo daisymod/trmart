@@ -24,13 +24,18 @@ class ProductItemSerice
 
     public function create($attributes,$id)
     {
+        if (isset($attributes['image'])) {
+            $data['image'] =  gettype($attributes['image']) == 'string' ?  '['.$attributes['image'] .']' : '['.implode(",",$attributes['image']).']';
+        }else{
+            $data['image'] = null;
+        }
+
         $data['item_id'] = $id;
         $data['color'] = $attributes['color'];
         $data['size'] = $attributes['size'];
         $data['count'] = empty($attributes['count']) ? 0 : $attributes['count'];
         $data['price'] = empty($attributes['price']) ? 0 : $attributes['price'];
         $data['sale'] = empty($attributes['sale']) ? 0 : $attributes['sale'];
-        $data['image'] =  gettype($attributes['image']) == 'string' ?  '['.$attributes['image'] .']' : '['.implode(",",$attributes['image']).']';
         $item = $this->model->query()->create($data);
 
         return $item;

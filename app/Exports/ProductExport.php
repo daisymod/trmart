@@ -41,7 +41,7 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
 
         $result = array();
 
-        $lang = Auth::user()->lang ?? 'ru';
+        $lang = $this->user->lang ?? 'ru';
         app()->setLocale($lang);
 
         if ($this->category == null){
@@ -52,11 +52,7 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
             })->get();
         }
 
-        $itemsData = array();
 
-        foreach ($characteristics as $item){
-            array_push($itemsData,$item->{'name_'.$lang});
-        }
 
         $headers = [
             trans('system.name_ru'),
@@ -91,7 +87,7 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
 
 
 
-        array_push($result,array_merge($headers,$itemsData));
+        array_push($result,$headers);
 
         foreach ($items as $item){
             $compoundItemTr = '[';
@@ -142,19 +138,19 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
             $gallery = json_decode($item->image, true);
 
             array_push($result,array_merge([
-                $item->catalogItem->name_ru,
-                $item->catalogItem->name_tr,
-                $item->catalogItem->name_kz,
+                $item->catalogItem->name_ru ?? '',
+                $item->catalogItem->name_tr ?? '',
+                $item->catalogItem->name_kz ?? '',
                 $compoundItemTr,
-                $item->catalogItem->body_ru,
-                $item->catalogItem->body_tr,
-                $item->catalogItem->body_kz,
+                $item->catalogItem->body_ru ?? '',
+                $item->catalogItem->body_tr ?? '',
+                $item->catalogItem->body_kz ?? '',
                 'https://turkiyemart.com'.$image,
-                $item->catalogItem->article,
-                $item->catalogItem->sale,
-                $item->catalogItem->price,
-                $item->colorData->name_tr,
-                $item->sizeData->name_tr,
+                $item->catalogItem->article ?? '',
+                $item->catalogItem->sale ?? '',
+                $item->catalogItem->price ?? '',
+                $item->colorData->name_tr ?? '',
+                $item->sizeData->name_tr ?? '',
                 $item->count,
                 $item->catalogItem->status,
                 $item->catalogItem->active,
@@ -164,13 +160,13 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
                 $compoundItemRu,
                 $compoundItemKz,
                 $item->catalogItem->weight,
-                !empty($gallery[0]["img"]) ? 'https://turkiyemart.com'.str_replace('/files','',$gallery[0]["img"]) : '',
-                !empty($gallery[1]["img"]) ? 'https://turkiyemart.com'.str_replace('/files','',$gallery[1]["img"]) : '',
-                !empty($gallery[2]["img"]) ? 'https://turkiyemart.com'.str_replace('/files','',$gallery[2]["img"]) : '',
-                !empty($gallery[3]["img"]) ? 'https://turkiyemart.com'.str_replace('/files','',$gallery[3]["img"]) : '',
-                !empty($gallery[4]["img"]) ? 'https://turkiyemart.com'.str_replace('/files','',$gallery[4]["img"]) : '',
-                !empty($gallery[5]["img"]) ? 'https://turkiyemart.com'.str_replace('/files','',$gallery[5]["img"]) : '',
-            ],$item_characteristic));
+                !empty($gallery[0]["img"]) ? 'https://turkiyemart.com'.$gallery[0]["img"] : '',
+                !empty($gallery[1]["img"]) ? 'https://turkiyemart.com'.$gallery[1]["img"] : '',
+                !empty($gallery[2]["img"]) ? 'https://turkiyemart.com'.$gallery[2]["img"] : '',
+                !empty($gallery[3]["img"]) ? 'https://turkiyemart.com'.$gallery[3]["img"] : '',
+                !empty($gallery[4]["img"]) ? 'https://turkiyemart.com'.$gallery[4]["img"] : '',
+                !empty($gallery[5]["img"]) ? 'https://turkiyemart.com'.$gallery[5]["img"] : '',
+            ]));
         }
 
 

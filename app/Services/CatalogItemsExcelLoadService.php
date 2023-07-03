@@ -230,19 +230,21 @@ class CatalogItemsExcelLoadService
 
             if (!empty($checkCatalog->id)) {
                 $is_create = false;
+                print_r($checkCatalog->id);
+                print_r($array_update);
+                if (!in_array($checkCatalog->id,$array_update)){
+                    $catalog_id = $checkCatalog;
+                    $item->update($dataItem,$catalog_id->id,$user);
 
-               if (!in_array($checkCatalog->id,$array_update)){
-                   $catalog_id = $checkCatalog;
-                   $item->update($dataItem,$catalog_id->id,$user);
-
-                   $productItemService->delete($catalog_id->id);
-                   array_push($array_update,$checkCatalog->id);
-               }
+                    $productItemService->delete($catalog_id->id);
+                    array_push($array_update,$checkCatalog->id);
+                }
                 $characteristic->delete($catalog_id->id);
                 $compound->delete($catalog_id->id);
             } else {
                 $is_create = true;
                 $catalog_id = $item->create($dataItem,$user);
+                array_push($array_update,$catalog_id->id);
             }
 
 

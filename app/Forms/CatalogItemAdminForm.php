@@ -3,6 +3,7 @@
 namespace App\Forms;
 
 
+use App\Fields\IntegerField;
 use App\Fields\MerchantField;
 use App\Fields\SelectField;
 use App\Fields\TextareaField;
@@ -15,7 +16,7 @@ class CatalogItemAdminForm extends CatalogItemMerchantForm
     {
         static::$formFields = array_merge(static::$formFields, [
             "user" => [MerchantField::class],
-            "sale" => [TextboxField::class],
+            "sale" => [IntegerField::class],
             "status" => [SelectField::class, "data" => [
                 "0" => trans('system.verif1'),
                 "1" => trans('system.verif2'),

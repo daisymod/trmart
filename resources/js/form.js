@@ -18,17 +18,17 @@ jQuery(document).ready(function () {
         var sizeText  = size.innerHTML.replace('addmore[0][size]', 'addmore['+ j +'][size]')
 
         //'                <td><input type="text" name="addmore['+j+'][price]"  class="form-control" /></td>\n' +
-        $('#productTable tr:last').after('<tr><td>\n' +
+        $('#productTable tr:last').after('<tr style="border: 3px solid #cccccc"><td>\n' +
             '                    ' + sizeText + ' \n' +
             '                </td>\n' +
             '                <td>\n' +
             '                    ' + colorText + ' \n' +
             '                </td>\n' +
 
-            '                <td><input type="text" name="addmore['+j+'][count]" class="form-control" /></td>\n' +
+            '                <td><input type="number" step="1" name="addmore['+j+'][count]" class="form-control" /></td>\n' +
             //'                <td><input type="text" name="addmore['+j+'][sale]"  class="form-control" /></td>' +
             '<td>\n' +
-            '                    <div id="image-load-box-'+j+'" class="field-images-box " data-style="" data-width="250" data-height="250" data-filed="addmore['+j+'][image]">\n' +
+            '                    <div id="image-load-box-'+j+'" class="field-images-box " data-style="" data-width="800" data-height="1200" data-filed="addmore['+j+'][image]">\n' +
             '                        <div class="images-list-box ui-sortable">\n' +
             '                            <div class="image-box image-load ui-sortable-handle" style="display: none;">\n' +
             '                                <div class="image">\n' +

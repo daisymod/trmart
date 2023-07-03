@@ -62,17 +62,18 @@
             </div>
 
                 <div class="detail-sliders" id="details-slider">
+                    @php $k = 0; @endphp
                     @foreach($color as $gallery)
                     <div class="left slider-left">
                         <div class="detail-slider-wrap">
-                            <div class="big-slider-wrap">
+                            <div class="big-slider-wrap big-slider-wrap-data-{{$k}}">
                                 <button style="left:-13px !important;" type="button" class="arrow arrow-prev">
                                     <img src="/img/slider-arrow-left.png" alt="">
                                 </button>
-                                <div class="big-slider">
+                                <div class="big-slider" id="big-slider-{{$k}}">
                                     @if($gallery->image != null && $gallery->images() != null)
                                         @foreach($gallery->images() as $image)
-                                            <div class="item"><img src="{{ $image["img"] ?? '#' }}" alt=""></div>
+                                           <div class="item"><img src="{{ $image["img"] ?? '#' }}" alt=""></div>
                                         @endforeach
                                     @endif
 
@@ -83,7 +84,7 @@
                             </div>
                             <div class="small-slider-wrap">
 
-                                <div class="small-slider">
+                                <div class="small-slider" id="small-slider-{{$k}}">
                                     @if($gallery->image != null && $gallery->images() != null)
                                         @foreach($gallery->images() as $image)
                                             <div class="slide-item"><img src="{{ $image["img"] ?? '#' }}" alt=""></div>
@@ -94,11 +95,13 @@
                             </div>
                         </div>
                     </div>
+                        @php $k++; @endphp
                     @endforeach
                     <div class="right">
-
-                        <p class="color-info">@lang('products.color'): <span id="color-text">{{$color[0]->colorData->{'name_'.app()->getLocale()} }} </span></p>
-                        <div class="colors-slider-wrap"   >
+                            @if(isset($color[0]))
+                                <p class="color-info">@lang('products.color'): <span id="color-text">{{$color[0]->colorData->{'name_'.app()->getLocale()} ?? '' }} </span></p>
+                            @endif
+                            <div class="colors-slider-wrap"   >
                             <div class="slider-navigation">
                                 <button type="button" class="slick-next" id="color-slick-next"><img src="/img/arr-right.svg" alt=""></button>
                                 <button type="button" class="slick-prev" id="color-slick-prev"><img src="/img/arr-right.svg" alt=""></button>

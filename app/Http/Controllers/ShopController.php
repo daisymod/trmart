@@ -6,6 +6,7 @@ use App\Models\CatalogCatalogCharacteristic;
 use App\Models\CatalogCharacteristic;
 use App\Models\CatalogItem;
 use App\Models\CatalogItemDynamicCharacteristic;
+use App\Models\Color;
 use App\Models\Company;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -110,7 +111,11 @@ class ShopController
                 //$q->where('name_tr','!=','');
             })
             ->get()->unique('size');
-
+        if (count($size) == 0){
+            $size = ProductItem::where('item_id','=','1')
+                ->with('sizeData')
+                ->get();
+        }
         $color = ProductItem::where('item_id','=',$id)
             ->with('colorData')
             ->whereHas('colorData',function ($q){
@@ -118,14 +123,20 @@ class ShopController
             })
             ->get()->unique('color');
 
+        if (count($color) == 0){
+            $color = ProductItem::where('item_id','=','1')
+                ->with('colorData')
+                ->get();
+        }
 
-        $colorCurrent = $color[0]->{"name_".app()->getLocale()} ;
+        $colorCurrent = $color[0]->{"name_".app()->getLocale()} ?? '';
 
 
         foreach ($size as $item){
-            $item->sizeData->exist = $this->checkExist($item->sizeData->id,$color[0]->color,$id);
+            $item->sizeData->exist = $this->checkExist($item->sizeData->id,$color[0]->color ?? null,$id);
         }
 
+        $sliderIndex = 0;
         foreach ($color as $item){
             if ($item->image == []){
                 $item->image = $item->colorData->image;
@@ -136,7 +147,10 @@ class ShopController
             } else {
                 $item['img'] = "/i/no_image.png";
             }
+            $sliderIndex++;
         }
+
+
 
         $characteristic = CatalogItemDynamicCharacteristic::where('item_id','=',$id)
                 ->with('category')

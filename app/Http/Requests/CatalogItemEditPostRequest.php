@@ -26,6 +26,7 @@ class CatalogItemEditPostRequest extends FormRequest
             "catalog" => "required",
         ];
 
+
         if (empty((request('name')['ru']))) {
 
             $rules["name_ru"] = "required";
@@ -51,6 +52,14 @@ class CatalogItemEditPostRequest extends FormRequest
         return $rules;
     }
 
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if (!isset(request('addmore')[0]['image']) && !isset(request('addmore')[0]['0']) ) {
+                $validator->errors()->add("image", "Необходимо фото для галереи");
+            }
+        });
+    }
 
     public function messages()
     {
@@ -62,6 +71,7 @@ class CatalogItemEditPostRequest extends FormRequest
             'image.required' => trans('system.qq16') .' '. trans('system.images'),
             'catalog.required' => trans('system.qq16') .' '. trans('catalog_item.form.catalog'),
             'user.required' => trans('system.qq16') .' '. trans('catalog_item.form.user'),
+            'addmore.required' => trans('system.qq16') .' '. trans('system.images'),
         ];
     }
 }

@@ -139,7 +139,7 @@ class ParserController extends Controller
                                     $gallery[3] ?? '',
                                     $gallery[4] ?? '',
                                     $gallery[5] ?? '',
-                                ],$characteristicArray)
+                                ])
                             );
                         }
                     }else{
@@ -177,7 +177,7 @@ class ParserController extends Controller
                                         $gallery[3] ?? '',
                                         $gallery[4] ?? '',
                                         $gallery[5] ?? '',
-                                    ], $characteristicArray));
+                                    ]));
                             }
                         }
                     }

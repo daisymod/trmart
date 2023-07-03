@@ -57,47 +57,10 @@ jQuery(document).ready(function () {
 
             jQuery(modalTable).on("click", ".relation-save", function () {
 
-                if (config.field == 'catalog' && (modalTable[0].baseURI.toLowerCase().includes("catalog_item/add") || modalTable[0].baseURI.toLowerCase().includes("catalog_item/edit")) ){
 
-                    closeModal(modalTable);
-                    modalTableQuestion = createModal("");
-                    addQuestion(modalTableQuestion);
-                    jQuery(modalTableQuestion).on("click", ".btn-accept", function () {
-                        saveRelation();
-                        config.onChange(self, config);
-
-                        let characteristic = document.getElementById('TableCharacteristic');
-                        document.getElementsByName("value[ru][0]")[0].value = "";
-                        document.getElementsByName("value[tr][0]")[0].value = "";
-                        document.getElementsByName("value[kz][0]")[0].value = "";
-
-
-
-                        var x = document.getElementById("TableCharacteristic").rows.length;
-                        if (x>1){
-                            for (let index=x; index > 2 ; index --){
-                                $('#TableCharacteristic tr:last').remove();
-                            }
-                        }
-
-
-
-
-                        closeModal(modalTableQuestion);
-                    });
-
-
-                    jQuery(modalTableQuestion).on("click", ".btn-reject", function () {
-                        closeModal(modalTableQuestion);
-                    });
-                }else{
                     saveRelation();
                     config.onChange(self, config);
                     closeModal(modalTable);
-                }
-
-
-
             });
 
 

@@ -12,7 +12,7 @@
                         @endforeach
                         <div class="mb-3 row">
                             <div class="col-md-4">
-                                <a href="{{ route("catalog_characteristic_item.list", 0) }}" class="btn btn-back btn-block" > @lang('system.cancel') </a>
+                                <a href="javascript: history.go(-1)" class="btn btn-back btn-block" > @lang('system.cancel') </a>
                             </div>
                             <div class="col-md-8">
                                 <button class="btn btn-primary btn-block">
