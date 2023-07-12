@@ -111,11 +111,13 @@ class ShopController
                 //$q->where('name_tr','!=','');
             })
             ->get()->unique('size');
+
         if (count($size) == 0){
             $size = ProductItem::where('item_id','=','1')
                 ->with('sizeData')
                 ->get();
         }
+
         $color = ProductItem::where('item_id','=',$id)
             ->with('colorData')
             ->whereHas('colorData',function ($q){

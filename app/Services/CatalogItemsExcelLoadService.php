@@ -11,7 +11,8 @@ use App\Models\CatalogCharacteristicItem;
 use App\Models\CatalogItem;
 use App\Models\CatalogItemDynamicCharacteristic;
 use App\Models\Color;
-use App\Models\ItemCompound;
+use App\Models\Compound;
+use App\Models\ItemCompoundTable;
 use App\Models\MarketplaceBrands;
 use App\Models\ProductItem;
 use App\Models\User;
@@ -26,7 +27,7 @@ use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 class CatalogItemsExcelLoadService
 {
 
-    public function __construct(protected CompoundService $compound,protected ItemService $item,protected ProductItemSerice $product,protected CharacteristicService $characteristic)
+    public function __construct(protected CompoundModelService $compound,protected ItemService $item,protected ProductItemSerice $product,protected CharacteristicService $characteristic)
     {
     }
 
@@ -225,13 +226,12 @@ class CatalogItemsExcelLoadService
             $characteristic = new CharacteristicService($modelCharacteristic);
             $productItemModel = new ProductItem();
             $productItemService = new ProductItemSerice($productItemModel);
-            $compoundModel = new ItemCompound();
-            $compound = new CompoundService($compoundModel);
+            $compoundModel = new Compound();
+            $compound = new CompoundModelService($compoundModel);
 
             if (!empty($checkCatalog->id)) {
                 $is_create = false;
-                print_r($checkCatalog->id);
-                print_r($array_update);
+
                 if (!in_array($checkCatalog->id,$array_update)){
                     $catalog_id = $checkCatalog;
                     $item->update($dataItem,$catalog_id->id,$user);
@@ -239,14 +239,17 @@ class CatalogItemsExcelLoadService
                     $productItemService->delete($catalog_id->id);
                     array_push($array_update,$checkCatalog->id);
                 }
+
                 $characteristic->delete($catalog_id->id);
-                $compound->delete($catalog_id->id);
+
             } else {
                 $is_create = true;
                 $catalog_id = $item->create($dataItem,$user);
                 array_push($array_update,$catalog_id->id);
             }
-
+            
+            ItemCompoundTable::where('item_id','=',$catalog_id->id)
+                ->delete();
 
 
 
@@ -328,14 +331,34 @@ class CatalogItemsExcelLoadService
                     continue;
                 } else {
                     $attribute = [
-                        'item_id' =>  $catalog_id->id,
                         'name_ru' =>  $compoundDataRu[$indexForCreate] ?? '',
                         'name_tr' =>  $compoundData[$indexForCreate] ?? '',
-                        'percent' =>  intval($compoundData[$indexForCreate + 1]) ?? '0',
                         'name_kz' =>  $compoundDataKz[$indexForCreate] ?? '',
                     ];
 
-                    $compound->create($attribute, $catalog_id->id);
+                    $percent = intval($compoundData[$indexForCreate + 1]) ?? '0';
+                    $compoundExist = Compound::where('name_tr','=',$attribute['name_tr'])
+                                     ->first();
+                    if (!empty($compoundExist->name_tr)){
+                        ItemCompoundTable::create(
+                            [
+                                'item_id'       =>    $catalog_id->id,
+                                'compound_id'   =>    $compoundExist->id,
+                                'percent'       =>    $percent
+                            ]
+                        );
+                    }else{
+                        $newCompound = $compound->create($attribute);
+                        ItemCompoundTable::create(
+                            [
+                                'item_id'       =>    $catalog_id->id,
+                                'compound_id'   =>    $newCompound->id,
+                                'percent'       =>    $percent
+                            ]
+                        );
+                    }
+
+                    //$compound->create($attribute, $catalog_id->id);
                     $indexForCreate++;
                 }
             }

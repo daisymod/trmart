@@ -44,12 +44,28 @@
                         </div>
 
                         <div class="filter-drop-wrap">
+                            <h3>@lang('catalog_item.form.compound') </h3>
+                            <div class="hide-wrap-2 open">
+                                @foreach($uniqueCompound as $item)
+                                    <label class="label-checkbox-text-2" for="compound[{{$item->id}}]">
+                                        {{$item->{'name_'.app()->getLocale()} }}
+                                        @if(isset($_GET['compound'][$item->id] ) && (in_array($item->{'name_'.app()->getLocale()},$_GET['compound'])) )
+                                            <input  checked style="height: 15px!important;margin-right:10px; cursor: pointer"  class="small-checkbox" type="checkbox" name="compound[{{$item->id}}]" value="{{ $item->{'name_'.app()->getLocale()} }}">
+                                        @else
+                                            <input  class="small-checkbox" style="height: 15px!important;margin-right:10px;cursor: pointer"    type="checkbox" name="compound[{{$item->id}}]" value="{{ $item->{'name_'.app()->getLocale()} }}">
+                                        @endif
+                                    </label>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="filter-drop-wrap">
                             <h3>@lang('system.color')   </h3>
                             <div class="hide-wrap-2 open">
                                 @foreach($uniqueColor as $color)
                                     <label class="label-checkbox-text-2" for="color[{{$color->color}}]">
                                         @if(empty($color->colorData->{'name_'.app()->getLocale()}))
-                                            standart
+                                            <p></p>
                                         @else
                                             {{$color->colorData->{'name_'.app()->getLocale()} }}
                                         @endif
@@ -71,7 +87,7 @@
                                 @foreach($uniqueSize as $size)
                                     <label class="label-checkbox-text-2" for="size[{{$size->size}}]">
                                         @if(empty($size->sizeData->{'name_'.app()->getLocale()}))
-                                            standart
+                                            <p></p>
                                         @else
                                             {{$size->sizeData->{'name_'.app()->getLocale()} }}
                                         @endif
@@ -131,7 +147,11 @@
                                 @foreach($items as $k=>$i)
                                     @if(!empty($i->image()))
                                     <a href="{{ route("shop.item", $i->id) }}" class="sale-item">
-                                        <span class="img-wrap"><img src="{{ $i->image() }}" alt=""></span>
+                                        <span class="img-wrap"><img src="{{ $i->image() }}" alt="">
+                                         @if($item->sale > 0)
+                                                <b>- {{$item->sale}} %</b>
+                                            @endif
+                                        </span>
                                         <p>
                                             <span class="new price-product"  data-price="{{ number_format($i->new_price, 0, ".", " ") }}">{{ number_format($i->new_price, 0, ".", " ") }} </span>
                                             @if($i->sale > 0)
@@ -149,7 +169,9 @@
             </div>
         </div>
     </div>
-
+    <div class="Pager2">
+        {{ $items->withQueryString()->links( "pagination::bootstrap-4") }}
+    </div>
     <div class="top-products-slider-wrap detail-top-products">
         <div class="wrapper">
             <div class="title-wrap">

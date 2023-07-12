@@ -20,13 +20,13 @@
                         </select>
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-md-2 ml-2">
                         <label class="col-form-label">&nbsp;</label>
                         <button class="btn btn-primary btn-block">
                             @lang('system.takeChange')
                         </button>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 ml-2">
                         <label class="col-form-label">&nbsp;</label>
                         <a href="{{ url()->current() }}" class="btn btn-link btn-block">
                             @lang('system.cancel')

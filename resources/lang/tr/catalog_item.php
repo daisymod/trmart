@@ -3,7 +3,7 @@
 return [
     "form" => [
         'sale' => 'İndirim',
-        "name" => "Mağazanın adı",
+        "name" => "İsim",
         "image" => "Resim",
         "price" => "Fiyat",
         "catalog" => "Kategori",

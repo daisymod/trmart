@@ -27,7 +27,10 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
     public function array(): array
     {
         $items = ProductItem::with(
-            ['catalogItem', 'sizeData','colorData']
+            ['catalogItem', 'sizeData','colorData',
+                'catalogItem.compound',
+                'catalogItem.compound.compound'
+                ]
         )
             ->when($this->user->role == 'merchant',function ($q){
                 $q->whereHas('catalogItem',function ($query){
@@ -95,9 +98,9 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
             $compoundItemKz = '[';
             try{
                 foreach ($item->catalogItem->compound as $compoundData){
-                    $compoundItemTr .= $compoundData->name_tr.",".$compoundData->percent.",";
-                    $compoundItemRu .= $compoundData->name_ru.",".$compoundData->percent.",";
-                    $compoundItemKz .= $compoundData->name_kz.",".$compoundData->percent.",";
+                    $compoundItemTr .= $compoundData->compound->name_tr.",".$compoundData->percent.",";
+                    $compoundItemRu .= $compoundData->compound->name_ru.",".$compoundData->percent.",";
+                    $compoundItemKz .= $compoundData->compound->name_kz.",".$compoundData->percent.",";
                 }
             }catch (\Exception $e){
                 $compoundItemTr = '"",0';

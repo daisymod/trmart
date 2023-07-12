@@ -6,6 +6,7 @@ use App\Models\Catalog;
 use App\Models\CatalogCatalogCharacteristic;
 use App\Models\CatalogCharacteristic;
 use App\Models\CatalogItem;
+use App\Models\Compound;
 use App\Models\CatalogItemDynamicCharacteristic;
 use App\Models\CurrencyRate;
 use App\Models\Favorites;
@@ -62,6 +63,27 @@ class ShopService
                     $q->whereIn("size",request()->size);
                 });
             })
+            ->when(!empty(request()->compound),function ($query) {
+                $query->whereHas('compound.compound',function ($q){
+                    if (Auth::check()){
+                        switch (Auth::user()->lang){
+                            case 'ru':
+                                $q->whereIn("name_ru",request()->compound);
+                                break;
+                            case 'kz':
+                                $q->whereIn("name_kz",request()->compound);
+                                break;
+                            case 'tr':
+                                $q->whereIn("name_tr",request()->compound);
+                                break;
+                        }
+                    }else{
+                        $q->whereIn("name_ru",request()->compound);
+                        $q->whereIn("name_kz",request()->compound);
+                        $q->whereIn("name_tr",request()->compound);
+                    }
+                });
+            })
             ->when(!empty(request()->item),function ($query) {
                 foreach (request()->item as $key => $value){
                     $query->whereHas('dynamic',function ($q) use ($key,$value){
@@ -91,6 +113,7 @@ class ShopService
             ->whereIn("id", $searchIds)
             ->get()->unique('brand');
 
+        $uniqueCompound = Compound::all();
 
         $uniqueColor = ProductItem::query()
             ->whereIn("item_id", $searchIds)
@@ -106,6 +129,9 @@ class ShopService
         $count = $items->count();
         $items = $items->paginate(50);
 
+        foreach ($items as $item){
+            $item->new_price = $item->price - ($item->price * $item->sale / 100) ;
+        }
 
         $filter = CatalogCharacteristic::where('id','!=',15)
             ->where('id','!=',16)
@@ -115,7 +141,7 @@ class ShopService
             })
             ->get();
 
-        return compact("record", "breadcrumbs", "items", "count",'uniqueBrand','uniqueColor','uniqueSize','filter');
+        return compact("record", "breadcrumbs", "items", "count",'uniqueBrand','uniqueColor','uniqueSize','filter','uniqueCompound');
     }
 
     public static function actionItem($id)
@@ -128,7 +154,8 @@ class ShopService
                 'sizes',
                 'lengths',
                 'weights',
-                'compound'
+                'compound',
+                'compound.compound'
             ])
             ->findOrFail($id);
 
@@ -164,7 +191,28 @@ class ShopService
             ->when(!empty(request()->brand),function ($query) {
                 $query->whereIn("brand",gettype(request()->brand) == 'array' ? request()->brand : [request()->brand]);
             })
+            ->when(!empty(request()->compound),function ($query) {
+                $query->whereHas('compound.compound',function ($q){
+                    if (Auth::check()){
+                        switch (Auth::user()->lang){
+                            case 'ru':
+                                $q->whereIn("name_ru",request()->compound);
+                                break;
+                            case 'kz':
+                                $q->whereIn("name_kz",request()->compound);
+                                break;
+                            case 'tr':
+                                $q->whereIn("name_tr",request()->compound);
+                                break;
+                        }
+                    }else{
+                        $q->whereIn("name_ru",request()->compound);
+                        $q->whereIn("name_kz",request()->compound);
+                        $q->whereIn("name_tr",request()->compound);
+                    }
 
+                });
+            })
             ->when(!empty(request()->size),function ($query) {
                 $query->whereHas('productsData',function ($q){
                     $q->whereIn("size",request()->size);
@@ -199,6 +247,7 @@ class ShopService
             ->whereIn("id", $searchIds)
             ->get()->unique('brand');
 
+        $uniqueCompound = Compound::all();
 
         $uniqueColor = ProductItem::query()
             ->whereIn("item_id", $searchIds)
@@ -216,15 +265,9 @@ class ShopService
             $item->new_price = $item->price - ($item->price * $item->sale / 100) ;
         }
 
-        $filter = CatalogCharacteristic::where('id','!=',15)
-            ->where('id','!=',16)
-            ->with('dynamicCharacteristic')
-            ->whereHas('dynamicCharacteristic',function ($q) use ($searchIds){
-                $q->whereIn("item_id", $searchIds);
-            })
-            ->get();
+        $filter = [];
 
-        return compact("items", "count", "find",'uniqueBrand','uniqueColor','uniqueSize','filter');
+        return compact("items", "count", "find",'uniqueBrand','uniqueColor','uniqueSize','filter','uniqueCompound');
     }
 
 }

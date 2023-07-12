@@ -17,7 +17,7 @@
             <div class="product-style-wrap">
                 <div class="product-style-block">
                     <img src="/img/info-icon.svg" alt="">
-                    <p>@lang('system.lk3')</p>
+                    <p>@lang('system.warning-10')</p>
                 </div>
                 <div class="product-style-block">
                     <img src="/img/info-icon.svg" alt="">

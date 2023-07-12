@@ -1,5 +1,4 @@
-@extends("fields.LanguageBasicField")
-@section("content")
+
 <div style="width: 100%" class="form-group">
     <table style="width: 1000px" class="table table-bordered" id="dynamicAddRemove">
         <tr>
@@ -11,17 +10,12 @@
             @php $index = 0; @endphp
             @foreach($compound as $item)
                 <tr>
-                    <td width="300px">
-                        @foreach($langList as $k=>$i)
-                            <div class="@if($k == $lang) active @endif form-lang-box form-lang-box-{{ $k }}">
-                                <input type="text" name="compound[{{$k}}][{{$index}}]" value="{{$item->{'name_'.$k} }}" class="form-control" />
-                                <datalist id="{{ $class->field }}">
-                                    @foreach($class->datalist as $k=>$i)
-                                        <option>{{$i}}</option>
-                                    @endforeach
-                                </datalist>
-                            </div>
-                        @endforeach
+                    <td id="compound-data" width="300px">
+                        <select name="compound[{{$index}}]" class="form-control">
+                            @foreach($data as $itemData)
+                                <option @if($item->compound_id == $itemData->id) selected @endif   value="{{$itemData->id}}">{{$itemData->{'name_'.app()->getLocale()} }}</option>
+                            @endforeach
+                        </select>
                     </td>
                     <td width="100px"><input type="number" min="0" max="100" name="percent[{{$index}}]"  value="{{$item->percent}}" class="form-control" /></td>
                     @if($index == 0)
@@ -35,17 +29,12 @@
 
         @else
             <tr>
-                <td width="300px">
-                    @foreach($langList as $k=>$i)
-                        <div class="@if($k == $lang) active @endif form-lang-box form-lang-box-{{ $k }}">
-                            <input type="text" name="compound[{{ $k }}][0]"  class="form-control" />
-                            <datalist id="{{ $class->field }}">
-                                @foreach($class->datalist as $k=>$i)
-                                    <option>{{$i}}</option>
-                                @endforeach
-                            </datalist>
-                        </div>
-                    @endforeach
+                <td id="compound-data" width="300px">
+                    <select name="compound[0]" class="form-control">
+                        @foreach($data as $itemData)
+                            <option   value="{{$itemData->id}}">{{$itemData->{'name_'.app()->getLocale()} }}</option>
+                        @endforeach
+                    </select>
                 </td>
                 <td width="100px"><input type="number" min="0" max="100" name="percent[0]"  class="form-control" /></td>
                 <td><button type="button" name="add" id="add-btn" style="width: 200px !important;" class="btn green-btn">@lang('system.y1')</button></td>
@@ -56,7 +45,7 @@
     </table>
 
 </div>
-@endsection
+
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <script>
     function removeTr() {

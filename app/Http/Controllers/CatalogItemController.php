@@ -13,6 +13,7 @@ use App\Models\CatalogCharacteristicItem;
 use App\Models\CatalogItem;
 use App\Models\MarketplaceBrands;
 use App\Models\ProductItem;
+use App\Models\ItemCompoundTable;
 use App\Models\User;
 use App\Services\CatalogItemActionService;
 use App\Services\CatalogItemsExcelLoadService;
@@ -90,15 +91,18 @@ class CatalogItemController
         }
 
         $data  = $this->item->create($request->all(),Auth::user());
-        for ($index=0;$index<count($request->compound['ru']);$index++){
+
+        for ($index=0;$index<count($request->compound);$index++){
             if (isset($request->percent[$index])){
-                $array = [
-                    'name_ru' => $request->compound['ru'][$index] ?? null,
-                    'name_tr' => $request->compound['tr'][$index] ?? null,
-                    'name_kz' => $request->compound['kz'][$index] ?? null,
-                    'percent' => $request->percent[$index],
-                ];
-                $this->compound->create($array,$data->id);
+                if (isset($request->percent[$index])){
+                    ItemCompoundTable::create(
+                        [
+                            'item_id'       =>    $data->id,
+                            'compound_id'   =>    $request->compound[$index],
+                            'percent'       =>    $request->percent[$index]
+                        ]
+                    );
+                }
             }
 
         }
@@ -161,19 +165,20 @@ class CatalogItemController
 
         $this->item->update($request->all(),$id,Auth::user());
 
-        $this->compound->delete($id);
+        ItemCompoundTable::where('item_id','=',$id)
+            ->delete();
         $this->characteristic->delete($id);
         $this->product->delete($id);
 
-        for ($index=0;$index<count($request->compound['ru']);$index++){
+        for ($index=0;$index<count($request->compound);$index++){
             if (isset($request->percent[$index])){
-                $array = [
-                    'name_ru' => $request->compound['ru'][$index] ?? null,
-                    'name_tr' => $request->compound['tr'][$index] ?? null,
-                    'name_kz' => $request->compound['kz'][$index] ?? null,
-                    'percent' => $request->percent[$index],
-                ];
-                $this->compound->create($array,$id);
+                ItemCompoundTable::create(
+                    [
+                        'item_id'       =>    $id,
+                        'compound_id'   =>    $request->compound[$index],
+                        'percent'       =>    $request->percent[$index]
+                    ]
+                );
             }
         }
 

@@ -22,7 +22,7 @@ class MerchantSearchForm extends MerchantAdminForm
 
 
         static::$formFields = array_merge(static::$formFields, [
-            "phone" => [TextboxField::class, "type" => "tel"],
+            "phone" => [TextboxField::class, "type" => "tel",'placeholder' => ''],
             "email" => [TextboxField::class, "type"=>"email"],
             "company_name" => [TextboxField::class, "find" => false],
             "shop_name" => [TextboxField::class, "find" => false],

@@ -6,7 +6,7 @@
 @else
     <div class="form-group form-field-box-{{ $class->field }}">
         <div class="form-label">{{ __($class->name) }}</div>
-        <input @if($readonly == true) readonly @endif class="form-control" list="{{ $class->field }}" placeholder="{{ __($class->name) }}" name="{{ $class->field }}" type="{{ $class->type }}" @if($class->type == "number") step="{{ $class->step }}" @endif value="{{ $value }}">
+        <input @if($readonly == true) readonly @endif class="form-control" list="{{ $class->field }}"  name="{{ $class->field }}" type="{{ $class->type }}" @if($class->type == "number") step="{{ $class->step }}" @endif value="{{ $value }}">
         <div class="error-field-text error-{{ $class->field }}"></div>
         <datalist id="{{ $class->field }}">
             @foreach($class->datalist as $k=>$i)

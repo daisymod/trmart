@@ -482,7 +482,10 @@ $(document).ready(function () {
 
                 case 'tr':
                     mask.updateOptions({
-                        mask: "+{90}(000)000-00-00",
+                        mask: "+{9*}(000)000-00-00",
+                        definitions: {
+                            '*': /[0]/
+                        }
                     });
                     break
                 case 'kg':
@@ -531,7 +534,10 @@ $(document).ready(function () {
 
                 case 'tr':
                     mask.updateOptions({
-                        mask: "+{90}(000)000-00-00",
+                        mask: "+{9*}(000)000-00-00",
+                        definitions: {
+                            '*': /[0]/
+                        }
                     });
                     break
                 case 'kg':
@@ -549,47 +555,25 @@ $(document).ready(function () {
     jQuery('#input-phone-register').init(function() {
         let input = document.querySelector("#input-phone-register");
         let data =  intlTelInput(input, {
-            initialCountry: "auto",
+            initialCountry: "tr",
             autoPlaceholder: "polite",
             customPlaceholder: null,
-            onlyCountries: ['tr','kz'],
+            onlyCountries: ['tr'],
             utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.3/build/js/utils.js",
+
             geoIpLookup: function (callback) {
 
-                var countryCode = 'kz';
+                var countryCode = 'tr';
                 callback(countryCode);
             }
         });
 
         let mask = new IMask(input, {
-            mask: "+{7}(000)000-00-00",
-        });
-
-        jQuery(input).on("countrychange", function () {
-            switch(data.defaultCountry) {
-                case 'kz':
-                    mask.updateOptions({
-                        mask: "+{7}(000)000-00-00",
-                    });
-                    break
-                case 'uz':
-                    mask.updateOptions({
-                        mask: "+{998}(00)000-00-00",
-                    });
-                    break
-
-                case 'tr':
-                    mask.updateOptions({
-                        mask: "+{90}(000)000-00-00",
-                    });
-                    break
-                case 'kg':
-                    mask.updateOptions({
-                        mask: "+{996}(000)000000",
-                    });
-                    break
-
+            mask: "+{9*}(000)000-00-00",
+            definitions: {
+                '*': /[0]/
             }
+
         });
     });
 

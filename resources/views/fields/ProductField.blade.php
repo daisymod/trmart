@@ -1,5 +1,5 @@
 <div style="width: 100%;" class="form-group">
-    <button type="button" id="add-btn-product" class="btn green-btn">@lang('system.newColor1')</button>
+
     <table style="border-collapse: collapse; margin-top: 20px;" class="table table-bordered" id="productTable">
         <tr>
             <th>@lang('cart.size')</th>
@@ -138,7 +138,7 @@
 
 
     </table>
-
+    <button type="button" style="margin-top: 20px" id="add-btn-product" class="btn green-btn">@lang('system.newColor1')</button>
 </div>
 
 <script>

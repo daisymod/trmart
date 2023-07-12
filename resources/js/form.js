@@ -166,26 +166,20 @@ jQuery(document).ready(function () {
         i = totalRowCount - 1;
 
 
-        var compound  = '<td>\n' +
-            '                       <div class="form-lang-box form-lang-box-ru '+ setActive('RUS',active) +'">\n' +
-            '                            <input type="text" name="compound[ru]['+ i+']" class="form-control">\n' +
-            '                            <datalist id="compound">\n' +
-            '                                                            </datalist>\n' +
-            '                        </div>\n' +
-            '                                            <div class="form-lang-box form-lang-box-tr '+ setActive('TUR',active) +'">\n' +
-            '                            <input type="text" name="compound[tr]['+ i+']" class="form-control">\n' +
-            '                            <datalist id="compound">\n' +
-            '                                                            </datalist>\n' +
-            '                        </div>\n' +
-            '                                            <div class="form-lang-box form-lang-box-kz '+ setActive('KAZ',active) +'">\n' +
-            '                            <input type="text" name="compound[kz]['+ i+']" class="form-control">\n' +
-            '                            <datalist id="compound">\n' +
-            '                                                            </datalist>\n' +
-            '                        </div>\n' +
-            '                                    </td>'
+        var compound = document.getElementById('compound-data');
+        var compoundText  = compound.innerHTML.replace('compound[0]', 'compound['+ i +']')
 
 
-        $('#dynamicAddRemove tr:last').after('<tr>'+ compound +'<td><input type="number" min="0" max="100" name="percent['+i+']" class="form-control" /></td><td><button type="button" onclick="$(this).parents(\'tr\').remove()" class="btn red-btn remove-tr">-</button></td></tr>');
+        $('#dynamicAddRemove tr:last').after(
+            '<tr><td>\n' +
+            '                    ' + compoundText + ' \n' +
+            '                </td>\n' +
+        '<td width="100px">' +
+            '<input type="number" min="0" max="100" name="percent['+ i +']"  value="" class="form-control" />' +
+            '</td>' +
+
+        '<td><button type="button" onclick="$(this).parents(\'tr\').remove()" class="btn red-btn remove-tr">-</button></td></tr>'
+        );
     });
 
 

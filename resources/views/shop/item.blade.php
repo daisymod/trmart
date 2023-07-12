@@ -37,7 +37,7 @@
                                     </svg>
                                 </div>
                             </div>
-                            <a href="#">{{$count_feedback}} @lang('products.feedbacks')</a>
+                            <a href="#" style="cursor: initial">{{$count_feedback}} @lang('products.feedbacks')</a>
                         </div>
 
 
@@ -189,11 +189,15 @@ display: flex;
 flex-wrap: wrap;">
                             <span>@lang('products.squad'):</span>
                             @foreach($record->compound as $items)
-                                <span style="display: flex;width: 100%" class="text">{{ $items->{'name_'.app()->getLocale()} }}  {{ $items->percent . '%' }}</span>
+                                <span style="display: flex;width: 100%" class="text">{{ $items->compound->{'name_'.app()->getLocale()}  ?? ''}}  {{ $items->percent . '%' }}</span>
                             @endforeach
 
                         </div>
-                        <p> {{$record->{'body_'.app()->getLocale()} }} </p>
+                        <div class="top" style="max-width: 384px;width: 100%;display: flex;flex-wrap: wrap;">
+                            <span>@lang('merchant.form.body'):</span>
+                            <span class="text" style="font-size: 13px;font-weight: 500;line-height: 18px; width: 100%"> {{$record->{'body_'.app()->getLocale()} }} </span>
+                        </div>
+
                     </div>
 
 
@@ -247,7 +251,12 @@ flex-wrap: wrap;">
                                 <div class="img-wrap"><img src="/img/user-icon-dark.svg" alt=""></div>
                                 <div class="texts">
                                     <div class="top-info">
-                                        <span>{{$item->user->name}} {{$item->user->s_name}}</span>
+                                        @if($item->user->role == 'user')
+                                            <span>{{$item->user->name}} {{$item->user->s_name}}</span>
+                                        @else
+                                            <span>{{$item->user->company->company_name}} / {{$item->user->company->shop_name}}</span>
+                                        @endif
+
                                         <span class="gray">{{$item->created_at}}</span>
                                     </div>
                                     <p>{{$item->text}}</p>
@@ -280,7 +289,7 @@ flex-wrap: wrap;">
                                 </div>
                             </div>
                             <span class="number">{{number_format($rating, 2, '.', ',')}}</span>
-                            <img src="/img/arr-right.svg" alt="">
+
                         </div>
                         <p>@lang('products.forFeedback') {{$count_feedback}} @lang('products.feedbacks')</p>
                     </div>
@@ -297,38 +306,42 @@ flex-wrap: wrap;">
                     <div class="form-ajax-feedback">
                         <form class="main-form4" method="POST" action="{{ route("feedback.create",$i->id) }}">
                             @csrf
-                            <div class="rating">
-                                <label>
-                                    <input type="radio" name="rating" value="1" />
-                                    <span class="icon">★</span>
-                                </label>
-                                <label>
-                                    <input type="radio" name="rating" value="2" />
-                                    <span class="icon">★</span>
-                                    <span class="icon">★</span>
-                                </label>
-                                <label>
-                                    <input type="radio" name="rating" value="3" />
-                                    <span class="icon">★</span>
-                                    <span class="icon">★</span>
-                                    <span class="icon">★</span>
-                                </label>
-                                <label>
-                                    <input type="radio" name="rating" value="4" />
-                                    <span class="icon">★</span>
-                                    <span class="icon">★</span>
-                                    <span class="icon">★</span>
-                                    <span class="icon">★</span>
-                                </label>
-                                <label>
-                                    <input type="radio" name="rating" value="5" />
-                                    <span class="icon">★</span>
-                                    <span class="icon">★</span>
-                                    <span class="icon">★</span>
-                                    <span class="icon">★</span>
-                                    <span class="icon">★</span>
-                                </label>
-                            </div>
+                            @if(Auth::check())
+                            @if(Auth::user()->role == 'user')
+                                <div class="rating">
+                                    <label>
+                                        <input type="radio" name="rating" value="1" />
+                                        <span class="icon">★</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="rating" value="2" />
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="rating" value="3" />
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="rating" value="4" />
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="rating" value="5" />
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                    </label>
+                                </div>
+                            @endif
+                            @endif
                             <textarea placeholder="@lang('system.y4')" name="text" cols="5">
 
                         </textarea>

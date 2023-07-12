@@ -38,7 +38,7 @@ class CatalogItem extends Model
 
     public function compound()
     {
-        return $this->hasMany(ItemCompound::class, "item_id");
+        return $this->hasMany(ItemCompoundTable::class, "item_id");
     }
 
 

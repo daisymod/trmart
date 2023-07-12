@@ -164,7 +164,16 @@
     </li>
 @endif
 
-
+@if( Auth::user()->role == 'admin')
+    <li @if(Route::currentRouteName() == "compound.list")class="active"@endif>
+        <a href="{{ route("compound.list") }}">
+            @if(Route::currentRouteName() == "compound.list")
+                <img src="/img/menu-icon12.svg" alt="">
+            @endif
+            @lang('catalog_item.form.compound')
+        </a>
+    </li>
+@endif
 
 
 @if(\Illuminate\Support\Facades\Auth::user()->role == 'admin' || ((\Illuminate\Support\Facades\Auth::user()->role == 'merchant') && (Auth::user()->status == 2)))

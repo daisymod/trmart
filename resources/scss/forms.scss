@@ -20,10 +20,10 @@
 .field-images-box {
     .images-list-box {display: flex; flex-wrap: wrap; margin: 0 -5px;
         .image-box {position: relative; margin: 0 5px 5px 5px; width: 150px; cursor: move; /* background: #ffffff;*/
-            .image {width: 100%; min-height: 60px; border: 1px solid #0b5ed7; display: flex; justify-content: center; align-items: center;
-                img { width: 100%;}
+            .image {width: 50%; min-height: 60px; border: 1px solid #0b5ed7; display: flex; justify-content: center; align-items: center;
+                img { width: 50%;}
             }
-            .name {width: 100%; font-size: 14px; text-align: center;}
+            .name {width: 100%; font-size: 7px; text-align: center;}
             .del, .edit {position: absolute; right: 5px; cursor: pointer; color: #ffffff; background: #0b5ed7; border-radius: 100%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;}
             .del {top: 5px;}
             .edit {top: 32px;}

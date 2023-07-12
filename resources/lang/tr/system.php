@@ -352,4 +352,6 @@ Türkiye'nin tanıdığınız tüm markaları tek bir marketplace'te.",
     'del' => 'Sil',
 
     'newColor1' => 'Renk, boyut eklemek',
+    'warning-10' =>  'Dikkat! Malların fiyatı, ürünün değerinin %25\'i tutarında TürkiyeMart ticaret alanı payının komisyon ücreti ile belirtilmelidir. Mallar ihracat şartları ile KDV hariç satılmaktadır.',
+
 ];

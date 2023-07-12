@@ -45,6 +45,7 @@ class FeedbackService
         return $this->model->query()
             ->where('item_id','=',$id)
             ->with('user')
+            ->with('user.company')
             ->orderByDesc('id')
             ->get();
     }
@@ -52,6 +53,9 @@ class FeedbackService
 
     public function ratingById($id){
         return $this->model->query()
+            ->whereHas('user',function ($q){
+                $q->where('role','=','user');
+            })
             ->where('item_id','=',$id)
             ->avg('rating');
     }
@@ -75,6 +79,9 @@ class FeedbackService
             ->whereHas('item',function($query) use ($user_id){
                 $query->where('user_id','=',$user_id);
             })
+            ->whereHas('user',function ($q){
+                $q->where('role','=','user');
+            })
             ->count();
     }
 
@@ -83,6 +90,9 @@ class FeedbackService
         return $this->model->query()
             ->whereHas('item',function($query) use ($user_id){
                 $query->where('user_id','=',$user_id);
+            })
+            ->whereHas('user',function ($q){
+                $q->where('role','=','user');
             })
             ->avg('rating');
     }

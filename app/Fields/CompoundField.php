@@ -7,7 +7,8 @@ use App\Forms\CatalogItemMerchantForm;
 use App\Forms\CurrencyAdminForm;
 use App\Forms\ShippingMethodAdminForm;
 use App\Models\CatalogItemDynamicCharacteristic;
-use App\Models\Currency;
+use App\Models\Compound;
+use App\Models\ItemCompoundTable;
 use App\Models\ItemCompound;
 use App\Models\ShippingMethod;
 use App\Services\LanguageService;
@@ -73,15 +74,19 @@ class CompoundField extends RelationField
     protected function standart($data, $action)
     {
         if (isset($data['id'])) {
-            $compound = ItemCompound::where('item_id', '=', $data['id'])
+
+            $compound = ItemCompoundTable::where('item_id', '=', $data['id'])
+                ->with('compound')
                 ->get();
         }else{
             $compound = [];
         }
 
+        $data = Compound::all();
+
         $class = $this;
 
-        return view("fields." . class_basename($this), compact("compound",'action','class'))->render();
+        return view("fields." . class_basename($this), compact("compound",'action','data','class'))->render();
     }
 
 }

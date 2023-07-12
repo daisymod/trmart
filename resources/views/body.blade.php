@@ -51,11 +51,11 @@
                 <span class="text-top">@lang('system.language')</span>
                 <select id="language-data" class="language-select">
 
-                        <option class="option-data" data-active="0" @if($lang == 'ru') selected @endif value="ru">RUS
+                        <option class="option-data" data-active="0" @if($lang == 'ru') selected @endif value="ru">RU
                         </option>
                         <option class="option-data" data-active="1" value="kz" @if($lang == 'kz') selected @endif>KZ
                         </option>
-                        <option class="option-data" data-active="2" value="tr" @if($lang == 'tr') selected @endif>TUR
+                        <option class="option-data" data-active="2" value="tr" @if($lang == 'tr') selected @endif>TR
                         </option>
                 </select>
             </div>

@@ -105,7 +105,9 @@ class ItemService
             $item->body_ru == $data['body_ru'] &&
             $item->body_tr == $data['body_tr'] &&
             $item->body_kz == $data['body_kz'] &&
-            $item->status == 2){
+            $item->status == 2 &&
+            $item->image == $data['image']
+        ){
 
             $data['status'] = $item->status;
         }else{

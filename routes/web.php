@@ -193,7 +193,14 @@ Route::group(["middleware" => ["auth"]], function () {
     });
 
 
-
+    Route::group(["prefix" => "compound"], function () {
+        Route::get("/list", [\App\Http\Controllers\CompoundController::class, "index"])->name("compound.list");
+        Route::get("/create", [\App\Http\Controllers\CompoundController::class, "create"])->name("compound.create");
+        Route::post("/create", [\App\Http\Controllers\CompoundController::class, "store"])->name("compound.store");
+        Route::get("/{id}", [\App\Http\Controllers\CompoundController::class, "show"])->name("compound.edit");
+        Route::post("/{id}", [\App\Http\Controllers\CompoundController::class, "update"])->name("compound.update");
+        Route::get("/{id}/delete", [\App\Http\Controllers\CompoundController::class, "delete"])->name("compound.delete");
+    });
 
 
     Route::group(["prefix" => "color"], function () {
