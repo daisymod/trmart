@@ -2,26 +2,24 @@
 
 namespace App\Services;
 
-use App\Actions\ImageLoadAction;
-use App\Events\CheckNotExistCharacteristicEvent;
+use App\Exports\ParseExport;
 use App\Mail\ResultImportMail;
-use App\Models\Catalog;
 use App\Models\CatalogCharacteristic;
 use App\Models\CatalogCharacteristicItem;
 use App\Models\CatalogItem;
 use App\Models\CatalogItemDynamicCharacteristic;
-use App\Models\Color;
 use App\Models\Compound;
+use App\Models\ParseStatistic;
 use App\Models\ItemCompoundTable;
 use App\Models\MarketplaceBrands;
 use App\Models\ProductItem;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManager;
+use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 class CatalogItemsExcelLoadService
@@ -97,345 +95,409 @@ class CatalogItemsExcelLoadService
         $resultError = 0;
         $flagDeleteBefore = true;
         $array_update = array();
+        $parseStatistic = new ParseStatistic();
+        $parseStatisticService = new ParseStatisticService($parseStatistic);
+        $fileResultName = Carbon::now().'-load-data.csv';
+        $newData = [
+            'job_id' =>   1,
+            'user_id' => $user->id,
+            'start_parse' => Carbon::now(),
+            'end_parse' => null,
+            'file' => null,
+            'count_of_lines' => count($excelArray)
+        ];
 
-        foreach ($excelArray as $number => $row) {
-            if ($row[0] == null && $row[1] == null  && $row[2] == null ){
-                break;
-            }
-            $data = CatalogCharacteristic::all();
+        $parseStat = $parseStatisticService->create($newData);
 
-            $indexRowCharacteristic = 28;
-            $getLastRowToResult = 28 + count($data);
-
-            if (empty($row[7])){
-                $resultArrayParse[$i][$getLastRowToResult + 1] = 'IMG value cannot be empty';
-                $i++;
-                $resultError++;
-                continue;
-            }
-
-            $images = explode(',', $row[7]);
-            $galleryResult = null;
-            $gallery = [$row[22],$row[23],$row[24],$row[25],$row[26],$row[27]];
-
-            foreach ($gallery as $item){
-                if (!empty($item)){
-                    $galleryResult .= self::saveParseImage($item).',';
-                }
-            }
-
-
-            $catalog = str_replace('"]', '', str_replace('["', '', $row[16]));
-            $merchant = str_replace('"]', '', str_replace('["', '', $row[17]));
-            $getLastId = CatalogItem::orderbyDesc('id')->first();
-            $article = substr("0000000000".$getLastId->id + 1, strlen($getLastId->id + 1));
-
-
-            if (filter_var(str_replace('[{"file":','',$images[0]), FILTER_VALIDATE_URL)){
-                if(substr(get_headers(str_replace('[{"file":','',$images[0]))[0], 9, 3) != "200"){
-                    $imageResult =
-                                '{"file":"\/img\/no_img.jpeg",
-                                "name":"\/img\/no_img.jpeg",
-                                "img":"\/img\/no_img.jpeg",
-                                "small":"\/img\/no_img.jpeg"}';
-                }else{
-                    $imageResult = self::saveParseImage(str_replace('[{"file":','',$images[0]));
-
-                }
-            }else{
-                $imageResult = '{"file":"\/img\/no_img.jpeg",
-                                "name":"\/img\/no_img.jpeg",
-                                "img":"\/img\/no_img.jpeg",
-                                "small":"\/img\/no_img.jpeg"}';
-            }
-
-
-
-            if ($user->role == 'admin'){
-                $loadUser = empty($merchant) ? 0 : $merchant;
-            }else{
-                $loadUser = $user->id;
-            }
-
-
-
-
-            if (empty($row[11])){
-                $resultArrayParse[$i][$getLastRowToResult + 1] = 'Color value cannot be empty';
-                $i++;
-                $resultError++;
-                continue;
-            }
-
-
-            if (empty($row[12])){
-                $resultArrayParse[$i][$getLastRowToResult + 1] = 'Size value cannot be empty';
-                $i++;
-                $resultError++;
-                continue;
-            }
-
-
-            $dataItem = [
-                'name' => [
-                    'ru' => $row[0],
-                    'tr' => $row[1],
-                    'kz' => $row[2],
-                ],
-                'brand' => $row[18],
-                'article' => $article,
-                'barcode' => $row[8],
-                'country_title' => null,
-                'city_id' => null,
-                'country_id' => null,
-                'equipment' => [
-                    'ru' => '',
-                    'tr' => '',
-                    'kz' => '',
-                ],
-                'body' => [
-                    'ru' => $row[4],
-                    'kz' => $row[6],
-                    'tr' => $row[5],
-                ],
-                'active' => $row[15],
-                'status' => $row[14],
-                'status_text' => $row[14],
-                'sex' => 1,
-                'style' => null,
-                'size' => null,
-                'sale' => $row[9],
-                'length' => null,
-                'price' => $row[10] ?? 0,
-                'count' => $row[13],
-                'catalog' => [
-                    empty($catalog) ? 0 : $catalog,
-                ],
-                'user' => [
-                    $loadUser,
-                ],
-                'image' => $imageResult,
-                'weight' => $row[21] ?? 1,
-            ];
-
-            $model = new CatalogItem();
-            $item = new ItemService($model);
-
-            $checkCatalog = $item->checkExist($dataItem);
-            $modelCharacteristic =  new CatalogItemDynamicCharacteristic;
-            $characteristic = new CharacteristicService($modelCharacteristic);
-            $productItemModel = new ProductItem();
-            $productItemService = new ProductItemSerice($productItemModel);
-            $compoundModel = new Compound();
-            $compound = new CompoundModelService($compoundModel);
-
-            if (!empty($checkCatalog->id)) {
-                $is_create = false;
-
-                if (!in_array($checkCatalog->id,$array_update)){
-                    $catalog_id = $checkCatalog;
-                    $item->update($dataItem,$catalog_id->id,$user);
-
-                    $productItemService->delete($catalog_id->id);
-                    array_push($array_update,$checkCatalog->id);
-                }
-
-                $characteristic->delete($catalog_id->id);
-
-            } else {
-                $is_create = true;
-                $catalog_id = $item->create($dataItem,$user);
-                array_push($array_update,$catalog_id->id);
-            }
-            
-            ItemCompoundTable::where('item_id','=',$catalog_id->id)
-                ->delete();
-
-
-
-            foreach ($data as $rowData){
-                if (!empty($row[$indexRowCharacteristic])){
-                    $rowArray = str_replace("]", '', str_replace("[", '', $row[$indexRowCharacteristic] ));
-                    $rowArray = str_replace("\"", '', str_replace("'", '', $rowArray ));
-                    $rowArray = explode(",", $rowArray);
-                    $characteristicID = CatalogCharacteristic::where('name_ru','=',$header[$indexRowCharacteristic])
-                        ->orWhere('name_tr','=',$header[$indexRowCharacteristic])
-                        ->orWhere('name_kz','=',$header[$indexRowCharacteristic])
-                        ->first();
-                    if (!empty($characteristicID->id)){
-                        $characteristic_id = $characteristicID->id;
-                    }else{
-                        $characteristic_id = $rowData->id;
-                    }
-
-                    if ((empty($rowArray[0]) && empty($rowArray[1]) && empty($rowArray[2])) || ($rowArray[0] == '' && $rowArray[1]== '' && $rowArray[2]== '')){
-                        $indexRowCharacteristic++;
-                        continue;
-                    }else{
-                        $insert = [
-                            'item_id' => $catalog_id->id,
-                            'characteristic_id' =>$characteristic_id,
-                            'name_ru' => $rowArray[0] ?? '',
-                            'name_tr' => $rowArray[1] ?? '',
-                            'name_kz' => $rowArray[2] ?? '',
-                        ];
-
-                        $characteristic->create($insert);
-                        $indexRowCharacteristic++;
-                    }
-                }else{
+        try {
+            foreach ($excelArray as $number => $row) {
+                if ($row[0] == null && $row[1] == null  && $row[2] == null ){
                     break;
                 }
-            }
+                $data = CatalogCharacteristic::all();
 
+                $indexRowCharacteristic = 28;
+                $getLastRowToResult = 28 + count($data);
 
-
-            if ($is_create == true){
-                $resultArrayParse[$i][$getLastRowToResult] = 'Product create - successful. Article - '.$article;
-            }else{
-                $resultArrayParse[$i][$getLastRowToResult] = 'Product update - successful. Article - '.$catalog_id->article;
-            }
-
-
-            if (empty(json_decode($imageResult)->file)){
-                $resultArrayParse[$i][$getLastRowToResult + 1] = 'File image not found, take another url for image';
-                $resultError++;
-            }else{
-                $resultSuccess++;
-            }
-
-            $marketBrandModel = new MarketplaceBrands();
-            $brandService = new MarketPlaceBrandService($marketBrandModel);
-
-            $brandService->create($row[18]);
-
-
-            $compoundData =  str_replace(']', '', str_replace('[', '', $row[3]));
-            if (substr($compoundData, -1) == ','){
-                $compoundData = substr($compoundData, 0, -1);
-            }
-
-            $compoundDataRu = str_replace(']', '', str_replace('[', '', $row[19]));
-            $compoundDataKz = str_replace(']', '', str_replace('[', '', $row[20]));
-            $compoundData = explode(",", $compoundData);
-            $compoundDataRu = explode(",", $compoundDataRu);
-            $compoundDataKz = explode(",", $compoundDataKz);
-
-
-            $indexForCreate = 0;
-
-
-            foreach ($compoundDataRu as $compoundItem) {
-                if ($indexForCreate % 2 == 1 || empty($compoundItem)) {
-                    $indexForCreate++;
+                if (empty($row[7])){
+                    $resultArrayParse[$i][$getLastRowToResult + 1] = 'IMG value cannot be empty';
+                    $i++;
+                    $resultError++;
                     continue;
-                } else {
-                    $attribute = [
-                        'name_ru' =>  $compoundDataRu[$indexForCreate] ?? '',
-                        'name_tr' =>  $compoundData[$indexForCreate] ?? '',
-                        'name_kz' =>  $compoundDataKz[$indexForCreate] ?? '',
-                    ];
+                }
 
-                    $percent = intval($compoundData[$indexForCreate + 1]) ?? '0';
-                    $compoundExist = Compound::where('name_tr','=',$attribute['name_tr'])
-                                     ->first();
-                    if (!empty($compoundExist->name_tr)){
-                        ItemCompoundTable::create(
-                            [
-                                'item_id'       =>    $catalog_id->id,
-                                'compound_id'   =>    $compoundExist->id,
-                                'percent'       =>    $percent
-                            ]
-                        );
+                $images = explode(',', $row[7]);
+                $galleryResult = null;
+                $gallery = [$row[22],$row[23],$row[24],$row[25],$row[26],$row[27]];
+
+
+                $catalog = str_replace('"]', '', str_replace('["', '', $row[16]));
+                $merchant = str_replace('"]', '', str_replace('["', '', $row[17]));
+                $getLastId = CatalogItem::orderbyDesc('id')->first();
+                $article = substr("0000000000".$getLastId->id + 1, strlen($getLastId->id + 1));
+
+
+                if (filter_var(str_replace('[{"file":','',$images[0]), FILTER_VALIDATE_URL)){
+                    if(substr(get_headers(str_replace('[{"file":','',$images[0]))[0], 9, 3) != "200"){
+                        $imageResult =
+                            '{"file":"\/img\/no_img.jpeg",
+                                "name":"\/img\/no_img.jpeg",
+                                "img":"\/img\/no_img.jpeg",
+                                "small":"\/img\/no_img.jpeg"}';
                     }else{
-                        $newCompound = $compound->create($attribute);
-                        ItemCompoundTable::create(
-                            [
-                                'item_id'       =>    $catalog_id->id,
-                                'compound_id'   =>    $newCompound->id,
-                                'percent'       =>    $percent
-                            ]
-                        );
+                        $imageResult = self::saveParseImage(str_replace('[{"file":','',$images[0]));
+
+                    }
+                }else{
+                    $imageResult = '{"file":"\/img\/no_img.jpeg",
+                                "name":"\/img\/no_img.jpeg",
+                                "img":"\/img\/no_img.jpeg",
+                                "small":"\/img\/no_img.jpeg"}';
+                }
+
+
+
+                if ($user->role == 'admin'){
+                    $loadUser = empty($merchant) ? 0 : $merchant;
+                }else{
+                    $loadUser = $user->id;
+                }
+
+
+
+
+                if (empty($row[11])){
+                    $resultArrayParse[$i][$getLastRowToResult + 1] = 'Color value cannot be empty';
+                    $i++;
+                    $resultError++;
+                    continue;
+                }
+
+
+                if (empty($row[12])){
+                    $resultArrayParse[$i][$getLastRowToResult + 1] = 'Size value cannot be empty';
+                    $i++;
+                    $resultError++;
+                    continue;
+                }
+
+
+                $dataItem = [
+                    'name' => [
+                        'ru' => $row[0],
+                        'tr' => $row[1],
+                        'kz' => $row[2],
+                    ],
+                    'brand' => $row[18],
+                    'article' => $article,
+                    'barcode' => $row[8],
+                    'country_title' => null,
+                    'city_id' => null,
+                    'country_id' => null,
+                    'equipment' => [
+                        'ru' => '',
+                        'tr' => '',
+                        'kz' => '',
+                    ],
+                    'body' => [
+                        'ru' => $row[4],
+                        'kz' => $row[6],
+                        'tr' => $row[5],
+                    ],
+                    'active' => $row[15],
+                    'status' => $row[14],
+                    'status_text' => $row[14],
+                    'sex' => 1,
+                    'style' => null,
+                    'size' => null,
+                    'sale' => $row[9],
+                    'length' => null,
+                    'price' => $row[10] ?? 0,
+                    'count' => $row[13],
+                    'catalog' => [
+                        empty($catalog) ? 0 : $catalog,
+                    ],
+                    'user' => [
+                        $loadUser,
+                    ],
+                    'image' => $imageResult,
+                    'weight' => $row[21] ?? 1,
+                ];
+
+                $model = new CatalogItem();
+                $item = new ItemService($model);
+
+                $checkCatalog = $item->checkExist($dataItem);
+                $modelCharacteristic =  new CatalogItemDynamicCharacteristic;
+                $characteristic = new CharacteristicService($modelCharacteristic);
+                $productItemModel = new ProductItem();
+                $productItemService = new ProductItemSerice($productItemModel);
+                $compoundModel = new Compound();
+                $compound = new CompoundModelService($compoundModel);
+
+                if (!empty($checkCatalog->id)) {
+                    $is_create = false;
+
+                    if (!in_array($checkCatalog->id,$array_update)){
+                        $catalog_id = $checkCatalog;
+                        $item->update($dataItem,$catalog_id->id,$user);
+
+                        $productItemService->delete($catalog_id->id);
+                        array_push($array_update,$checkCatalog->id);
                     }
 
-                    //$compound->create($attribute, $catalog_id->id);
-                    $indexForCreate++;
+                    $characteristic->delete($catalog_id->id);
+
+                } else {
+                    $is_create = true;
+                    $catalog_id = $item->create($dataItem,$user);
+                    array_push($array_update,$catalog_id->id);
                 }
+
+
+
+                ItemCompoundTable::where('item_id','=',$catalog_id->id)
+                    ->delete();
+
+
+
+                foreach ($data as $rowData){
+                    if (!empty($row[$indexRowCharacteristic])){
+                        $rowArray = str_replace("]", '', str_replace("[", '', $row[$indexRowCharacteristic] ));
+                        $rowArray = str_replace("\"", '', str_replace("'", '', $rowArray ));
+                        $rowArray = explode(",", $rowArray);
+                        $characteristicID = CatalogCharacteristic::where('name_ru','=',$header[$indexRowCharacteristic])
+                            ->orWhere('name_tr','=',$header[$indexRowCharacteristic])
+                            ->orWhere('name_kz','=',$header[$indexRowCharacteristic])
+                            ->first();
+                        if (!empty($characteristicID->id)){
+                            $characteristic_id = $characteristicID->id;
+                        }else{
+                            $characteristic_id = $rowData->id;
+                        }
+
+                        if ((empty($rowArray[0]) && empty($rowArray[1]) && empty($rowArray[2])) || ($rowArray[0] == '' && $rowArray[1]== '' && $rowArray[2]== '')){
+                            $indexRowCharacteristic++;
+                            continue;
+                        }else{
+                            $insert = [
+                                'item_id' => $catalog_id->id,
+                                'characteristic_id' =>$characteristic_id,
+                                'name_ru' => $rowArray[0] ?? '',
+                                'name_tr' => $rowArray[1] ?? '',
+                                'name_kz' => $rowArray[2] ?? '',
+                            ];
+
+                            $characteristic->create($insert);
+                            $indexRowCharacteristic++;
+                        }
+                    }else{
+                        break;
+                    }
+                }
+
+
+
+                if ($is_create == true){
+                    $resultArrayParse[$i][$getLastRowToResult] = 'Product create - successful. Article - '.$article;
+                }else{
+                    $resultArrayParse[$i][$getLastRowToResult] = 'Product update - successful. Article - '.$catalog_id->article;
+                }
+
+
+                if (empty(json_decode($imageResult)->file)){
+                    $resultArrayParse[$i][$getLastRowToResult + 1] = 'File image not found, take another url for image';
+                    $resultError++;
+                }else{
+                    $resultSuccess++;
+                }
+
+                $marketBrandModel = new MarketplaceBrands();
+                $brandService = new MarketPlaceBrandService($marketBrandModel);
+
+                $brandService->create($row[18]);
+
+
+                $compoundData =  str_replace(']', '', str_replace('[', '', $row[3]));
+                if (substr($compoundData, -1) == ','){
+                    $compoundData = substr($compoundData, 0, -1);
+                }
+
+                $compoundDataRu = str_replace(']', '', str_replace('[', '', $row[19]));
+                $compoundDataKz = str_replace(']', '', str_replace('[', '', $row[20]));
+                $compoundData = explode(",", $compoundData);
+                $compoundDataRu = explode(",", $compoundDataRu);
+                $compoundDataKz = explode(",", $compoundDataKz);
+
+
+                $indexForCreate = 0;
+
+
+                foreach ($compoundDataRu as $compoundItem) {
+                    if ($indexForCreate % 2 == 1 || empty($compoundItem)) {
+                        $indexForCreate++;
+                        continue;
+                    } else {
+                        $attribute = [
+                            'name_ru' =>  $compoundDataRu[$indexForCreate] ?? '',
+                            'name_tr' =>  $compoundData[$indexForCreate] ?? '',
+                            'name_kz' =>  $compoundDataKz[$indexForCreate] ?? '',
+                        ];
+
+                        $percent = intval($compoundData[$indexForCreate + 1]) ?? '0';
+                        $compoundExist = Compound::where('name_tr','=',$attribute['name_tr'])
+                            ->first();
+                        if (!empty($compoundExist->name_tr)){
+                            ItemCompoundTable::create(
+                                [
+                                    'item_id'       =>    $catalog_id->id,
+                                    'compound_id'   =>    $compoundExist->id,
+                                    'percent'       =>    $percent
+                                ]
+                            );
+                        }else{
+                            $newCompound = $compound->create($attribute);
+                            ItemCompoundTable::create(
+                                [
+                                    'item_id'       =>    $catalog_id->id,
+                                    'compound_id'   =>    $newCompound->id,
+                                    'percent'       =>    $percent
+                                ]
+                            );
+                        }
+
+                        $indexForCreate++;
+                    }
+                }
+
+
+                $color = CatalogCharacteristicItem::where('catalog_characteristic_id', '=', 15)
+                    ->where('name_tr', '=', $row[11])
+                    ->orWhere('name_kz', '=', $row[11])
+                    ->orWhere('name_ru', '=', $row[11])
+                    ->first();
+
+                if (!empty($color->id)) {
+                    $colorData = $color->id;
+                } else {
+                    $newColor = CatalogCharacteristicItem::create([
+                        'name_ru' => $row[11],
+                        'name_tr' => $row[11],
+                        'name_kz' => $row[11],
+                        'catalog_characteristic_id' => 15,
+                        'position' => 1,
+                    ]);
+                    $colorData = $newColor->id;
+                }
+
+                $size = CatalogCharacteristicItem::where('catalog_characteristic_id', '=', 16)
+                    ->where('name_tr', '=', $row[12])
+                    ->first();
+
+                if (!empty($size->id)) {
+                    $sizeData = $size->id;
+                } else {
+                    $newSize = CatalogCharacteristicItem::create([
+                        'name_ru' => $row[12],
+                        'name_tr' => $row[12],
+                        'name_kz' => $row[12],
+                        'catalog_characteristic_id' => 16,
+                        'position' => 1,
+                    ]);
+                    $sizeData = $newSize->id;
+                }
+
+
+                $productData = [
+                    'color' => $colorData,
+                    'size' => $sizeData,
+                    'price' => $row[10],
+                    'count' => empty($row[13]) ? 0 : $row[13],
+                    'sale' => empty($row[9]) ? 0 : $row[9],
+                    'image' => substr($galleryResult, 0, -1),
+                ];
+
+                $checkProductItem = ProductItem::where('color','=',$colorData)
+                    ->where('size','=',$sizeData)
+                    ->where('item_id','=',$catalog_id->id)
+                    ->first();
+
+
+
+                $checkProductItemColor = ProductItem::where('color','=',$colorData)
+                    ->where('item_id','=',$catalog_id->id)
+                    ->first();
+
+                if (!empty($checkProductItemColor->size)){
+                    $productData = [
+                        'color' => $colorData,
+                        'size' => $sizeData,
+                        'price' => $row[10],
+                        'count' => empty($row[13]) ? 0 : $row[13],
+                        'sale' => empty($row[9]) ? 0 : $row[9],
+                        'image' => $checkProductItemColor->image,
+                    ];
+                }else{
+                    foreach ($gallery as $item){
+                        if (!empty($item)){
+                            $galleryResult .= self::saveParseImage($item).',';
+                        }
+                    }
+                    $productData = [
+                        'color' => $colorData,
+                        'size' => $sizeData,
+                        'price' => $row[10],
+                        'count' => empty($row[13]) ? 0 : $row[13],
+                        'sale' => empty($row[9]) ? 0 : $row[9],
+                        'image' => substr($galleryResult, 0, -1),
+                    ];
+                }
+
+
+                if (!empty($checkProductItem->size)){
+                    $productItemService->update($productData, $checkProductItem->id);
+                }else{
+                    $productItemService->create($productData, $catalog_id->id);
+                }
+
+                $i++;
             }
 
+            Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
 
-            $color = CatalogCharacteristicItem::where('catalog_characteristic_id', '=', 15)
-                ->where('name_tr', '=', $row[11])
-                ->orWhere('name_kz', '=', $row[11])
-                ->orWhere('name_ru', '=', $row[11])
+            $adminUser = User::where('id','=',1)
                 ->first();
 
-            if (!empty($color->id)) {
-                $colorData = $color->id;
-            } else {
-                $newColor = CatalogCharacteristicItem::create([
-                    'name_ru' => $row[11],
-                    'name_tr' => $row[11],
-                    'name_kz' => $row[11],
-                    'catalog_characteristic_id' => 15,
-                    'position' => 1,
-                ]);
-                $colorData = $newColor->id;
-            }
+            Mail::to($adminUser->email)->send(new ResultImportMail($adminUser,$resultArrayParse,$adminUser->lang,$resultSuccess,$resultError));
+        }catch (\Exception $e){
+            Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
 
-            $size = CatalogCharacteristicItem::where('catalog_characteristic_id', '=', 16)
-                ->where('name_tr', '=', $row[12])
+            $adminUser = User::where('id','=',1)
                 ->first();
 
-            if (!empty($size->id)) {
-                $sizeData = $size->id;
-            } else {
-                $newSize = CatalogCharacteristicItem::create([
-                    'name_ru' => $row[12],
-                    'name_tr' => $row[12],
-                    'name_kz' => $row[12],
-                    'catalog_characteristic_id' => 16,
-                    'position' => 1,
-                ]);
-                $sizeData = $newSize->id;
-            }
+            Mail::to($adminUser->email)->send(new ResultImportMail($adminUser,$resultArrayParse,$adminUser->lang,$resultSuccess,$resultError));
 
-
-            $productData = [
-                'color' => $colorData,
-                'size' => $sizeData,
-                'price' => $row[10],
-                'count' => empty($row[13]) ? 0 : $row[13],
-                'sale' => empty($row[9]) ? 0 : $row[9],
-                'image' => substr($galleryResult, 0, -1),
+            Excel::store(new ParseExport($resultArrayParse,$user->locale), $fileResultName);
+            $update = [
+                'end_parse' => Carbon::now(),
+                'file' => $fileResultName,
             ];
-
-            $checkProductItem = ProductItem::where('color','=',$colorData)
-                                ->where('size','=',$sizeData)
-                                ->where('item_id','=',$catalog_id->id)
-                                ->first();
-
-            if (!empty($checkProductItem->size)){
-                $productItemService->update($productData, $checkProductItem->id);
-            }else{
-                $productItemService->create($productData, $catalog_id->id);
-            }
-
-            $i++;
+            $parseStatisticService->update($update,$parseStat->id);
         }
 
-        Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
+        Excel::store(new ParseExport($resultArrayParse,$user->locale), $fileResultName);
+        $update = [
+            'end_parse' => Carbon::now(),
+            'file' => $fileResultName,
+        ];
+        $parseStatisticService->update($update,$parseStat->id);
 
-        $adminUser = User::where('id','=',1)
-                ->first();
-
-        Mail::to($adminUser->email)->send(new ResultImportMail($adminUser,$resultArrayParse,$adminUser->lang,$resultSuccess,$resultError));
         return $characteristicData;
     }
 
     public static function getArrayFromFile($file): array
     {
-        $reader = new Xlsx();
+            $reader = new Xlsx();
         $spreadsheet = $reader->load($file);
         return $spreadsheet->getSheet(0)->toArray();
     }

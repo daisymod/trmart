@@ -163,7 +163,9 @@ Route::group(["middleware" => ["auth"]], function () {
         Route::post("/list/{id}", [\App\Http\Controllers\CommissionController::class, "update"])->name("commission.update");
     });
 
-
+    Route::group(["prefix" => "parse-statistic"], function () {
+        Route::get("/list", [\App\Http\Controllers\ParseStatisticController::class, "index"])->name("ParseStatistic.list");
+    });
     Route::group(["prefix" => "geo"], function () {
         Route::get("/list", [\App\Http\Controllers\GeoController::class, "index"])->name("geo.list");
         Route::get("/create", [\App\Http\Controllers\GeoController::class, "create"])->name("geo.create");

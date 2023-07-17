@@ -6,6 +6,7 @@
             <div class="card-header">
                 <div class="menu">@include("menu")</div></div>
             <div class="card-body table-scroll-wrap">
+                <a href="{{route('compound.create')}}" class="btn"> + </a>
                 <table class="table table-striped table-hover table-bordered">
                     <thead>
                     <tr>
