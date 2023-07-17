@@ -26,9 +26,14 @@
                             <td>{{ \Carbon\Carbon::parse($i->start_parse) }}</td>
                             <td>{{ \Carbon\Carbon::parse($i->end_parse) }}</td>
                             <td>{{ $i->count_of_lines }}</td>
-                            <td>{{ \Carbon\Carbon::parse($i->start_parse - $i->end_parse)->format('H:i:s') }}</td>
+                            @php
+                                $date = \Carbon\Carbon::parse($i->start_parse);
+                                $end = \Carbon\Carbon::parse($i->end_parse);
+                                $diff = $date->diff($end);
+                            @endphp
+                            <td>{{$diff->h}}:{{$diff->i}}:{{$diff->s}}</td>
                             <td class="controls">
-                            <a href="{{$i->file}}" class="btn gren-btn">Файл результата</a>
+                            <a href="{{Storage::url($i->file)}}" class="btn gren-btn">Файл результата</a>
                             </td>
                         </tr>
                     @endforeach

@@ -17,7 +17,7 @@ class ParseStatisticController extends Controller
     public function index(){
         Gate::authorize("brand-list");
         $records = $this->service->getAll();
-        return view("color.list", compact("records"));
+        return view("parseStat.list", compact("records"));
     }
 
     public function show($id){

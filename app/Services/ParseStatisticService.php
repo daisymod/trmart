@@ -40,8 +40,10 @@ class ParseStatisticService
     public function getAll()
     {
         $items =  $this->model->query()
-            ->get();
-        
+            ->with('user')
+            ->orderByDesc('id')
+            ->paginate(50);
+
         return $items;
 
     }

@@ -97,7 +97,7 @@ class CatalogItemsExcelLoadService
         $array_update = array();
         $parseStatistic = new ParseStatistic();
         $parseStatisticService = new ParseStatisticService($parseStatistic);
-        $fileResultName = Carbon::now().'-load-data.csv';
+        $fileResultName = Carbon::now().'-load-data.xlsx';
         $newData = [
             'job_id' =>   1,
             'user_id' => $user->id,
@@ -477,15 +477,15 @@ class CatalogItemsExcelLoadService
 
             Mail::to($adminUser->email)->send(new ResultImportMail($adminUser,$resultArrayParse,$adminUser->lang,$resultSuccess,$resultError));
 
-            Excel::store(new ParseExport($resultArrayParse,$user->locale), $fileResultName);
+            Excel::store(new ParseExport($resultArrayParse,'ru'), $fileResultName,'public');
             $update = [
                 'end_parse' => Carbon::now(),
                 'file' => $fileResultName,
             ];
             $parseStatisticService->update($update,$parseStat->id);
         }
-
-        Excel::store(new ParseExport($resultArrayParse,$user->locale), $fileResultName);
+        print_r($resultArrayParse);
+        Excel::store(new ParseExport($resultArrayParse,'ru'), $fileResultName,'public');
         $update = [
             'end_parse' => Carbon::now(),
             'file' => $fileResultName,
