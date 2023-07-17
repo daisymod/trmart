@@ -24,6 +24,7 @@ use App\Services\CompoundService;
 use App\Services\ItemService;
 use App\Services\MarketPlaceBrandService;
 use App\Services\ProductItemSerice;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -249,13 +250,14 @@ class CatalogItemController
            $result = CatalogItemsExcelLoadJob::dispatch(CatalogItemsExcelLoadService::getArrayFromFile(request()->file("file")),Auth::user());
         }
 
-
+        $count = count(CatalogItemsExcelLoadService::getArrayFromFile(request()->file("file"))) - 1;
+        $time = $count * 3;
         if (empty($result)){
             return response()->json(['html' =>
             "<div class='result-data'>".
                 "<p class='contact-success'>".trans('system.importSuccess')."</p>".
                 "<p class='contact'>".trans('system.importSuccess1')."</p>".
-                "<p class='contact-2'>".trans('system.importSuccess3')."</p>".
+                "<p class='contact-2'>".trans('system.importSuccess3').'-'.Carbon::now()->addSecond($time)."</p>".
                 "<p class='contact-2'>".trans('system.importSuccess2')."</p>".
 
             "</div>"
@@ -267,7 +269,7 @@ class CatalogItemController
                 "<div class='result-data'>".
                 "<p class='contact-success'>".trans('system.importSuccess')."</p>".
                 "<p class='contact'>".trans('system.importSuccess1')."</p>".
-                "<p class='contact-2'>".trans('system.importSuccess3')."</p>".
+                "<p class='contact-2'>".trans('system.importSuccess3').'-'.Carbon::now()->addSecond($time)."</p>".
                 "<p class='contact-2'>".trans('system.importSuccess2')."</p>".
                 "</div>"
             ]);

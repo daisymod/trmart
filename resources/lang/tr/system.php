@@ -292,7 +292,7 @@ return [
     'importSuccess' => 'İçe aktarma başarılı!',
     'importSuccess1' => 'Ürün özellikleri verilerinin yanlış olması durumunda lütfen yönetici ile iletişime geçin!',
     'importSuccess2' => 'E-posta: info@turkiyemart.com',
-    'importSuccess3' => '3 dakika içinde, mal yükleme sonucunu içeren bir e-posta alacaksınız.',
+    'importSuccess3' => 'içinde, mal yükleme sonucunu içeren bir e-posta alacaksınız.',
 
     'yes' => 'evet',
     'no' => 'Hayır',
