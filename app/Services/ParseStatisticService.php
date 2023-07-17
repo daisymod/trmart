@@ -41,8 +41,9 @@ class ParseStatisticService
     {
         $items =  $this->model->query()
             ->with('user')
+            ->with('user.company')
             ->orderByDesc('id')
-            ->paginate(50);
+            ->paginate(100);
 
         return $items;
 

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Exports\ParseExport;
+use App\Exports\ParseResultExport;
 use App\Mail\ResultImportMail;
 use App\Models\CatalogCharacteristic;
 use App\Models\CatalogCharacteristicItem;
@@ -15,10 +15,8 @@ use App\Models\MarketplaceBrands;
 use App\Models\ProductItem;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-
-use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
@@ -97,7 +95,6 @@ class CatalogItemsExcelLoadService
         $array_update = array();
         $parseStatistic = new ParseStatistic();
         $parseStatisticService = new ParseStatisticService($parseStatistic);
-        $fileResultName = Carbon::now().'-load-data.xlsx';
         $newData = [
             'job_id' =>   1,
             'user_id' => $user->id,
@@ -106,7 +103,7 @@ class CatalogItemsExcelLoadService
             'file' => null,
             'count_of_lines' => count($excelArray)
         ];
-
+        $fileResultName = Carbon::now().'-load-data.csv';
         $parseStat = $parseStatisticService->create($newData);
 
         try {
@@ -408,15 +405,6 @@ class CatalogItemsExcelLoadService
                 }
 
 
-                $productData = [
-                    'color' => $colorData,
-                    'size' => $sizeData,
-                    'price' => $row[10],
-                    'count' => empty($row[13]) ? 0 : $row[13],
-                    'sale' => empty($row[9]) ? 0 : $row[9],
-                    'image' => substr($galleryResult, 0, -1),
-                ];
-
                 $checkProductItem = ProductItem::where('color','=',$colorData)
                     ->where('size','=',$sizeData)
                     ->where('item_id','=',$catalog_id->id)
@@ -435,7 +423,7 @@ class CatalogItemsExcelLoadService
                         'price' => $row[10],
                         'count' => empty($row[13]) ? 0 : $row[13],
                         'sale' => empty($row[9]) ? 0 : $row[9],
-                        'image' => $checkProductItemColor->image,
+                        'image' => substr(substr($checkProductItemColor->image, 0, -1),1),
                     ];
                 }else{
                     foreach ($gallery as $item){
@@ -470,6 +458,7 @@ class CatalogItemsExcelLoadService
 
             Mail::to($adminUser->email)->send(new ResultImportMail($adminUser,$resultArrayParse,$adminUser->lang,$resultSuccess,$resultError));
         }catch (\Exception $e){
+            log::info(print_r('qwewqewqewqewq',true));
             Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
 
             $adminUser = User::where('id','=',1)
@@ -477,15 +466,18 @@ class CatalogItemsExcelLoadService
 
             Mail::to($adminUser->email)->send(new ResultImportMail($adminUser,$resultArrayParse,$adminUser->lang,$resultSuccess,$resultError));
 
-            Excel::store(new ParseExport($resultArrayParse,'ru'), $fileResultName,'public');
+            self::makeCsv($resultArrayParse,$fileResultName);
             $update = [
                 'end_parse' => Carbon::now(),
                 'file' => $fileResultName,
             ];
             $parseStatisticService->update($update,$parseStat->id);
         }
-        print_r($resultArrayParse);
-        Excel::store(new ParseExport($resultArrayParse,'ru'), $fileResultName,'public');
+
+
+
+        self::makeCsv($resultArrayParse,$fileResultName);
+
         $update = [
             'end_parse' => Carbon::now(),
             'file' => $fileResultName,
@@ -493,6 +485,16 @@ class CatalogItemsExcelLoadService
         $parseStatisticService->update($update,$parseStat->id);
 
         return $characteristicData;
+    }
+
+
+    public static function makeCsv($array,$fileResultName){
+        $filename =  public_path("files/".$fileResultName);
+        $handle = fopen($filename, 'w');
+        foreach ($array as $fields) {
+            fputcsv($handle, $fields);
+        }
+        fclose($handle);
     }
 
     public static function getArrayFromFile($file): array
