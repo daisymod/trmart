@@ -10,6 +10,8 @@ use App\Forms\ExtendCatalogItemMerchantForm;
 use App\Forms\MerchantCatalogItemMerchantForm;
 use App\Forms\SearchCatalogItemForm;
 use App\Models\CatalogCharacteristicItem;
+use App\Models\ParseStatistic;
+use App\Services\ParseStatisticService;
 use App\Models\CatalogItem;
 use App\Models\ProductItem;
 use Illuminate\Database\Eloquent\Model;
@@ -25,7 +27,9 @@ class CatalogItemActionService
         }else{
             session()->put('limit_catalog_item',100);
         }
-
+        $parseStatistic = new ParseStatistic();
+        $parseStatisticService = new ParseStatisticService($parseStatistic);
+        $job = $parseStatisticService->getByUserNotEnd();
         $lang = LanguageService::getLang();
 
         $item = new CatalogItem();
@@ -137,7 +141,7 @@ class CatalogItemActionService
             ->get();
 
 
-        return compact("records", "form",'size','color', "sortBy");
+        return compact("records", "form",'size','color', "sortBy",'job');
     }
 
     public function actionAddGet()

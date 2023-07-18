@@ -14,6 +14,9 @@ class Company extends Model
         'legal_address_city','legal_address_street','legal_address_number','legal_address_office',
         'city','tax_office','street','number','office'];
 
-
+    public function user()
+    {
+        return $this->belongsTo(User::class, "user_id");
+    }
 
 }

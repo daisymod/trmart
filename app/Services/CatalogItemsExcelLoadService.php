@@ -111,10 +111,9 @@ class CatalogItemsExcelLoadService
                 if ($row[0] == null && $row[1] == null  && $row[2] == null ){
                     break;
                 }
-                $data = CatalogCharacteristic::all();
 
                 $indexRowCharacteristic = 28;
-                $getLastRowToResult = 28 + count($data);
+                $getLastRowToResult = 28;
 
                 if (empty($row[7])){
                     $resultArrayParse[$i][$getLastRowToResult + 1] = 'IMG value cannot be empty';
@@ -255,43 +254,6 @@ class CatalogItemsExcelLoadService
 
                 ItemCompoundTable::where('item_id','=',$catalog_id->id)
                     ->delete();
-
-
-
-                foreach ($data as $rowData){
-                    if (!empty($row[$indexRowCharacteristic])){
-                        $rowArray = str_replace("]", '', str_replace("[", '', $row[$indexRowCharacteristic] ));
-                        $rowArray = str_replace("\"", '', str_replace("'", '', $rowArray ));
-                        $rowArray = explode(",", $rowArray);
-                        $characteristicID = CatalogCharacteristic::where('name_ru','=',$header[$indexRowCharacteristic])
-                            ->orWhere('name_tr','=',$header[$indexRowCharacteristic])
-                            ->orWhere('name_kz','=',$header[$indexRowCharacteristic])
-                            ->first();
-                        if (!empty($characteristicID->id)){
-                            $characteristic_id = $characteristicID->id;
-                        }else{
-                            $characteristic_id = $rowData->id;
-                        }
-
-                        if ((empty($rowArray[0]) && empty($rowArray[1]) && empty($rowArray[2])) || ($rowArray[0] == '' && $rowArray[1]== '' && $rowArray[2]== '')){
-                            $indexRowCharacteristic++;
-                            continue;
-                        }else{
-                            $insert = [
-                                'item_id' => $catalog_id->id,
-                                'characteristic_id' =>$characteristic_id,
-                                'name_ru' => $rowArray[0] ?? '',
-                                'name_tr' => $rowArray[1] ?? '',
-                                'name_kz' => $rowArray[2] ?? '',
-                            ];
-
-                            $characteristic->create($insert);
-                            $indexRowCharacteristic++;
-                        }
-                    }else{
-                        break;
-                    }
-                }
 
 
 
@@ -450,39 +412,26 @@ class CatalogItemsExcelLoadService
 
                 $i++;
             }
-
-            Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
-
-            $adminUser = User::where('id','=',1)
-                ->first();
-
-            Mail::to($adminUser->email)->send(new ResultImportMail($adminUser,$resultArrayParse,$adminUser->lang,$resultSuccess,$resultError));
         }catch (\Exception $e){
-            log::info(print_r('qwewqewqewqewq',true));
-            Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
 
-            $adminUser = User::where('id','=',1)
-                ->first();
 
-            Mail::to($adminUser->email)->send(new ResultImportMail($adminUser,$resultArrayParse,$adminUser->lang,$resultSuccess,$resultError));
-
+        }finally {
             self::makeCsv($resultArrayParse,$fileResultName);
+
+                Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
+
+                $adminUser = User::where('id','=',1)
+                    ->first();
+
+                Mail::to($adminUser->email)->send(new ResultImportMail($adminUser,$resultArrayParse,$adminUser->lang,$resultSuccess,$resultError));
+            
+
             $update = [
                 'end_parse' => Carbon::now(),
                 'file' => $fileResultName,
             ];
             $parseStatisticService->update($update,$parseStat->id);
         }
-
-
-
-        self::makeCsv($resultArrayParse,$fileResultName);
-
-        $update = [
-            'end_parse' => Carbon::now(),
-            'file' => $fileResultName,
-        ];
-        $parseStatisticService->update($update,$parseStat->id);
 
         return $characteristicData;
     }

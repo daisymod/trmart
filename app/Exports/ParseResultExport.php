@@ -18,9 +18,7 @@ class ParseResultExport implements FromArray,WithColumnWidths,ShouldQueue
 
     public function array(): array
     {
-        print_r($this->data);
-        log::info(print_r(1111,true));
-        log::info(print_r($this->data,true));
+      
         return $this->data;
     }
 

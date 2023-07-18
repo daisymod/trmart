@@ -33,12 +33,15 @@
                         @endcan
 
                         @can("catalog-item-excel-load")
-                                <div class="d-flex flex-wrap" style="flex-wrap: wrap;width: 233px;">
+                                @if(empty($job->id))
+                                    <div class="d-flex flex-wrap" style="flex-wrap: wrap;width: 233px;">
                                         <div class="custom-file-upload" style="display: flex;justify-content: flex-start;flex-wrap: wrap;">
                                             <input type="file" name="file" id="fileUpload" accept=".xlsx" />
                                         </div>
-                                    <button id="upload" class="green-btn product-btn1">@lang('system.loadTable') </button>
-                                </div>
+                                        <button id="upload" class="green-btn product-btn1">@lang('system.loadTable') </button>
+                                    </div>
+                                @endif
+
 
 
                         @endcan

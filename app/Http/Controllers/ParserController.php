@@ -44,8 +44,9 @@ class ParserController extends Controller
 
 
     public function actionExcelExport(Request $request){
-        ini_set('max_execution_time', 600);
+        ini_set('max_execution_time', 6000);
 
+        set_time_limit(6000);
         if (!str_contains(request()->url, "www.ozdilekteyim.com")) {
             throw \Illuminate\Validation\ValidationException::withMessages(['Site Is wrong']);
         }

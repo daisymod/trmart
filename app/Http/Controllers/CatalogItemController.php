@@ -20,6 +20,7 @@ use App\Services\CatalogItemsExcelLoadService;
 use App\Services\CatalogItemStockService;
 use App\Services\CharacteristicService;
 use App\Services\ColorService;
+use App\Services\ParseStatisticService;
 use App\Services\CompoundService;
 use App\Services\ItemService;
 use App\Services\MarketPlaceBrandService;
@@ -34,7 +35,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class CatalogItemController
 {
 
-    public function __construct(protected ColorService $color,protected CompoundService $compound,protected ItemService $item,protected ProductItemSerice $product,protected CharacteristicService $characteristic)
+    public function __construct(protected ParseStatisticService $parserStatistic,protected ColorService $color,protected CompoundService $compound,protected ItemService $item,protected ProductItemSerice $product,protected CharacteristicService $characteristic)
     {
     }
 
@@ -42,6 +43,7 @@ class CatalogItemController
     {
 
         Gate::authorize("catalog-item-list");
+
         return view("catalog_item.list", $service->actionList($request));
     }
 
@@ -244,7 +246,9 @@ class CatalogItemController
 
     public function actionExcelLoad()
     {
+        ini_set('max_execution_time', 6000);
 
+        set_time_limit(6000);
         //Gate::authorize("catalog-item-excel-load");
         if (request()->hasFile("file") and request()->file("file")->getMimeType() == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
            $result = CatalogItemsExcelLoadJob::dispatch(CatalogItemsExcelLoadService::getArrayFromFile(request()->file("file")),Auth::user());
