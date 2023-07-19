@@ -49,7 +49,7 @@
                             </div>
                             <div class="info">
                                 <b>@lang('admin.change')</b>
-                                <span class="red">{{$diffPercentMerchant}} %</span>
+                                <span class="red">{{number_format($diffPercentMerchant, 2, '.', ' ')}} %</span>
                             </div>
                         </div>
                         <img src="/img/dashboard-img1.png" alt="">
@@ -76,7 +76,7 @@
                             </div>
                             <div class="info">
                                 <b>@lang('admin.change')</b>
-                                <span class="green">{{$diffPercentUser}} %</span>
+                                <span class="green">{{number_format($diffPercentUser, 2, '.', ' ')}} %</span>
                             </div>
                         </div>
                         <img src="/img/dashboard-img2.png" alt="">
@@ -103,7 +103,7 @@
                             </div>
                             <div class="info">
                                 <b>@lang('admin.change')</b>
-                                <span class="green">{{$diffPercentPrice}} %</span>
+                                <span class="green">{{number_format($diffPercentPrice, 2, '.', ' ')}} %</span>
                             </div>
                         </div>
                         <img src="/img/dashboard-img3.png" alt="">
@@ -140,7 +140,7 @@
                             </div>
                             <div class="info">
                                 <b>@lang('admin.change')</b>
-                                <span class="red">{{ $diffPercentMerchant }}%</span>
+                                <span class="red">{{ number_format($diffPercentMerchant, 2, '.', ' ')}}%</span>
                             </div>
                         </div>
                         <a href="#" class="green-btn">@lang('admin.edit-commission')</a>

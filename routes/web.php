@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 */
 Route::get("/", [\App\Http\Controllers\IndexController::class, "actionIndex"])->name("index");
 
+
+Route::post("/parse", [\App\Http\Controllers\ParserController::class, "actionExcelExport"])->name("parseOzdilekteyim");
 Route::post("/", [\App\Http\Controllers\ContactController::class, "sendMessage"])->name("sendMessage");
 
 Route::group(["prefix" => "user"], function () {

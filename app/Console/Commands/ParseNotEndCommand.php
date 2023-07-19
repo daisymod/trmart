@@ -27,9 +27,8 @@ class ParseNotEndCommand extends Command
      */
     public function handle()
     {
-        ParseStatistic::whereNotHas('job')
+        ParseStatistic::whereDoesntHave('job')
                         ->where('file','=',null)
-                        ->where('status','=','in progress')
                         ->update(
                             [
                                 'status' => 'error load'

@@ -24,9 +24,7 @@ class ItemService
         $data['brand'] = $attributes['brand'];
         $data['article'] = empty($attributes['article']) ? substr("0000000000".$getLastId->id + 1, strlen($getLastId->id + 1)) : $attributes['article'];
         $data['barcode'] = $attributes['barcode'];
-        $data['country_title'] = $attributes['country_title'] ?? null;
-        $data['city_id'] = $attributes['city_id'] ?? null;
-        $data['country_id'] = $attributes['country_id'] ?? null;
+
 
         $data['body_ru'] = $attributes['body']['ru'];
         $data['body_tr'] = $attributes['body']['tr'];
@@ -35,12 +33,11 @@ class ItemService
         $data['status'] = $user->role == 'merchant' ? 1 : intval($attributes['status']);
         $data['status_text'] = "";
         $data['stock'] = $attributes['stock'] ?? 1;
-        $data['sex'] = $attributes['sex'] ?? null;
+
         $data['weight'] = $attributes['weight'] ?? 1;
-        $data['style'] = $attributes['style']?? null;
-        $data['size'] = $attributes['size'] ?? null;
+
         $data['sale'] = $attributes['sale'] ?? 0;
-        $data['length'] = $attributes['length'] ?? null;
+
         $data['price'] = ceil($attributes['price']) ?? 0 ;
         $data['count'] = $attributes['count'] ?? 1;
         $data['catalog_id'] = $attributes['catalog'][0] ?? 1;
@@ -71,9 +68,7 @@ class ItemService
         $data['name_kz'] = $attributes['name']['kz'];
         $data['brand'] = $attributes['brand'];
         $data['barcode'] = $attributes['barcode'];
-        $data['country_title'] = $attributes['country_title'] ?? null;
-        $data['city_id'] = $attributes['city_id'] ?? null;
-        $data['country_id'] = $attributes['country_id'] ?? null;
+
 
         $data['body_ru'] = $attributes['body']['ru'];
         $data['body_tr'] = $attributes['body']['tr'];
@@ -81,13 +76,12 @@ class ItemService
         $data['active'] = $attributes['active'];
 
         $data['status_text'] =  '';
-        $data['sex'] = $attributes['sex'] ?? null;
+
         $data['stock'] = $attributes['stock'] ?? 1;
         $data['weight'] = $attributes['weight'] ?? 1;
-        $data['style'] = $attributes['style'] ?? null;
-        $data['size'] = $attributes['size'] ?? null;
+
         $data['sale'] = $attributes['sale'] ?? 0;
-        $data['length'] = $attributes['length'] ?? null;
+        
         $data['price'] = ceil($attributes['price']) ?? 0 ;
         $data['count'] = $attributes['count'] ?? 1;
         $data['catalog_id'] = $attributes['catalog'][0] ?? 1;

@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
-class CatalogItemsExcelLoadService
+class CatalogItemsExcelLoadServiceTest
 {
 
     public function __construct(protected CompoundModelService $compound,protected ItemService $item,protected ProductItemSerice $product,protected CharacteristicService $characteristic)
@@ -103,7 +103,7 @@ class CatalogItemsExcelLoadService
             'end_parse' => null,
             'file' => null,
             'count_of_lines' => count($excelArray),
-            'status' => 'in progress',
+            'status' => 'id_progress',
         ];
         $fileResultName = Carbon::now().'-load-data.xlsx';
         $parseStat = $parseStatisticService->create($newData);
@@ -189,14 +189,6 @@ class CatalogItemsExcelLoadService
                     'brand' => $row[18],
                     'article' => $article,
                     'barcode' => $row[8],
-                    'country_title' => null,
-                    'city_id' => null,
-                    'country_id' => null,
-                    'equipment' => [
-                        'ru' => '',
-                        'tr' => '',
-                        'kz' => '',
-                    ],
                     'body' => [
                         'ru' => $row[4],
                         'kz' => $row[6],
@@ -205,11 +197,8 @@ class CatalogItemsExcelLoadService
                     'active' => $row[15],
                     'status' => $row[14],
                     'status_text' => $row[14],
-                    'sex' => 1,
-                    'style' => null,
-                    'size' => null,
+
                     'sale' => $row[9],
-                    'length' => null,
                     'price' => $row[10] ?? 0,
                     'count' => $row[13],
                     'catalog' => [
@@ -411,22 +400,22 @@ class CatalogItemsExcelLoadService
 
 
         }finally {
-                self::makeCsv($resultArrayParse,$fileResultName);
-                $update = [
-                    'status' => 'done',
-                    'end_parse' => Carbon::now(),
-                    'file' => $fileResultName,
-                ];
-                $parseStatisticService->update($update,$parseStat->id);
+            self::makeCsv($resultArrayParse,$fileResultName);
+            $update = [
+                'status' => 'done',
+                'end_parse' => Carbon::now(),
+                'file' => $fileResultName,
+            ];
+            $parseStatisticService->update($update,$parseStat->id);
 
-                if (!empty($user->email)){
-                    Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
-                }
-                $adminUser = User::where('id','=',1)
-                    ->first();
-                if (!empty($adminUser->email)){
-                    Mail::to($adminUser->email)->send(new ResultImportMail($adminUser,$resultArrayParse,$adminUser->lang,$resultSuccess,$resultError));
-                }
+            if (!empty($user->email)){
+                Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
+            }
+            $adminUser = User::where('id','=',1)
+                ->first();
+            if (!empty($adminUser->email)){
+                Mail::to($adminUser->email)->send(new ResultImportMail($adminUser,$resultArrayParse,$adminUser->lang,$resultSuccess,$resultError));
+            }
 
 
 
@@ -448,7 +437,7 @@ class CatalogItemsExcelLoadService
 
     public static function getArrayFromFile($file): array
     {
-            $reader = new Xlsx();
+        $reader = new Xlsx();
         $spreadsheet = $reader->load($file);
         return $spreadsheet->getSheet(0)->toArray();
     }

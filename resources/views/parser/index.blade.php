@@ -2,6 +2,11 @@
 @section("title", "Parser")
 @section("content")
     <div class="container">
+        @if (!empty(request("send")))
+            <div class="alert alert-success">
+                @lang('system.warning000')
+            </div>
+        @endif
         <div class="card">
             <div class="card-header"><div class="menu">@include("menu")</div></div>
             <div class="card-body">

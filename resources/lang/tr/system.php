@@ -1,5 +1,6 @@
 <?php
 return [
+    'warning000' => 'Ayrıştırıcı, görevi arka planda çalıştırır. Sonuç, Yöneticiye ve tüccara bir mektup şeklinde gelecektir.',
     'question100' =>'Siparişinizin durumunu değiştirmek istediğinizden emin misiniz? Bu eylem değiştirilemez.',
     'not-pr-found' =>'Üzgünüm, ürün stokta yok.',
     "catalog_product" => 'katalog',

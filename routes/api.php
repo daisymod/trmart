@@ -18,7 +18,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get("/test", [\App\Http\Controllers\CartController::class, "actionIndexPost"])->name("test.test");
+//Route::get("/test", [\App\Http\Controllers\CartController::class, "actionIndexPost"])->name("test.test");
 
 
 Route::post("/catalog_item/export", [\App\Http\Controllers\CatalogItemController::class, "actionExcelExport"])->name("catalog_item.export");
@@ -40,7 +40,7 @@ Route::get("/currency/calculate", [\App\Http\Controllers\CurrencyController::cla
 Route::get("/calc-delivery", [\App\Http\Controllers\CalculateController::class, "getCalculateDelivery"])->name("calculate.delivery");
 
 
-Route::post("/parse", [\App\Http\Controllers\ParserController::class, "actionExcelExport"])->name("parseOzdilekteyim");
+
 
 Route::get('/redirect', function () {
     //return redirect(route('catalog_item.list'));
@@ -50,3 +50,6 @@ Route::get("/product/paginate", [\App\Http\Controllers\CatalogItemController::cl
 
 
 Route::get("/product/color-size", [\App\Http\Controllers\ShopController::class, "getColorAndSizeById"])->name("getColorAndSizeById");
+
+
+Route::post("/test", [\App\Http\Controllers\TestController::class, "index"])->name("TestController");
