@@ -256,41 +256,26 @@ class CatalogItemController
                 "</div>"
             ]);
         }
-
-
         ini_set('max_execution_time', 6000);
-
         set_time_limit(6000);
-        //Gate::authorize("catalog-item-excel-load");
+
         if (request()->hasFile("file") and request()->file("file")->getMimeType() == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
-           $result = CatalogItemsExcelLoadJob::dispatch(CatalogItemsExcelLoadService::getArrayFromFile(request()->file("file")),Auth::user());
+          CatalogItemsExcelLoadJob::dispatch(CatalogItemsExcelLoadService::getArrayFromFile(request()->file("file")),Auth::user());
         }
+
 
         $count = count(CatalogItemsExcelLoadService::getArrayFromFile(request()->file("file"))) - 1;
         $time = $count * 3;
-        if (empty($result)){
-            return response()->json(['html' =>
+
+        return response()->json(['html' =>
             "<div class='result-data'>".
-                "<p class='contact'>".trans('system.importSuccessV1') .$count.trans('system.importSuccessV13').
-            Carbon::now()->addSecond($time).trans('system.importSuccessV14')."</p>".
-                "<p class='contact-2'>".trans('system.importSuccessV11')."</p>".
-                "<p class='contact-2'>".trans('system.importSuccessV12')."</p>".
-            "</div>"
-
-
-            ]);
-        }else{
-            return response()->json(['html' =>
-                "<div class='result-data'>".
-                "<p class='contact'>".trans('system.importSuccessV1') .$count.trans('system.importSuccessV13').
+            "<p class='contact'>".trans('system.importSuccessV1') .$count
+                .trans('system.importSuccessV13').
                 Carbon::now()->addSecond($time).trans('system.importSuccessV14')."</p>".
                 "<p class='contact-2'>".trans('system.importSuccessV11')."</p>".
                 "<p class='contact-2'>".trans('system.importSuccessV12')."</p>".
                 "</div>"
-            ]);
-        }
-
-
+        ]);
     }
 
     public function actionDel($id)

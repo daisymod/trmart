@@ -189,14 +189,6 @@ class CatalogItemsExcelLoadService
                     'brand' => $row[18],
                     'article' => $article,
                     'barcode' => $row[8],
-                    'country_title' => null,
-                    'city_id' => null,
-                    'country_id' => null,
-                    'equipment' => [
-                        'ru' => '',
-                        'tr' => '',
-                        'kz' => '',
-                    ],
                     'body' => [
                         'ru' => $row[4],
                         'kz' => $row[6],
@@ -205,11 +197,8 @@ class CatalogItemsExcelLoadService
                     'active' => $row[15],
                     'status' => $row[14],
                     'status_text' => $row[14],
-                    'sex' => 1,
-                    'style' => null,
-                    'size' => null,
+
                     'sale' => $row[9],
-                    'length' => null,
                     'price' => $row[10] ?? 0,
                     'count' => $row[13],
                     'catalog' => [
