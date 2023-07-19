@@ -2553,7 +2553,7 @@ color: #A0A0A0;
 
 .variants-radios {
     @include flex;
-
+    flex-wrap: wrap;
     .radio-wrap {
         margin: 0;
         margin-right: 10px;

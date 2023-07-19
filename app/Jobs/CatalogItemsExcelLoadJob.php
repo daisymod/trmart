@@ -34,7 +34,7 @@ class CatalogItemsExcelLoadJob implements ShouldQueue
      */
     public function handle()
     {
-      
-       return  CatalogItemsExcelLoadService::load($this->excelArray,$this->user);
+
+       return  CatalogItemsExcelLoadService::load($this->excelArray,$this->user,$this->job->getJobId());
     }
 }

@@ -119,6 +119,9 @@
                                 <th style="width: 5%">@lang('item.photo')</th>
                                 <th style="width: 14%">@lang('item.name')</th>
                                 <th style="width: 8%">@lang('item.mark')</th>
+                                @if(\Illuminate\Support\Facades\Auth::user()->role == 'admin')
+                                    <th style="width: 8%">@lang('merchant.form.company_name')</th>
+                                @endif
                                 <th style="width: 7%">@lang('item.article')</th>
                                 <th style="width: 11%">@lang('item.article2')</th>
                                 <th style="width: 11%">@lang('item.code')</th>
@@ -146,6 +149,9 @@
                                     </td>
 
                                     <td><span>{{ $i->brand }}</span></td>
+                                    @if(\Illuminate\Support\Facades\Auth::user()->role == 'admin')
+                                    <td><span>{{$i->user->company->company_name ?? ''}}</span></td>
+                                    @endif
                                     <td><span>{{ $i->article }}</span></td>
                                     <td><span>{{ $i->catalog->name ?? ""}}</span></td>
                                     <td><span>{{ $i->barcode }}</span></td>

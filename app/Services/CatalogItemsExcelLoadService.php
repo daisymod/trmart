@@ -83,7 +83,7 @@ class CatalogItemsExcelLoadService
     }
 
 
-    public static function load($excelArray,$user)
+    public static function load($excelArray,$user,$jobId = null)
     {
         $header = $excelArray[0];
         unset($excelArray[0]);
@@ -97,12 +97,13 @@ class CatalogItemsExcelLoadService
         $parseStatistic = new ParseStatistic();
         $parseStatisticService = new ParseStatisticService($parseStatistic);
         $newData = [
-            'job_id' =>   1,
+            'job_id' =>   $jobId == null ? 1 : $jobId,
             'user_id' => $user->id,
             'start_parse' => Carbon::now(),
             'end_parse' => null,
             'file' => null,
-            'count_of_lines' => count($excelArray)
+            'count_of_lines' => count($excelArray),
+            'status' => 'id_progress',
         ];
         $fileResultName = Carbon::now().'-load-data.xlsx';
         $parseStat = $parseStatisticService->create($newData);
@@ -411,20 +412,25 @@ class CatalogItemsExcelLoadService
 
         }finally {
                 self::makeCsv($resultArrayParse,$fileResultName);
+                $update = [
+                    'status' => 'done',
+                    'end_parse' => Carbon::now(),
+                    'file' => $fileResultName,
+                ];
+                $parseStatisticService->update($update,$parseStat->id);
 
-                Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
-
+                if (!empty($user->email)){
+                    Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
+                }
                 $adminUser = User::where('id','=',1)
                     ->first();
+                if (!empty($adminUser->email)){
+                    Mail::to($adminUser->email)->send(new ResultImportMail($adminUser,$resultArrayParse,$adminUser->lang,$resultSuccess,$resultError));
+                }
 
-                Mail::to($adminUser->email)->send(new ResultImportMail($adminUser,$resultArrayParse,$adminUser->lang,$resultSuccess,$resultError));
 
 
-            $update = [
-                'end_parse' => Carbon::now(),
-                'file' => $fileResultName,
-            ];
-            $parseStatisticService->update($update,$parseStat->id);
+
         }
 
         return $characteristicData;

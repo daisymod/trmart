@@ -57,6 +57,9 @@ class ItemService
     public function checkExist($attributes){
         $item = $this->model->query()
             ->where('name_ru','=',$attributes['name']['ru'])
+            ->when(!empty($attributes['user'][0]),function ($q) use ($attributes){
+                $q->where('user_id','=',$attributes['user'][0]);
+            })
             ->first();
 
         return $item;

@@ -66,7 +66,9 @@ class CatalogItemActionService
 
 
         $sort = explode(".", request("sort_by", "updated_at.desc"));
-        $records = CatalogItem::query()->orderBy($sort[0], $sort[1]);
+        $records = CatalogItem::query()
+            ->with('user.company')
+            ->orderBy($sort[0], $sort[1]);
         if (Auth::user()->role == "merchant") {
             $records = $records->where("user_id", Auth::user()->id);
         }

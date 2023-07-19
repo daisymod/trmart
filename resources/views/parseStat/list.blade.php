@@ -83,11 +83,7 @@
                                 @endif
                             </td>
                             <td>
-                            @if($i->end_parse == null)
-                                    in progress
-                            @else
-                                    done
-                            @endif
+                                {{$i->status}}
                             </td>
                             <td class="controls">
                                 @if($i->file != null)
