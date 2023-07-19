@@ -289,10 +289,19 @@ return [
     'user' => 'Satıcı',
     'brand' => 'marka',
 
+
+    'errorExist' => 'Dikkat! Bekleyen mevcut içe aktarma işlemi nedeniyle içe aktarma başarısız oldu, lütfen içe aktarma tamamlanana kadar bekleyin. ',
+
     'importSuccess' => 'İçe aktarma başarılı!',
     'importSuccess1' => 'Ürün özellikleri verilerinin yanlış olması durumunda lütfen yönetici ile iletişime geçin!',
     'importSuccess2' => 'E-posta: info@turkiyemart.com',
     'importSuccess3' => 'içinde, mal yükleme sonucunu içeren bir e-posta alacaksınız.',
+
+    'importSuccessV1' => 'Dosyanız (Örneğin: ',
+    'importSuccessV13' => 'satır) sunucuya yükleme aşamasındadır. İşlem yaklaşık olarak saat  ',
+    'importSuccessV14' => "'da tamamlanacaktır (örneğin). İndirmenin sonunda, indirmenin sonuçları hakkında bir rapor içeren bir e-posta postanıza gönderilecektir. Bu ürün özelliklerinin yanlış olması durumunda veya mektubun belirtilen süre içinde gelmemesi durumunda Yöneticinizle iletişime geçin. ",
+    'importSuccessV11' => ' Bu dosyayı indirmeyi bitirdikten sonra içe aktarılacak yeni bir dosyayı indirebilirsiniz.',
+    'importSuccessV12' => 'Email: info@turkiyemart.com',
 
     'yes' => 'evet',
     'no' => 'Hayır',
@@ -353,5 +362,7 @@ Türkiye'nin tanıdığınız tüm markaları tek bir marketplace'te.",
 
     'newColor1' => 'Renk, boyut eklemek',
     'warning-10' =>  'Dikkat! Malların fiyatı, ürünün değerinin %25\'i tutarında TürkiyeMart ticaret alanı payının komisyon ücreti ile belirtilmelidir. Mallar ihracat şartları ile KDV hariç satılmaktadır.',
-
+    'warning-11' => "Dikkat!\n
+Sitedeki malların ve teslimatın maliyeti tenge'de belirtilir ve ödeme sayfasına geçtiğinizde bu tutar otomatik olarak Türk lirasına dönüştürülür.\n
+Banka kartınızdan para çekme işlemi, toplam sipariş tutarına uygun olarak tenge'de yapılacaktır.",
 ];

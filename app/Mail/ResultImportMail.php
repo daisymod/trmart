@@ -7,6 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Excel as BaseExcel;
 
@@ -41,13 +42,13 @@ class ResultImportMail extends Mailable
     public function build()
     {
         app()->setLocale($this->contact->lang);
-        $filename = "Import-product.csv";
+        $filename = "Import-product.xlsx";
 
         $attachment = Excel::raw(
             new ImportDataCatalogResultExport($this->data, $this->locale),
-            BaseExcel::CSV
+            \Maatwebsite\Excel\Excel::XLSX
         );
-
+       
         return $this->from('no-reply@turkiyemart.com', 'Turkiyemart')
             ->to($this->contact->email, 'Turkiyemart')
             ->subject("Result import file")

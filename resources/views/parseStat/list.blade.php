@@ -54,7 +54,11 @@
                                 @endif
                             </td>
                             <td>{{ \Carbon\Carbon::parse($i->start_parse) }}</td>
-                            <td>{{ \Carbon\Carbon::parse($i->end_parse) }}</td>
+                            <td>
+                                @if($i->end_parse != null)
+                                    {{ \Carbon\Carbon::parse($i->end_parse) }}
+                                @endif
+                            </td>
                             <td>{{ $i->count_of_lines }}</td>
                             @php
                                 $date = \Carbon\Carbon::parse($i->start_parse);
@@ -62,14 +66,22 @@
                                 $diff = $date->diff($end);
                                 $diff_time = $diff->h .':' .$diff->i.':' .$diff->s;
                             @endphp
-                            <td>{{$diff_time}}</td>
+                            <td>
+                                @if($i->end_parse != null)
+                                    {{$diff_time}}
+                                @endif
+                            </td>
 
                             @php
                                 sscanf($diff_time, "%d:%d:%d", $hours, $minutes, $seconds);
                                 $time_seconds = isset($seconds) ? $hours * 3600 + $minutes * 60 + $seconds : $hours * 60 + $minutes;
                                 $time_one = $time_seconds / $i->count_of_lines;
                             @endphp
-                            <td>{{number_format($time_one, 2, '.', ' ')}}</td>
+                            <td>
+                                @if($i->end_parse != null)
+                                    {{number_format($time_one, 2, '.', ' ')}}
+                                @endif
+                            </td>
                             <td>
                             @if($i->end_parse == null)
                                     in progress
@@ -78,7 +90,13 @@
                             @endif
                             </td>
                             <td class="controls">
-                            <a href="/files/{{$i->file}}" class="btn gren-btn">Файл результата</a>
+                                @if($i->file != null)
+                                    @if($i->id < 49)
+                                        <a href="/files/{{$i->file}}" class="btn gren-btn">Файл результата</a>
+                                    @else
+                                        <a href="/storage/files/{{$i->file}}" class="btn gren-btn">Файл результата</a>
+                                    @endif
+                                @endif
                             </td>
                         </tr>
                     @endforeach

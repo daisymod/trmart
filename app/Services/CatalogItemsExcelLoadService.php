@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exports\ImportDataCatalogResultExport;
 use App\Exports\ParseResultExport;
 use App\Mail\ResultImportMail;
 use App\Models\CatalogCharacteristic;
@@ -15,8 +16,8 @@ use App\Models\MarketplaceBrands;
 use App\Models\ProductItem;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
@@ -103,7 +104,7 @@ class CatalogItemsExcelLoadService
             'file' => null,
             'count_of_lines' => count($excelArray)
         ];
-        $fileResultName = Carbon::now().'-load-data.csv';
+        $fileResultName = Carbon::now().'-load-data.xlsx';
         $parseStat = $parseStatisticService->create($newData);
 
         try {
@@ -255,13 +256,6 @@ class CatalogItemsExcelLoadService
                 ItemCompoundTable::where('item_id','=',$catalog_id->id)
                     ->delete();
 
-
-
-                if ($is_create == true){
-                    $resultArrayParse[$i][$getLastRowToResult] = 'Product create - successful. Article - '.$article;
-                }else{
-                    $resultArrayParse[$i][$getLastRowToResult] = 'Product update - successful. Article - '.$catalog_id->article;
-                }
 
 
                 if (empty(json_decode($imageResult)->file)){
@@ -416,7 +410,7 @@ class CatalogItemsExcelLoadService
 
 
         }finally {
-            self::makeCsv($resultArrayParse,$fileResultName);
+                self::makeCsv($resultArrayParse,$fileResultName);
 
                 Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
 
@@ -424,7 +418,7 @@ class CatalogItemsExcelLoadService
                     ->first();
 
                 Mail::to($adminUser->email)->send(new ResultImportMail($adminUser,$resultArrayParse,$adminUser->lang,$resultSuccess,$resultError));
-            
+
 
             $update = [
                 'end_parse' => Carbon::now(),
@@ -438,12 +432,12 @@ class CatalogItemsExcelLoadService
 
 
     public static function makeCsv($array,$fileResultName){
-        $filename =  public_path("files/".$fileResultName);
-        $handle = fopen($filename, 'w');
-        foreach ($array as $fields) {
-            fputcsv($handle, $fields);
-        }
-        fclose($handle);
+        $attachment = Excel::raw(
+            new ImportDataCatalogResultExport($array, 'ru'),
+            \Maatwebsite\Excel\Excel::XLSX
+        );
+
+        Storage::disk('public-files')->put($fileResultName, $attachment);
     }
 
     public static function getArrayFromFile($file): array

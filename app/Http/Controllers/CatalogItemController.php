@@ -30,6 +30,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
 
 class CatalogItemController
@@ -246,6 +247,17 @@ class CatalogItemController
 
     public function actionExcelLoad()
     {
+        $existParse = $this->parserStatistic->getByUserNotEnd();
+
+        if (!empty($existParse->id)){
+            return response()->json(['html' =>
+                "<div class='result-data'>".
+                    "<p class='contact-2'>".trans('system.errorExist')."</p>".
+                "</div>"
+            ]);
+        }
+
+
         ini_set('max_execution_time', 6000);
 
         set_time_limit(6000);
@@ -259,11 +271,10 @@ class CatalogItemController
         if (empty($result)){
             return response()->json(['html' =>
             "<div class='result-data'>".
-                "<p class='contact-success'>".trans('system.importSuccess')."</p>".
-                "<p class='contact'>".trans('system.importSuccess1')."</p>".
-                "<p class='contact-2'>".trans('system.importSuccess3').'-'.Carbon::now()->addSecond($time)."</p>".
-                "<p class='contact-2'>".trans('system.importSuccess2')."</p>".
-
+                "<p class='contact'>".trans('system.importSuccessV1') .$count.trans('system.importSuccessV13').
+            Carbon::now()->addSecond($time).trans('system.importSuccessV14')."</p>".
+                "<p class='contact-2'>".trans('system.importSuccessV11')."</p>".
+                "<p class='contact-2'>".trans('system.importSuccessV12')."</p>".
             "</div>"
 
 
@@ -271,10 +282,10 @@ class CatalogItemController
         }else{
             return response()->json(['html' =>
                 "<div class='result-data'>".
-                "<p class='contact-success'>".trans('system.importSuccess')."</p>".
-                "<p class='contact'>".trans('system.importSuccess1')."</p>".
-                "<p class='contact-2'>".trans('system.importSuccess3').'-'.Carbon::now()->addSecond($time)."</p>".
-                "<p class='contact-2'>".trans('system.importSuccess2')."</p>".
+                "<p class='contact'>".trans('system.importSuccessV1') .$count.trans('system.importSuccessV13').
+                Carbon::now()->addSecond($time).trans('system.importSuccessV14')."</p>".
+                "<p class='contact-2'>".trans('system.importSuccessV11')."</p>".
+                "<p class='contact-2'>".trans('system.importSuccessV12')."</p>".
                 "</div>"
             ]);
         }

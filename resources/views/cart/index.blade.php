@@ -258,9 +258,16 @@
                                         Рассчитать стоимость доставки
                                     </span>
                                 </div>
+
+                                <div class="product-style-block-cart">
+                                    <img src="/img/info-icon.svg" alt="">
+                                    <p>@lang('system.warning-11')</p>
+                                </div>
                             </div>
                         </form>
+
                     </div>
+
                     @endif
                 </div>
                 <div class="info-items client-info-items">

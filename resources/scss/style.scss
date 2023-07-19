@@ -4250,6 +4250,7 @@ footer {
     justify-content: center;
     align-items: center;
     width: 100%;
+    padding: 0px 200px;
     height: 400px;
     background-color: #24262D;
 
@@ -4586,4 +4587,24 @@ button[disabled]{
 }
 
 
+.product-style-block-cart{
+    margin-top: 10px;
+    background: #fff;
+    border: 1px solid hsla(0,0%,86%,.25);
+    border-radius: 12px;
+    box-shadow: 0 14px 44px rgba(0,0,0,.05);
+    padding: 30px 35px;
+    display: flex;
+    flex-wrap: nowrap;
 
+    img{
+        margin: 0px 10px;
+    }
+
+    p{
+        color: #555;
+        font-size: 13px;
+        line-height: 18px;
+        max-width: 630px;
+    }
+}
