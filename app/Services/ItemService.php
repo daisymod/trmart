@@ -53,12 +53,12 @@ class ItemService
 
     public function checkExist($attributes){
         $item = $this->model->query()
-            ->where('name_ru','=',$attributes['name']['ru'])
+            ->where('name_tr','=',$attributes['name']['tr'])
             ->when(!empty($attributes['user'][0]),function ($q) use ($attributes){
                 $q->where('user_id','=',$attributes['user'][0]);
             })
             ->first();
-
+       
         return $item;
     }
 
@@ -81,7 +81,7 @@ class ItemService
         $data['weight'] = $attributes['weight'] ?? 1;
 
         $data['sale'] = $attributes['sale'] ?? 0;
-        
+
         $data['price'] = ceil($attributes['price']) ?? 0 ;
         $data['count'] = $attributes['count'] ?? 1;
         $data['catalog_id'] = $attributes['catalog'][0] ?? 1;

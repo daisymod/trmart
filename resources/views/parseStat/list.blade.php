@@ -12,7 +12,7 @@
                         <form method="GET" action="{{ route('ParseStatistic.list') }}">
                             <div class="filter-group">
 
-                                <select name="user_id">
+                                <select id="brand-item"  name="user_id">
                                     <option value="1">Admin</option>
                                     @foreach($users as $user)
                                         @if(isset($user->user->id))

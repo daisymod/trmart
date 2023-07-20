@@ -37,6 +37,11 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
                     $query->where('user_id','=',$this->user->id);
                 });
             })
+            ->when($this->category != 'null',function ($q){
+                $q->whereHas('catalogItem',function ($query){
+                    $query->where('catalog_id','=',$this->category);
+                });
+            })
             ->whereHas('catalogItem',function ($query){
                 $query->where('id','>',1);
             })

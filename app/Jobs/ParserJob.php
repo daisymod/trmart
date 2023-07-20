@@ -180,15 +180,17 @@ class ParserJob implements ShouldQueue
             }
 
         }
-        $user = User::where('id','=',$this->request['user'])
-            ->first();
-        if (!empty($user->email)){
-            Mail::to($user->email)->send(new ParserMail($user,$productExcel,$user->lang ?? 'tr',$this->request['url']));
-        }
+
         $adminUser = User::where('id','=',1)
             ->first();
         if (!empty($adminUser->email)){
             Mail::to($adminUser->email)->send(new ParserMail($adminUser,$productExcel,$user->lang ?? 'tr',$this->request['url']));
+        }
+
+        if (!empty($this->request['user'])){
+            $user = User::where('id','=',$this->request['user'] )
+                ->first();
+            Mail::to($user->email)->send(new ParserMail($user,$productExcel,$user->lang ?? 'tr',$this->request['url']));
         }
         if (ob_get_length() == 0 ) {
             ob_start();

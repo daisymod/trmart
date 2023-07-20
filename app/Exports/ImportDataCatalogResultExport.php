@@ -56,9 +56,16 @@ class ImportDataCatalogResultExport implements FromArray,WithColumnWidths,Should
             trans('system.equipment'). 'RUS',
             trans('system.equipment'). 'KZ',
             trans('catalog_item.form.weight'),
+            trans('system.images').' Gallery photo - 1',
+            trans('system.images').' Gallery photo - 2',
+            trans('system.images').' Gallery photo - 3',
+            trans('system.images').' Gallery photo - 4',
+            trans('system.images').' Gallery photo - 5',
+            trans('system.images').' Gallery photo - 6',
+            'result',
         ];
 
-        array_push($result,array_merge($headers,$itemsData,[ trans('result'),]));
+        array_push($result,$headers);
         array_push($result,$this->data);
 
         return $result;

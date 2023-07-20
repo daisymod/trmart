@@ -16,6 +16,7 @@ use App\Models\MarketplaceBrands;
 use App\Models\ProductItem;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -85,6 +86,7 @@ class CatalogItemsExcelLoadService
 
     public static function load($excelArray,$user,$jobId = null)
     {
+        log::info(print_r(111,true));
         $header = $excelArray[0];
         unset($excelArray[0]);
         $characteristicData = array();
@@ -92,7 +94,6 @@ class CatalogItemsExcelLoadService
         $i = 1;
         $resultSuccess = 0;
         $resultError = 0;
-        $flagDeleteBefore = true;
         $array_update = array();
         $parseStatistic = new ParseStatistic();
         $parseStatisticService = new ParseStatisticService($parseStatistic);
@@ -107,14 +108,13 @@ class CatalogItemsExcelLoadService
         ];
         $fileResultName = Carbon::now().'-load-data.xlsx';
         $parseStat = $parseStatisticService->create($newData);
-
+        print_r(0000);
         try {
             foreach ($excelArray as $number => $row) {
                 if ($row[0] == null && $row[1] == null  && $row[2] == null ){
                     break;
                 }
 
-                $indexRowCharacteristic = 28;
                 $getLastRowToResult = 28;
 
                 if (empty($row[7])){
@@ -126,7 +126,7 @@ class CatalogItemsExcelLoadService
 
                 $images = explode(',', $row[7]);
                 $galleryResult = null;
-                $gallery = [$row[22],$row[23],$row[24],$row[25],$row[26],$row[27]];
+                $gallery = [$row[22] ?? null,$row[23] ?? null,$row[24] ?? null,$row[25] ?? null,$row[26]?? null,$row[27] ?? null];
 
 
                 $catalog = str_replace('"]', '', str_replace('["', '', $row[16]));
@@ -179,7 +179,7 @@ class CatalogItemsExcelLoadService
                     continue;
                 }
 
-
+                log::info(print_r(1111,true));
                 $dataItem = [
                     'name' => [
                         'ru' => $row[0],
@@ -213,8 +213,9 @@ class CatalogItemsExcelLoadService
 
                 $model = new CatalogItem();
                 $item = new ItemService($model);
-
+                log::info(print_r($dataItem['user'][0],true));
                 $checkCatalog = $item->checkExist($dataItem);
+                log::info(print_r($checkCatalog,true));
                 $modelCharacteristic =  new CatalogItemDynamicCharacteristic;
                 $characteristic = new CharacteristicService($modelCharacteristic);
                 $productItemModel = new ProductItem();
@@ -242,7 +243,7 @@ class CatalogItemsExcelLoadService
                 }
 
 
-
+                
                 ItemCompoundTable::where('item_id','=',$catalog_id->id)
                     ->delete();
 
@@ -397,7 +398,7 @@ class CatalogItemsExcelLoadService
                 $i++;
             }
         }catch (\Exception $e){
-
+            log::info(print_r($e,true));
 
         }finally {
                 self::makeCsv($resultArrayParse,$fileResultName);

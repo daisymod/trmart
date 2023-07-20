@@ -81,6 +81,32 @@
             </div>
         </div>
     </div>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <div style="display: flex;justify-content: center; width: 100%; margin: 20px 0px;">
+        <div id="map" style="width: 1200px; height: 400px;"></div>
+    </div>
+
+    <script>
+
+        var defaultCoords = [40.9877,29.0692];
+
+
+        var map = L.map('map').setView(defaultCoords, 12);
+        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            {
+                maxZoom: 18
+            }).addTo(map);
+
+
+
+
+        var myMarker = L.marker(defaultCoords).addTo(map);
+        myMarker.setLatLng(defaultCoords);
+
+
+    </script>
+    </script>
     <div class="style-wrap">
         <p>@lang('index.bottomText')</p>
     </div>

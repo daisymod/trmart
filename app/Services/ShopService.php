@@ -260,7 +260,7 @@ class ShopService
             ->get()->unique('size');
 
         $count = $items->count();
-        $items = $items->paginate(150);
+        $items = $items->paginate(50);
         foreach ($items as $item){
             $item->new_price = $item->price - ($item->price * $item->sale / 100) ;
         }

@@ -56,7 +56,7 @@ class CatalogItemEditPostRequest extends FormRequest
     {
         $validator->after(function ($validator) {
             if (!isset(request('addmore')[0]['image']) && !isset(request('addmore')[0]['0']) ) {
-                $validator->errors()->add("image", "Необходимо фото для галереи");
+                //$validator->errors()->add("image", "Необходимо фото для галереи");
             }
         });
     }
