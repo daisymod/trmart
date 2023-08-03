@@ -14,7 +14,7 @@ class SearchCatalogItemForm extends CatalogItemMerchantForm
     protected function formGetFields($action): array
     {
         static::$formFields = array_merge(static::$formFields, [
-
+            "name" => [TextboxField::class],
             "status" => [SelectField::class, "data" => [
                 "4" => trans('system.verif1'),
                 "1" => trans('system.verif2'),

@@ -6,38 +6,45 @@
             <div class="card-header"><div class="menu">@include("menu")</div></div>
 
             <div class="row">
-                <label for="name">
-                    @lang('system.mySearch')
-                    <input style="border: 1px solid #000000; border-radius: 4px;" id="search-fields" name="search" type="text">
-                </label>
+
 
             </div>
 
+            <div class="customer-orders__filter">
+                <h4>Фильтр </h4>
+                <div class="filter-column">
 
-            <form method="GET" action="{{ route("userCart.list") }}">
-                <div>
-                    <div class="d-flex w-100 justify-content-between mb-5 mt-5" style="margin-bottom: 100px ;margin-top: 20px;display: flex; justify-content: space-between; width: 50%">
-                        <label for="from">
-                            @lang('system.q1')
-                            @if( isset($_GET['from']))
-                                <input type="date" name="from" class="form-control" value="{{\Carbon\Carbon::parse($_GET['from'])->format('Y-m-d')}}">
-                            @else
-                                <input type="date" name="from" class="form-control" value="{{ \Carbon\Carbon::now()->subDays(7)->format('Y-m-d')}}">
-                            @endif
-                        </label>
-                        <label for="to">
-                            @lang('system.q2')
-                            @if( isset($_GET['to']))
-                                <input type="date" name="to" class="form-control" value="{{\Carbon\Carbon::parse($_GET['to'])->format('Y-m-d')}}">
-                            @else
-                                <input type="date" name="to" class="form-control" value="{{ \Carbon\Carbon::now()->format('Y-m-d')}}">
-                            @endif
-                        </label>
-                    </div>
+                    <label for="name">
+                        @lang('system.mySearch')
+                        <input style="border: 1px solid #000000; border-radius: 4px;" id="search-fields" name="search" type="text">
+                    </label>
+                    <form method="GET" action="{{ route("userCart.list") }}">
+                        <div>
+                            <div class="d-flex" >
+                                <label for="from">
+                                    @lang('system.q1')
+                                    @if( isset($_GET['from']))
+                                        <input type="date" name="from" class="form-control" value="{{\Carbon\Carbon::parse($_GET['from'])->format('Y-m-d')}}">
+                                    @else
+                                        <input type="date" name="from" class="form-control" value="{{ \Carbon\Carbon::now()->subDays(7)->format('Y-m-d')}}">
+                                    @endif
+                                </label>
+                                <label for="to">
+                                    @lang('system.q2')
+                                    @if( isset($_GET['to']))
+                                        <input type="date" name="to" class="form-control" value="{{\Carbon\Carbon::parse($_GET['to'])->format('Y-m-d')}}">
+                                    @else
+                                        <input type="date" name="to" class="form-control" value="{{ \Carbon\Carbon::now()->format('Y-m-d')}}">
+                                    @endif
+                                </label>
+                            </div>
 
-                    <button class="green-btn product-btn1">@lang('system.find') </button>
+                            <button class="green-btn product-btn1">@lang('system.find') </button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
+
 
             <div class="card-body table-scroll-wrap">
                 <table id="myTable" class="table table-striped table-hover table-bordered">

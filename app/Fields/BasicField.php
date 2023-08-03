@@ -72,6 +72,7 @@ abstract class BasicField
 
     protected function getValue(array $data)
     {
+
         $value = null;
         if (isset($data[$this->field])) {
             $value = $data[$this->field];
