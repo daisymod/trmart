@@ -331,7 +331,7 @@
                    <div class="inputs-wrap">
                        <span>@lang('body.phone')</span>
                        <div class="input-box">
-                           <input type="text" name="phone" id="input-phone-reset-data" required placeholder="@lang('body.phone')">
+                           <input style="padding-left: 45px !important;" type="text" name="phone" id="input-phone-reset-data" required placeholder="@lang('body.phone')">
                            <div class="error-field-text error-phone"></div>
                        </div>
                    </div>

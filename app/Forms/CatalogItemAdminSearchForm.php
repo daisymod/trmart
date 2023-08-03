@@ -6,6 +6,7 @@ namespace App\Forms;
 use App\Fields\MerchantField;
 use App\Fields\SelectField;
 use App\Fields\TextareaField;
+use App\Fields\TextboxField;
 use App\Traits\FormModelTrait;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -14,6 +15,7 @@ class CatalogItemAdminSearchForm extends CatalogItemMerchantSearchForm
     protected function formGetFields($action): array
     {
         static::$formFields = array_merge(static::$formFields, [
+            "name" => [TextboxField::class],
             "user" => [MerchantField::class],
             "status" => [SelectField::class, "data" => [
                 "4" => trans('system.verif1'),

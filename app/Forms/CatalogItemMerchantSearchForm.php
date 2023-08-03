@@ -25,7 +25,7 @@ class CatalogItemMerchantSearchForm extends BasicForm
 {
     public static string $formNamePref = "catalog_item.form.";
     public static array $formFields = [
-        "name" => [LanguageTextboxField::class],
+        "name" => [TextboxField::class],
         "catalog" => [CatalogField::class, "selectParent" => true],
         "brand" => [TextboxField::class],
         "article" => [TextboxField::class],

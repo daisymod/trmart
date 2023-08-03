@@ -21,9 +21,7 @@ class CatalogController
             ->paginate(50);
 
         $breadcrumbs = [];
-        /*if (!empty($id)) {
-            $breadcrumbs = BreadcrumbService::get(Catalog::query()->with("parent")->findOrFail($id));
-        }*/
+
         return view("catalog.list", compact("records", "breadcrumbs", "id"));
     }
 

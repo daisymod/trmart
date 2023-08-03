@@ -300,7 +300,7 @@ class CatalogItemController
     }
 
     public function actionExcelExport(Request $request){
-        
+
         $user = User::where('id','=',$request->user_id)
                 ->first();
 

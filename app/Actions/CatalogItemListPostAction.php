@@ -9,7 +9,7 @@ class CatalogItemListPostAction
 {
     public function __invoke($ids, $action)
     {
-        
+
         foreach ($ids as $id) {
             $record = CatalogItem::query()->findOrFail($id);
             if ($action == "delete") {
@@ -35,6 +35,19 @@ class CatalogItemListPostAction
             }
         }
 
-        return redirect(route("catalog_item.list"))->send();
+        return redirect(route("catalog_item.list",
+            [
+                'name'=> request()->get('name'),
+                'brand'=> request()->get('brand'),
+                'article'=> request()->get('article'),
+                'status'=> request()->get('status'),
+                'active'=> request()->get('active'),
+                'barcode'=> request()->get('barcode'),
+                'price_from'=> request()->get('price_from'),
+                'price_to'=> request()->get('price_to'),
+                'catalog[]'=> request()->get('catalog'),
+                'user[]'=> request()->get('user'),
+            ]
+        ))->send();
     }
 }

@@ -26,8 +26,12 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
 
     public function array(): array
     {
+
         $items = ProductItem::with(
-            ['catalogItem', 'sizeData','colorData',
+            [
+                'catalogItem',
+                'sizeData',
+                'colorData',
                 'catalogItem.compound',
                 'catalogItem.compound.compound'
                 ]
@@ -37,7 +41,7 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
                     $query->where('user_id','=',$this->user->id);
                 });
             })
-            ->when($this->category != 'null',function ($q){
+            ->when(!empty($this->category),function ($q){
                 $q->whereHas('catalogItem',function ($query){
                     $query->where('catalog_id','=',$this->category);
                 });
