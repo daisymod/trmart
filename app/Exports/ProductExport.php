@@ -27,7 +27,10 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
     public function array(): array
     {
         $items = ProductItem::with(
-            ['catalogItem', 'sizeData','colorData',
+            [
+                'catalogItem',
+                'sizeData',
+                'colorData',
                 'catalogItem.compound',
                 'catalogItem.compound.compound'
                 ]
