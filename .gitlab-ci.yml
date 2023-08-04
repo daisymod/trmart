@@ -19,6 +19,8 @@ deploy_job:
   only:
     - main
   when: manual
+  tags:
+    - turkmart deploy shell
 
 logs_job:
   stage: logs
@@ -32,3 +34,5 @@ logs_job:
   only:
     - main
   when: manual
+  tags:
+    - turkmart deploy shell
