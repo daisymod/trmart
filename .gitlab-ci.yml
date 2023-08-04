@@ -9,13 +9,13 @@ deploy_job:
     - git config --global --add safe.directory /var/data/www/turkmart-laravel
     - git fetch --all
     - git reset --hard origin/main
-    - git pull origin master
+    - git pull origin main
     - php artisan optimize:clear
     - php artisan migrate
     - composer install
     - composer update
     - npm install
-    - npm run ***
+    - echo "npm run ***"
     - sudo systemctl restart supervisord
   only:
     - main
