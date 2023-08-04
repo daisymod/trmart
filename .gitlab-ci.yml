@@ -20,7 +20,7 @@ deploy_job:
     - main
   when: manual
   tags:
-    - turkmart deploy shell
+    - webserver
 
 logs_job:
   stage: logs
@@ -35,4 +35,4 @@ logs_job:
     - main
   when: manual
   tags:
-    - turkmart deploy shell
+    - webserver
