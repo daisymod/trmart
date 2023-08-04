@@ -33,16 +33,6 @@ laravel_logs_job:
   tags:
     - webserver
 
-mariadb_logs_job:
-  stage: logs
-  script:
-    - tail -n 1000 /var/data/www/logs/mariadb.log
-  only:
-    - main
-  when: manual
-  tags:
-    - webserver
-
 nginx_access_logs_job:
   stage: logs
   script:
