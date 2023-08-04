@@ -6,6 +6,7 @@ deploy_job:
   stage: deploy
   script:
     - cd /var/data/www/turkmart-laravel
+    - git config --global --add safe.directory /var/data/www/turkmart-laravel
     - git fetch --all
     - git reset --hard origin/master
     - git pull origin master
@@ -22,17 +23,63 @@ deploy_job:
   tags:
     - webserver
 
-logs_job:
+laravel_logs_job:
   stage: logs
   script:
     - tail -n 1000 /var/data/www/logs/laravel.log
+  only:
+    - main
+  when: manual
+  tags:
+    - webserver
+
+mariadb_logs_job:
+  stage: logs
+  script:
     - tail -n 1000 /var/data/www/logs/mariadb.log
+  only:
+    - main
+  when: manual
+  tags:
+    - webserver
+
+nginx_access_logs_job:
+  stage: logs
+  script:
     - tail -n 1000 /var/data/www/logs/nginx_turkiyemart.com_access
+  only:
+    - main
+  when: manual
+  tags:
+    - webserver
+
+nginx_error_logs_job:
+  stage: logs
+  script:
     - tail -n 1000 /var/data/www/logs/nginx_turkiyemart.com_error
+  only:
+    - main
+  when: manual
+  tags:
+    - webserver
+
+phpfpm_logs_job:
+  stage: logs
+  script:
     - tail -n 1000 /var/data/www/logs/phpfpm-error.log
+  only:
+    - main
+  when: manual
+  tags:
+    - webserver
+
+supervisor_logs_job:
+  stage: logs
+  script:
     - tail -n 1000 /var/data/www/logs/supervisor_log.log
   only:
     - main
   when: manual
   tags:
     - webserver
+
