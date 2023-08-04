@@ -15,7 +15,7 @@ deploy_job:
     - composer install
     - composer update
     - npm install
-    - echo "npm run ***"
+    - npm run prod
     - sudo systemctl restart supervisord
   only:
     - main
