@@ -14,7 +14,11 @@ use Illuminate\Support\Facades\Auth;
 class CatalogItemsExcelLoadJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    protected array $excelArray = [];
+
+    public $timeout = 9999999;
+
+
+    protected  $excelArray;
     protected  $user;
     /**
      * Create a new job instance.

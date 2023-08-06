@@ -16,6 +16,8 @@ use App\Models\MarketplaceBrands;
 use App\Models\ProductItem;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -86,8 +88,8 @@ class CatalogItemsExcelLoadService
 
     public static function load($excelArray,$user,$jobId = null)
     {
-        log::info(print_r(111,true));
-        $header = $excelArray[0];
+
+        $excelArray = self::getArrayFromFile($excelArray);
         unset($excelArray[0]);
         $characteristicData = array();
         $resultArrayParse = $excelArray;
@@ -243,7 +245,7 @@ class CatalogItemsExcelLoadService
                 }
 
 
-                
+
                 ItemCompoundTable::where('item_id','=',$catalog_id->id)
                     ->delete();
 
@@ -438,8 +440,11 @@ class CatalogItemsExcelLoadService
 
     public static function getArrayFromFile($file): array
     {
-            $reader = new Xlsx();
-        $spreadsheet = $reader->load($file);
+        $reader = new Xlsx();
+
+        $path = storage_path('app/public/' . $file);
+        print_r($path);
+        $spreadsheet = $reader->load($path);
         return $spreadsheet->getSheet(0)->toArray();
     }
 
