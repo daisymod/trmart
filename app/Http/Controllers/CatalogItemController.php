@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Events\ExcelEvent;
 use App\Actions\CatalogItemListPostAction;
 use App\Exports\ProductExport;
 use App\Http\Requests\CatalogItemEditPostRequest;
@@ -29,9 +29,13 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class CatalogItemController
 {
@@ -247,6 +251,8 @@ class CatalogItemController
 
     public function actionExcelLoad()
     {
+        ini_set('max_execution_time', 999999999);
+        set_time_limit(999999999);
         $existParse = $this->parserStatistic->getByUserNotEnd();
 
         if (!empty($existParse->id)){
@@ -256,15 +262,16 @@ class CatalogItemController
                 "</div>"
             ]);
         }
-        ini_set('max_execution_time', 6000);
-        set_time_limit(6000);
 
-        if (request()->hasFile("file") and request()->file("file")->getMimeType() == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
-          CatalogItemsExcelLoadJob::dispatch(CatalogItemsExcelLoadService::getArrayFromFile(request()->file("file")),Auth::user());
-        }
+        $file = request()->file("file");
+        $name = 'upload/'.Carbon::now()->format('Y-m-d_h-i');
+        $path = Storage::disk("public")->put($name, $file);
 
+        broadcast(new ExcelEvent($path,Auth::user()));
 
-        $count = count(CatalogItemsExcelLoadService::getArrayFromFile(request()->file("file"))) - 1;
+        $reader = new Xlsx();
+        $spreadsheet = $reader->load(request()->file("file"));
+        $count = $spreadsheet->getActiveSheet()->getHighestRow() - 1;
         $time = $count * 3;
 
         return response()->json(['html' =>
@@ -300,7 +307,7 @@ class CatalogItemController
     }
 
     public function actionExcelExport(Request $request){
-        
+
         $user = User::where('id','=',$request->user_id)
                 ->first();
 
