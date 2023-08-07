@@ -3,9 +3,7 @@
 namespace App\Services;
 
 use App\Exports\ImportDataCatalogResultExport;
-use App\Exports\ParseResultExport;
 use App\Mail\ResultImportMail;
-use App\Models\CatalogCharacteristic;
 use App\Models\CatalogCharacteristicItem;
 use App\Models\CatalogItem;
 use App\Models\CatalogItemDynamicCharacteristic;
@@ -16,9 +14,6 @@ use App\Models\MarketplaceBrands;
 use App\Models\ProductItem;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -88,17 +83,8 @@ class CatalogItemsExcelLoadService
 
     public static function load($excelArray,$user,$jobId = null)
     {
-
         $excelArray = self::getArrayFromFile($excelArray);
         unset($excelArray[0]);
-        $characteristicData = array();
-        $resultArrayParse = $excelArray;
-        $i = 1;
-        $resultSuccess = 0;
-        $resultError = 0;
-        $array_update = array();
-        $parseStatistic = new ParseStatistic();
-        $parseStatisticService = new ParseStatisticService($parseStatistic);
         $newData = [
             'job_id' =>   $jobId == null ? 1 : $jobId,
             'user_id' => $user->id,
@@ -108,10 +94,20 @@ class CatalogItemsExcelLoadService
             'count_of_lines' => count($excelArray),
             'status' => 'in progress',
         ];
+        $characteristicData = array();
+        $resultArrayParse = $excelArray;
+        $i = 1;
+        $resultSuccess = 0;
+        $resultError = 0;
+        $array_update = array();
+        $parseStatistic = new ParseStatistic();
+        $parseStatisticService = new ParseStatisticService($parseStatistic);
+
         $fileResultName = Carbon::now().'-load-data.xlsx';
         $parseStat = $parseStatisticService->create($newData);
-        print_r(0000);
+
         try {
+
             foreach ($excelArray as $number => $row) {
                 if ($row[0] == null && $row[1] == null  && $row[2] == null ){
                     break;
@@ -181,7 +177,7 @@ class CatalogItemsExcelLoadService
                     continue;
                 }
 
-                log::info(print_r(1111,true));
+
                 $dataItem = [
                     'name' => [
                         'ru' => $row[0],
@@ -215,9 +211,9 @@ class CatalogItemsExcelLoadService
 
                 $model = new CatalogItem();
                 $item = new ItemService($model);
-                log::info(print_r($dataItem['user'][0],true));
+
                 $checkCatalog = $item->checkExist($dataItem);
-                log::info(print_r($checkCatalog,true));
+
                 $modelCharacteristic =  new CatalogItemDynamicCharacteristic;
                 $characteristic = new CharacteristicService($modelCharacteristic);
                 $productItemModel = new ProductItem();
@@ -400,25 +396,25 @@ class CatalogItemsExcelLoadService
                 $i++;
             }
         }catch (\Exception $e){
-            log::info(print_r($e,true));
+
 
         }finally {
-                self::makeCsv($resultArrayParse,$fileResultName);
-                $update = [
-                    'status' => 'done',
-                    'end_parse' => Carbon::now(),
-                    'file' => $fileResultName,
-                ];
-                $parseStatisticService->update($update,$parseStat->id);
+            self::makeCsv($resultArrayParse,$fileResultName);
+            $update = [
+                'status' => 'done',
+                'end_parse' => Carbon::now(),
+                'file' => $fileResultName,
+            ];
+            $parseStatisticService->update($update,$parseStat->id);
 
-                if (!empty($user->email)){
-                    Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
-                }
-                $adminUser = User::where('id','=',1)
-                    ->first();
-                if (!empty($adminUser->email)){
-                    Mail::to($adminUser->email)->send(new ResultImportMail($adminUser,$resultArrayParse,$adminUser->lang,$resultSuccess,$resultError));
-                }
+            if (!empty($user->email)){
+                Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
+            }
+            $adminUser = User::where('id','=',1)
+                ->first();
+            if (!empty($adminUser->email)){
+                Mail::to($adminUser->email)->send(new ResultImportMail($adminUser,$resultArrayParse,$adminUser->lang,$resultSuccess,$resultError));
+            }
 
 
 
@@ -441,9 +437,8 @@ class CatalogItemsExcelLoadService
     public static function getArrayFromFile($file): array
     {
         $reader = new Xlsx();
-
         $path = storage_path('app/public/' . $file);
-        print_r($path);
+
         $spreadsheet = $reader->load($path);
         return $spreadsheet->getSheet(0)->toArray();
     }
