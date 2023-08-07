@@ -18,7 +18,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->command('check:tracking')->hourly();
 
-        $schedule->command('parse:notEnd')->everyMinute();
+       // $schedule->command('parse:notEnd')->everyMinute();
     }
 
     /**
