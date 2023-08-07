@@ -396,31 +396,25 @@ class CatalogItemsExcelLoadService
                 $i++;
             }
         }catch (\Exception $e){
-
-
-        }finally {
-            self::makeCsv($resultArrayParse,$fileResultName);
-            $update = [
-                'status' => 'done',
-                'end_parse' => Carbon::now(),
-                'file' => $fileResultName,
-            ];
-            $parseStatisticService->update($update,$parseStat->id);
-
-            if (!empty($user->email)){
-                Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
-            }
-            $adminUser = User::where('id','=',1)
-                ->first();
-            if (!empty($adminUser->email)){
-                Mail::to($adminUser->email)->send(new ResultImportMail($adminUser,$resultArrayParse,$adminUser->lang,$resultSuccess,$resultError));
-            }
-
-
-
-
+            print_r($e);
         }
 
+        self::makeCsv($resultArrayParse,$fileResultName);
+        $update = [
+            'status' => 'done',
+            'end_parse' => Carbon::now(),
+            'file' => $fileResultName,
+        ];
+        $parseStatisticService->update($update,$parseStat->id);
+
+        if (!empty($user->email)){
+            Mail::to($user->email)->send(new ResultImportMail($user,$resultArrayParse,$user->lang,$resultSuccess,$resultError));
+        }
+        $adminUser = User::where('id','=',1)
+            ->first();
+        if (!empty($adminUser->email)){
+            Mail::to($adminUser->email)->send(new ResultImportMail($adminUser,$resultArrayParse,$adminUser->lang,$resultSuccess,$resultError));
+        }
         return $characteristicData;
     }
 
