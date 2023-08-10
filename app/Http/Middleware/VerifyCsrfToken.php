@@ -15,7 +15,9 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         '/callback',
-
+        '/send-code',
+        '/check-code',
+        '/reset-password',
     ];
     
 }

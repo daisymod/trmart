@@ -145,13 +145,13 @@ class CatalogItemsExcelLoadService
 
                     }
                 }else{
-                    $imageResult = '{"file":"\/img\/no_img.jpeg",
+
+                }*/
+
+                $imageResult = '{"file":"\/img\/no_img.jpeg",
                                 "name":"\/img\/no_img.jpeg",
                                 "img":"\/img\/no_img.jpeg",
                                 "small":"\/img\/no_img.jpeg"}';
-                }*/
-
-
 
                 if ($user->role == 'admin'){
                     $loadUser = empty($merchant) ? 0 : $merchant;
@@ -205,7 +205,7 @@ class CatalogItemsExcelLoadService
                     'user' => [
                         $loadUser,
                     ],
-                    'image' => null,
+                    'image' => $imageResult,
                     'weight' => $row[21] ?? 1,
                 ];
 
