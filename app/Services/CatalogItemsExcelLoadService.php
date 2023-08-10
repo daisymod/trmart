@@ -133,7 +133,7 @@ class CatalogItemsExcelLoadService
                 $article = substr("0000000000".$getLastId->id + 1, strlen($getLastId->id + 1));
 
 
-                if (filter_var(str_replace('[{"file":','',$images[0]), FILTER_VALIDATE_URL)){
+                /*if (filter_var(str_replace('[{"file":','',$images[0]), FILTER_VALIDATE_URL)){
                     if(substr(get_headers(str_replace('[{"file":','',$images[0]))[0], 9, 3) != "200"){
                         $imageResult =
                             '{"file":"\/img\/no_img.jpeg",
@@ -149,7 +149,7 @@ class CatalogItemsExcelLoadService
                                 "name":"\/img\/no_img.jpeg",
                                 "img":"\/img\/no_img.jpeg",
                                 "small":"\/img\/no_img.jpeg"}';
-                }
+                }*/
 
 
 
@@ -205,7 +205,7 @@ class CatalogItemsExcelLoadService
                     'user' => [
                         $loadUser,
                     ],
-                    'image' => $imageResult,
+                    'image' => null,
                     'weight' => $row[21] ?? 1,
                 ];
 
