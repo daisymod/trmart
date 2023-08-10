@@ -267,7 +267,7 @@ class CatalogItemController
         $name = 'upload/'.Carbon::now()->format('Y-m-d_h-i');
         $path = Storage::disk("public")->put($name, $file);
 
-        CatalogItemsExcelLoadJob::dispatch($path,Auth::user());
+        CatalogItemsExcelLoadJob::dispatch($path,Auth::user())->onQueue('excel.'.rand(1,1000));
 
         $reader = new Xlsx();
         $spreadsheet = $reader->load(request()->file("file"));

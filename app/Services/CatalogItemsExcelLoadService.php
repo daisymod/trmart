@@ -133,7 +133,7 @@ class CatalogItemsExcelLoadService
                 $article = substr("0000000000".$getLastId->id + 1, strlen($getLastId->id + 1));
 
 
-                /*if (filter_var(str_replace('[{"file":','',$images[0]), FILTER_VALIDATE_URL)){
+                if (filter_var(str_replace('[{"file":','',$images[0]), FILTER_VALIDATE_URL)){
                     if(substr(get_headers(str_replace('[{"file":','',$images[0]))[0], 9, 3) != "200"){
                         $imageResult =
                             '{"file":"\/img\/no_img.jpeg",
@@ -145,13 +145,13 @@ class CatalogItemsExcelLoadService
 
                     }
                 }else{
-
-                }*/
-
-                $imageResult = '{"file":"\/img\/no_img.jpeg",
+                    $imageResult = '{"file":"\/img\/no_img.jpeg",
                                 "name":"\/img\/no_img.jpeg",
                                 "img":"\/img\/no_img.jpeg",
                                 "small":"\/img\/no_img.jpeg"}';
+                }
+
+
 
                 if ($user->role == 'admin'){
                     $loadUser = empty($merchant) ? 0 : $merchant;
