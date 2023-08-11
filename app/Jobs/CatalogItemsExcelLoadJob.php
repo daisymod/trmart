@@ -16,7 +16,8 @@ class CatalogItemsExcelLoadJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $timeout = 9999999;
-
+    public $tries = 10;
+    public $backoff = [2, 10, 20];
 
     protected  $excelArray;
     protected  $user;
