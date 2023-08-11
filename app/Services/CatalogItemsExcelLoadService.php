@@ -13,6 +13,7 @@ use App\Models\ItemCompoundTable;
 use App\Models\MarketplaceBrands;
 use App\Models\ProductItem;
 use App\Models\User;
+use App\Requests\ImageRequest;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -105,7 +106,7 @@ class CatalogItemsExcelLoadService
 
         $fileResultName = Carbon::now().'-load-data.xlsx';
         $parseStat = $parseStatisticService->create($newData);
-
+        $requestImage = new ImageRequest();
         try {
 
             foreach ($excelArray as $number => $row) {
@@ -133,24 +134,18 @@ class CatalogItemsExcelLoadService
                 $article = substr("0000000000".$getLastId->id + 1, strlen($getLastId->id + 1));
 
 
-                if (filter_var(str_replace('[{"file":','',$images[0]), FILTER_VALIDATE_URL)){
-                    if(substr(get_headers(str_replace('[{"file":','',$images[0]))[0], 9, 3) != "200"){
-                        $imageResult =
-                            '{"file":"\/img\/no_img.jpeg",
-                                "name":"\/img\/no_img.jpeg",
-                                "img":"\/img\/no_img.jpeg",
-                                "small":"\/img\/no_img.jpeg"}';
-                    }else{
-                        $imageResult = self::saveParseImage(str_replace('[{"file":','',$images[0]));
-
-                    }
-                }else{
+                $checkImage = $requestImage->getData($images[0]);
+                if ($checkImage['code'] == 200)
+                {
+                    $imageResult = self::saveParseImage(str_replace('[{"file":','',$checkImage['data']));
+                }
+                else
+                {
                     $imageResult = '{"file":"\/img\/no_img.jpeg",
                                 "name":"\/img\/no_img.jpeg",
                                 "img":"\/img\/no_img.jpeg",
                                 "small":"\/img\/no_img.jpeg"}';
                 }
-
 
 
                 if ($user->role == 'admin'){
@@ -373,7 +368,11 @@ class CatalogItemsExcelLoadService
                 }else{
                     foreach ($gallery as $item){
                         if (!empty($item)){
-                            $galleryResult .= self::saveParseImage($item).',';
+                            $galleryImageData = $requestImage->getData($item);
+                            if ($galleryImageData['code'] == 200)
+                            {
+                                $galleryResult .= self::saveParseImage($item).',';
+                            }
                         }
                     }
                     $productData = [
@@ -404,6 +403,7 @@ class CatalogItemsExcelLoadService
             'status' => 'done',
             'end_parse' => Carbon::now(),
             'file' => $fileResultName,
+            'load_lines' => $i,
         ];
         $parseStatisticService->update($update,$parseStat->id);
 

@@ -9,7 +9,7 @@ class ParseStatistic extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['job_id','user_id','start_parse','end_parse','file','count_of_lines','status'];
+    protected $fillable = ['job_id','user_id','start_parse','end_parse','file','count_of_lines','status','load_lines'];
 
     public function user()
     {
