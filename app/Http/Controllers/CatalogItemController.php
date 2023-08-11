@@ -11,6 +11,7 @@ use App\Mail\RejectNewItemMail;
 use App\Mail\ResultImportMail;
 use App\Models\CatalogCharacteristicItem;
 use App\Models\CatalogItem;
+use App\Models\Job;
 use App\Models\MarketplaceBrands;
 use App\Models\ProductItem;
 use App\Models\ItemCompoundTable;
@@ -266,6 +267,7 @@ class CatalogItemController
         $file = request()->file("file");
         $name = 'upload/'.Carbon::now()->format('Y-m-d_h-i');
         $path = Storage::disk("public")->put($name, $file);
+
 
         CatalogItemsExcelLoadJob::dispatch($path,Auth::user())->onQueue('excel'.rand(1,15));
 
