@@ -36,6 +36,7 @@
                         <th>Дата начала</th>
                         <th>Дата конца</th>
                         <th>к-во записей в файле</th>
+                        <th>итоговое к-во записей загруженно</th>
                         <th>Время выполнения</th>
                         <th>Время выполнения / 1 запись</th>
                         <th>Статус</th>
@@ -60,6 +61,7 @@
                                 @endif
                             </td>
                             <td>{{ $i->count_of_lines }}</td>
+                            <td>{{ $i->load_lines ?? 0 }}</td>
                             @php
                                 $date = \Carbon\Carbon::parse($i->start_parse);
                                 $end = \Carbon\Carbon::parse($i->end_parse);

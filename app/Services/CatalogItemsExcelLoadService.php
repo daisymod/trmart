@@ -137,7 +137,7 @@ class CatalogItemsExcelLoadService
                 $checkImage = $requestImage->getData($images[0]);
                 if ($checkImage['code'] == 200)
                 {
-                    $imageResult = self::saveParseImage(str_replace('[{"file":','',$checkImage['data']));
+                    $imageResult = self::saveParseImage(str_replace('[{"file":','',$images[0]));
                 }
                 else
                 {
