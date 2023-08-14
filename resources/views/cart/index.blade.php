@@ -216,16 +216,20 @@
                                     <div class="error-field-text error-street"></div>
                                 </div>
                                 <div class="inputs">
-                                    <span class="input-title">@lang('cart.homeNumber')</span>
-                                    <input type="text" name="house_number" value="{{\Illuminate\Support\Facades\Auth::user()->house_number ?? ''}}" placeholder="@lang('cart.homeNumber')">
-                                    @error('house_number')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                    <span class="input-title">@lang('cart.appartments')</span>
-                                    <input type="text" name="room" value="{{\Illuminate\Support\Facades\Auth::user()->room ?? ''}}" placeholder="@lang('cart.appartments')">
-                                    @error('room')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <div>
+                                        <span class="input-title" style="width: 100%">@lang('cart.homeNumber')</span>
+                                        <input type="text" name="house_number" value="{{\Illuminate\Support\Facades\Auth::user()->house_number ?? ''}}" placeholder="@lang('cart.homeNumber')">
+                                        @error('house_number')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div>
+                                        <span class="input-title" style="width: 100%">@lang('cart.appartments')</span>
+                                        <input type="text" name="room" value="{{\Illuminate\Support\Facades\Auth::user()->room ?? ''}}" placeholder="@lang('cart.appartments')">
+                                        @error('room')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                 </div>
 
                                 <textarea name="comment" placeholder="@lang('cart.commentOrder')"></textarea>
