@@ -104,11 +104,17 @@
                                 </div>
                             </div>
                         <div class="inputs-wrap">
+                            <span>@lang('cart.street')</span>
                             {!! $form["address_invoice"] !!}
                         </div>
                         <div style="display: flex;justify-content: space-between" class="inputs-wrap">
-                           <div style="width: 49%">{!! $form["house_number"] !!}</div>
-                           <div style="width: 49%">{!! $form["room"] !!}</div>
+                           <div style="width: 49%">
+                               <span>@lang('cart.homeNumber')</span>
+                               {!! $form["house_number"] !!}
+                           </div>
+                           <div style="width: 49%">
+                               <span>@lang('cart.appartments')</span>
+                               {!! $form["room"] !!}</div>
                         </div>
                         <div style="display: none; visibility: hidden">
                             <input type="hidden" name="country_title" id="profile-country_title" value="{{Auth::user()->country_title}}">
