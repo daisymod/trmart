@@ -109,11 +109,11 @@
                         </div>
                         <div style="display: flex;justify-content: space-between" class="inputs-wrap">
                            <div style="width: 49%">
-                               <span>@lang('cart.homeNumber')</span>
+                               <span style="color: rgba(85,85,85,.6);font-size: 15px;line-height: 20px;margin-bottom: 10px;">@lang('cart.homeNumber')</span>
                                {!! $form["house_number"] !!}
                            </div>
-                           <div style="width: 49%">
-                               <span>@lang('cart.appartments')</span>
+                           <div style="width: 49%;">
+                               <span style="color: rgba(85,85,85,.6);font-size: 15px;line-height: 20px;margin-bottom: 10px;">@lang('cart.appartments')</span>
                                {!! $form["room"] !!}</div>
                         </div>
                         <div style="display: none; visibility: hidden">
