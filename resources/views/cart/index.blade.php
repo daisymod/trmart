@@ -208,6 +208,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <span>@lang('cart.street')</span>
                                     <input type="text" name="street" value="{{Auth::user()->address_invoice ?? ''}}" placeholder="@lang('cart.street')">
                                     @error('street')
                                     <div class="alert alert-danger">{{ $message }}</div>
@@ -215,10 +216,12 @@
                                     <div class="error-field-text error-street"></div>
                                 </div>
                                 <div class="inputs">
+                                    <span>@lang('cart.homeNumber')</span>
                                     <input type="text" name="house_number" value="{{\Illuminate\Support\Facades\Auth::user()->house_number ?? ''}}" placeholder="@lang('cart.homeNumber')">
                                     @error('house_number')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
+                                    <span>@lang('cart.appartments')</span>
                                     <input type="text" name="room" value="{{\Illuminate\Support\Facades\Auth::user()->room ?? ''}}" placeholder="@lang('cart.appartments')">
                                     @error('room')
                                     <div class="alert alert-danger">{{ $message }}</div>
