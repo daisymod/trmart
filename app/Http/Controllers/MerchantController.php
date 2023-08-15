@@ -362,7 +362,7 @@ class MerchantController extends Controller
                 $order->left = Carbon::parse($order->created_at)->addDays(15)->diffInDays(Carbon::now());
                 $order->left = $order->left < 0 ? 0 : $order->left;
                 $order->left = $this->num_decline( $order->left, [trans('system.day'), trans('system.day1'), trans('system.day2')] );
-                $order->order_price = $order->delivery_price + $order->price;
+                $order->order_price = $order->delivery_sum + $order->price;
 
 
 
