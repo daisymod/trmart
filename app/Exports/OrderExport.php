@@ -57,7 +57,7 @@ class OrderExport implements FromArray,WithColumnWidths,ShouldQueue
         $total_sale_order = 0 ;
 
         foreach ($orders as $order){
-            $order->delivery_sum = $order->delivery_price;
+            $order->delivery_sum = $order->delivery_price + $order->tr_delivery_price;
 
             $order->delivery_dt_end = Carbon::parse($order->created_at)->addDays(15)->format('Y-m-d');
             $order->left = Carbon::parse($order->created_at)->addDays(15)->diffInDays(Carbon::now());
