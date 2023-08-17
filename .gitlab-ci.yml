@@ -13,7 +13,6 @@ deploy_job:
     - php artisan optimize:clear
     - php artisan migrate
     - composer install
-    - composer update
     - npm install
     - npm audit fix
     - npm run prod
