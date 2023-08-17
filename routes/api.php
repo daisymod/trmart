@@ -40,7 +40,10 @@ Route::get("/currency/calculate", [\App\Http\Controllers\CurrencyController::cla
 Route::get("/calc-delivery", [\App\Http\Controllers\CalculateController::class, "getCalculateDelivery"])->name("calculate.delivery");
 
 
+Route::get('/change-pass', function () {
+  \Illuminate\Support\Facades\Artisan::call('db:seed --class=UpdatePassword');
 
+})->name("change");
 
 Route::get('/redirect', function () {
     //return redirect(route('catalog_item.list'));
