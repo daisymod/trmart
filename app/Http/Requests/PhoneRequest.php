@@ -23,6 +23,7 @@ class PhoneRequest extends FormRequest
      */
     public function rules()
     {
+
         return [
             'phone' => 'required'
         ];
