@@ -149,12 +149,13 @@ class UserController
 
     public function resetPassword(ResetPasswordRequest $request)
     {
-        User::where('phone','=',$request->phone)
+        $checkUser = User::getOnPhone($request->phone);
+        User::where('phone','=',$checkUser->phone)
             ->update([
                 'password' => Hash::make($request->password),
             ]);
 
-        $user = User::where('phone','=',$request->phone)
+        $user = User::where('phone','=',$checkUser->phone)
             ->first();
 
         Auth::login($user);
