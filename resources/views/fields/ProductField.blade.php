@@ -99,8 +99,8 @@
                                 </div>
                                 @if($value != null)
                                 @php $j = 0; @endphp
-                                @if($value[$index] != null)
-                                        @foreach($value[$index] as $info)
+                                @if($value[$j] != null)
+                                        @foreach($value[$j] as $info)
                                             <div class="image-box" data-file="{{$info["file"]?? '#'}}" data-name="{{$info["name"]?? '#'}}">
                                                 <div class="image">
                                                     <img src="{{$info["small"]?? '#'}}">
