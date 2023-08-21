@@ -220,7 +220,7 @@ class CartController extends Controller
             $firstBasketItem->setId($index);
             $firstBasketItem->setSubMerchantKey('+nPmcvksgu5VDMAFwgfT8N7689I=');
             $firstBasketItem->setSubMerchantPrice($item['price']);
-            $firstBasketItem->setName($item['name_tr']);
+            $firstBasketItem->setName($item['name_ru']);
             $category = Catalog::where('id','=',$item['catalog_id'])
                 ->first();
             $firstBasketItem->setCategory1($category->name_ru);
