@@ -161,11 +161,15 @@ class CartController extends Controller
         $options->setSecretKey("ixAzd6UNXi1vhRpVZ2tUe5kcAO6Pl4Fd");
         $options->setBaseUrl("https://api.iyzipay.com");
 
+
+        Log::info(print_r($cart['price'],true));
+        Log::info(print_r(ceil($priceDelivery),true));
+
         $requestPay = new \Iyzipay\Request\CreateCheckoutFormInitializeRequest();
         $requestPay->setLocale(\Iyzipay\Model\Locale::EN);
         $requestPay->setConversationId(rand(0,9999999999));
         $requestPay->setPrice($cart['price']);
-        $requestPay->setPaidPrice(intval($cart['price'] + ceil($priceDelivery)));
+        $requestPay->setPaidPrice($cart['price'] + ceil($priceDelivery));
         $requestPay->setCurrency(\Iyzipay\Model\Currency::TL);
         $requestPay->setBasketId($basket->id);
         $requestPay->setBasketItems($cart['count']);
