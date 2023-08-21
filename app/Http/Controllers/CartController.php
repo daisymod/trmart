@@ -219,7 +219,7 @@ class CartController extends Controller
             $firstBasketItem = new \Iyzipay\Model\BasketItem();
             $firstBasketItem->setId($index);
             $firstBasketItem->setSubMerchantKey('+nPmcvksgu5VDMAFwgfT8N7689I=');
-            $firstBasketItem->setSubMerchantPrice($item['price']);
+            $firstBasketItem->setSubMerchantPrice(intval($item['price']));
             $firstBasketItem->setName($item['name_en']);
             $category = Catalog::where('id','=',$item['catalog_id'])
                 ->first();
