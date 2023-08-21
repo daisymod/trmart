@@ -233,6 +233,7 @@ class CartController extends Controller
         $requestPay->setBasketItems($basketItems);
 
         $checkoutFormInitialize = \Iyzipay\Model\CheckoutFormInitialize::create($requestPay, $options);
+        Log::info(print_r($checkoutFormInitialize,true));
         newOrderCopyJob::dispatch($request->all(),CartService::getCart(),Auth::user(),$hash);
         if (Auth::check()){
             $this->service->update($request->all());
