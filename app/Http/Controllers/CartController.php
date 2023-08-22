@@ -161,10 +161,6 @@ class CartController extends Controller
         $options->setSecretKey("ixAzd6UNXi1vhRpVZ2tUe5kcAO6Pl4Fd");
         $options->setBaseUrl("https://api.iyzipay.com");
 
-
-        Log::info(print_r($cart['price'],true));
-        Log::info(print_r(ceil($priceDelivery),true));
-
         $requestPay = new \Iyzipay\Request\CreateCheckoutFormInitializeRequest();
         $requestPay->setLocale(\Iyzipay\Model\Locale::EN);
         $requestPay->setConversationId(rand(0,9999999999));
@@ -198,6 +194,10 @@ class CartController extends Controller
 
         $merchantUser = User::where('id','=',$cart['items'][0]['user_id'])
             ->first();
+
+        $key = MerchantKey::where('user_id','=',$cart['items'][0]['user_id'])
+            ->first();
+
         $shippingAddress = new \Iyzipay\Model\Address();
         $shippingAddress->setContactName($merchant->first_name.' '.$merchant->last_name);
         $shippingAddress->setCity($merchant->city);
@@ -214,16 +214,17 @@ class CartController extends Controller
         $billingAddress->setZipCode($merchantUser->postcode);
         $requestPay->setBillingAddress($billingAddress);
         $index = 0;
+
+
         foreach ($cart['items'] as $item) {
             $basketItems = array();
             $firstBasketItem = new \Iyzipay\Model\BasketItem();
             $firstBasketItem->setId($index);
-            $firstBasketItem->setSubMerchantKey('+nPmcvksgu5VDMAFwgfT8N7689I=');
+            $firstBasketItem->setSubMerchantKey($key->key);
             $firstBasketItem->setSubMerchantPrice($item['price']);
             $firstBasketItem->setName($item['name_en']);
-            $category = Catalog::where('id','=',$item['catalog_id'])
-                ->first();
-            $firstBasketItem->setCategory1($category->name_en);
+
+            $firstBasketItem->setCategory1('turkiyemart');
             $firstBasketItem->setItemType(\Iyzipay\Model\BasketItemType::PHYSICAL);
             $firstBasketItem->setPrice($cart['price']);
             $basketItems[$index] = $firstBasketItem;
