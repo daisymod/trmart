@@ -150,11 +150,43 @@ class MerchantController extends Controller
 
     public function actionEditPost($id, MerchantEditPostRequest $request)
     {
-
         $record = Merchant::query()->findOrFail($id);
         Gate::authorize("merchant-edit", $record);
         $this->company->update($request->all(),$id);
         $this->user->updateMerchant($request->all(),$id);
+
+        $key = MerchantKey::where('user_id','=',$id)
+                        ->first();
+
+        if (empty($key->user_id)){
+            $options = new \Iyzipay\Options();
+            $options->setApiKey("bndv9YASgfDvKS6ZWzPiq3J4Ow3wU4q2");
+            $options->setSecretKey("ixAzd6UNXi1vhRpVZ2tUe5kcAO6Pl4Fd");
+            $options->setBaseUrl("https://api.iyzipay.com");
+
+            $requestMerchant = new \Iyzipay\Request\CreateSubMerchantRequest();
+            $requestMerchant->setLocale(\Iyzipay\Model\Locale::EN);
+            $requestMerchant->setConversationId(rand(1,999999999999));
+            $requestMerchant->setSubMerchantExternalId(rand(1,999999999999));
+            $requestMerchant->setSubMerchantType(\Iyzipay\Model\SubMerchantType::PRIVATE_COMPANY);
+            $requestMerchant->setAddress($request->city.','.$request->street.' '.' '.$request->number.' '.$request->office);
+            $requestMerchant->setTaxOffice($request->tax_office);
+            $requestMerchant->setLegalCompanyTitle($request->company_name);
+            $requestMerchant->setEmail($request->email);
+            $requestMerchant->setGsmNumber($request->phone);
+            $requestMerchant->setName($request->shop_name);
+            $requestMerchant->setIban(str_replace(' ','',str_replace('-','',$request->iban)));
+            $requestMerchant->setIdentityNumber('000'.$id);
+            $requestMerchant->setCurrency(\Iyzipay\Model\Currency::TL);
+
+            $subMerchant = \Iyzipay\Model\SubMerchant::create($requestMerchant, $options);
+            MerchantKey::firstOrCreate(
+                [
+                    'key' => $subMerchant->getSubMerchantKey(),
+                    'user_id' => $id,
+                ]
+            );
+        }
 
 
         if ($request->status == 3 && !empty($request->reason) && Auth::user()->role == 'admin'){
