@@ -180,6 +180,7 @@ class MerchantController extends Controller
             $requestMerchant->setCurrency(\Iyzipay\Model\Currency::TL);
 
             $subMerchant = \Iyzipay\Model\SubMerchant::create($requestMerchant, $options);
+            Log::info(print_r($subMerchant,true));
             MerchantKey::firstOrCreate(
                 [
                     'key' => $subMerchant->getSubMerchantKey(),
