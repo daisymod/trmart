@@ -222,12 +222,8 @@ class CartController extends Controller
             $firstBasketItem->setId($index);
             $firstBasketItem->setSubMerchantKey($key->key);
             $firstBasketItem->setSubMerchantPrice($item['price']);
-            $product = CatalogItem::where('article','=',$item['article'])
-                ->first();
-            Log::info(print_r($product,true));
-            $firstBasketItem->setName($product->name_en ?? 'turkiyemart');
-
-
+            Log::info(print_r($key->key,true));
+            $firstBasketItem->setName( 'turkiyemart');
 
             $firstBasketItem->setCategory1('turkiyemart');
             $firstBasketItem->setItemType(\Iyzipay\Model\BasketItemType::PHYSICAL);
