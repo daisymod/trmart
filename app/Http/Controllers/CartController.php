@@ -49,7 +49,8 @@ class CartController extends Controller
 
     public function actionAdd()
     {
-
+        session()->forget('deliveryCalDate');
+        session()->forget('deliveryPrices');
         $item = ProductItem::where('item_id','=',request()->get("id"))
                     ->where('size','=',request()->get("size"))
                     ->where('color','=',request()->get("color"))
@@ -291,7 +292,8 @@ class CartController extends Controller
 
     public function actionSet()
     {
-
+        session()->forget('deliveryCalDate');
+        session()->forget('deliveryPrices');
         $data = CartService::set(request()->get("key"), request()->get("count"));
 
         if ($data == 422){
@@ -306,6 +308,8 @@ class CartController extends Controller
     }
 
     public function actionDel(){
+        session()->forget('deliveryCalDate');
+        session()->forget('deliveryPrices');
         CartService::clear();
         $this->cart->delete(Auth::user()->id ?? 0);
 
@@ -350,14 +354,11 @@ class CartController extends Controller
             $product = CatalogItem::find($item['id']);
             $weight  = $product->weight * $item['count'];
             $price   = ceil(($product->price - ($product->price * $product->sale) / 100) * $coefficent->rate_end) * $item['count'];
-            Log::info(print_r('price-'.$price,true));
             $kps = $client->getPostRate($weight, $price, Auth::user()->postcode);
             if (isset($kps->Sum)) {
                 $test[] = [$count, $product->id, $weight, $price, $kps->Sum];
                 $deliveryPrice   = doubleval($kps->Sum);
                 $deliveryTrPrice = doubleval($product->weight) * $td * $item['count'];
-                Log::info(print_r('tenge -'.$deliveryPrice,true));
-                Log::info(print_r('tr -'.$deliveryTrPrice,true));
                 $delivery = $delivery + ($deliveryPrice * $item['count']);
                 $deliveryTr = $deliveryTr + ($deliveryTrPrice * $item['count']);
                 $arr['items'][$key] = $deliveryPrice + $deliveryTrPrice;
