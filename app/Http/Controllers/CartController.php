@@ -166,11 +166,11 @@ class CartController extends Controller
         $requestPay->setConversationId(rand(0,9999999999));
 
         Log::info(print_r($cart['price'],true));
-        Log::info(print_r(floatval($cart['price']),true));
+        Log::info(print_r(floatval(str_replace(' ','',$cart['price'])),true));
 
 
-        $requestPay->setPrice(floatval($cart['price']));
-        $requestPay->setPaidPrice(floatval($cart['price']) + ceil($priceDelivery));
+        $requestPay->setPrice(floatval(str_replace(' ','',$cart['price'])));
+        $requestPay->setPaidPrice(floatval(str_replace(' ','',$cart['price'])) + ceil($priceDelivery));
 
         $requestPay->setCurrency(\Iyzipay\Model\Currency::TL);
         $requestPay->setBasketId($basket->id);
@@ -227,13 +227,13 @@ class CartController extends Controller
             $firstBasketItem = new \Iyzipay\Model\BasketItem();
             $firstBasketItem->setId($index);
             $firstBasketItem->setSubMerchantKey($key->key);
-            $firstBasketItem->setSubMerchantPrice(floatval($item['price']));
+            $firstBasketItem->setSubMerchantPrice(floatval(str_replace(' ','',$item['price'])));
 
             $firstBasketItem->setName( 'turkiyemart');
 
             $firstBasketItem->setCategory1('turkiyemart');
             $firstBasketItem->setItemType(\Iyzipay\Model\BasketItemType::PHYSICAL);
-            $firstBasketItem->setPrice(floatval($item['price']));
+            $firstBasketItem->setPrice(floatval(str_replace(' ','',$item['price'])));
             $basketItems[$index] = $firstBasketItem;
         }
 
