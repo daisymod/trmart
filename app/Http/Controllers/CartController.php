@@ -10,6 +10,7 @@ use App\Jobs\newOrderCopyJob;
 use App\Jobs\newOrderJob;
 use App\Models\Basket;
 use App\Models\Catalog;
+use App\Models\CatalogCharacteristicItem;
 use App\Models\City;
 use App\Models\Company;
 use App\Models\Country;
@@ -51,11 +52,17 @@ class CartController extends Controller
     {
         session()->forget('deliveryCalDate');
         session()->forget('deliveryPrices');
+
+        $size = CatalogCharacteristicItem::where('catalog_characteristic_id','=',16)
+                            ->where('name_ru','=',request()->get("size"))
+                            ->orWhere('name_kz','=',request()->get("size"))
+                            ->orWhere('name_tr','=',request()->get("size"))
+                            ->first();
+
         $item = ProductItem::where('item_id','=',request()->get("id"))
-                    ->where('size','=',request()->get("size"))
+                    ->where('size','=',$size->id)
                     ->where('color','=',request()->get("color"))
                     ->first();
-
 
 
         $data = CartService::add(request()->get("id"), request()->get("count"), request()->get("size"), request()->get("color"));

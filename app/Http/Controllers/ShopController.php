@@ -54,16 +54,16 @@ class ShopController
 
             if (!in_array($item->sizeData->id,$result)){
                 $html .= '<div class="radio-wrap not-active" data-size="'.$item->sizeData->id  .'">
-                                    <input type="radio" disabled value="'.$item->sizeData->{'name_'.$request->lang}  .'" id="radio'.$index.'" name="size">
+                                    <input type="radio" disabled value="'.$item->sizeData->{'name_'.app()->getLocale()}  .'" id="radio'.$index.'" name="size">
                                     <label for="radio'.$index.'">
-                                        <b>'.$item->sizeData->{'name_'.$request->lang}  .'</b>
+                                        <b>'.$item->sizeData->{'name_'.app()->getLocale()}  .'</b>
                                     </label>
                                 </div>';
             }else{
                 $html .= '<div class="radio-wrap" data-size="'.$item->sizeData->id  .'">
-                                    <input '.$this->checkChecked($checked).' type="radio" value="'.$item->sizeData->{'name_'.$request->lang}  .'" id="radio'.$index.'" name="size">
+                                    <input '.$this->checkChecked($checked).' type="radio" value="'.$item->sizeData->{'name_'.app()->getLocale()}  .'" id="radio'.$index.'" name="size">
                                     <label for="radio'.$index.'">
-                                        <b>'.$item->sizeData->{'name_'.$request->lang}  .'</b>
+                                        <b>'.$item->sizeData->{'name_'.app()->getLocale()}  .'</b>
                                     </label>
                                 </div>';
 
@@ -131,7 +131,7 @@ class ShopController
                 ->get();
         }
 
-        $colorCurrent = $color[0]->{"name_".app()->getLocale()} ?? '';
+        $colorCurrent = $color[0]->colorData->{"name_".app()->getLocale()} ?? '';
 
 
         foreach ($size as $item){
@@ -140,7 +140,7 @@ class ShopController
 
         $sliderIndex = 0;
         foreach ($color as $item){
-            if ($item->image == []){
+            if ($item->image == '[]'){
                 $item->image = $item->colorData->image;
             }
             $image = json_decode($item->colorData->image, true);

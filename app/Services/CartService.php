@@ -34,6 +34,8 @@ class CartService
 
                 $size = CatalogCharacteristicItem::where('catalog_characteristic_id','=',16)
                     ->where('name_tr','=',$i["size"])
+                    ->orWhere('name_ru','=',$i["size"])
+                    ->orWhere('name_kz','=',$i["size"])
                     ->first();
                 $image = ProductItem::where('item_id','=',$i["id"])
                             ->where('size','=',$size->id)
@@ -93,6 +95,8 @@ class CartService
         $sizeId = CatalogCharacteristicItem::select('id')
             ->where('catalog_characteristic_id','=',16)
             ->where('name_tr','=',request()->get("size"))
+            ->orWhere('name_ru','=',request()->get("size"))
+            ->orWhere('name_kz','=',request()->get("size"))
             ->get()->toArray();
 
         $result = [];
