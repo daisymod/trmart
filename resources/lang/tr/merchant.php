@@ -15,9 +15,9 @@ return [
         'tax_office' => 'Vergi Dairesi',
 
         "shop_name" => "Mağaza adı",
-        "shot_name" => "Kısa adı",
+        "shot_name" => "Şirket adı",
         "full_name" => "Tam adı",
-        "company_name" => "Kısa adı",
+        "company_name" => "Şirket adı",
         "bin" => "Banka kimlik kodu",
         "reg_form" => "Kayıt formu",
         "tckn" => "Türkiye Cumhuriyeti Kimlik Numarası TCKN",
