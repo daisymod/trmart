@@ -15,16 +15,18 @@ class PhotoGalleryNullSeed extends Seeder
      */
     public function run()
     {
-        $items = ProductItem::where('image','=',null)
+        $items = ProductItem::where('image','=','[]')
             ->get();
 
         foreach ($items as $item){
             $checkProductItemColor = ProductItem::where('color','=',$item->color)
                 ->where('item_id','=',$item->item_id)
-                ->where('image','!=',null)
+                ->where('image','!=','[]')
                 ->first();
-            $item->image = $checkProductItemColor->image;
-            $item->save();
+            if (!empty($checkProductItemColor->image)){
+                $item->image = $checkProductItemColor->image;
+                $item->save();
+            }
         }
     }
 }
