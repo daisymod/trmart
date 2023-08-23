@@ -165,7 +165,7 @@ class CartController extends Controller
         $requestPay->setLocale(\Iyzipay\Model\Locale::EN);
         $requestPay->setConversationId(rand(0,9999999999));
         $requestPay->setPrice($cart['price']);
-        $requestPay->setPaidPrice(intval($cart['price']) + ceil($priceDelivery));
+        $requestPay->setPaidPrice(intval(number_format($cart['price'], 2, ".", "")) + ceil($priceDelivery));
 
         $requestPay->setCurrency(\Iyzipay\Model\Currency::TL);
         $requestPay->setBasketId($basket->id);
@@ -222,13 +222,13 @@ class CartController extends Controller
             $firstBasketItem = new \Iyzipay\Model\BasketItem();
             $firstBasketItem->setId($index);
             $firstBasketItem->setSubMerchantKey($key->key);
-            $firstBasketItem->setSubMerchantPrice(intval($item['price']));
+            $firstBasketItem->setSubMerchantPrice(intval(number_format($item['price'], 2, ".", "")));
 
             $firstBasketItem->setName( 'turkiyemart');
 
             $firstBasketItem->setCategory1('turkiyemart');
             $firstBasketItem->setItemType(\Iyzipay\Model\BasketItemType::PHYSICAL);
-            $firstBasketItem->setPrice(intval($cart['price']));
+            $firstBasketItem->setPrice(intval(number_format($item['price'], 2, ".", "")));
             $basketItems[$index] = $firstBasketItem;
         }
 
