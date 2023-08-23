@@ -164,7 +164,7 @@ class CartController extends Controller
         $requestPay = new \Iyzipay\Request\CreateCheckoutFormInitializeRequest();
         $requestPay->setLocale(\Iyzipay\Model\Locale::EN);
         $requestPay->setConversationId(rand(0,9999999999));
-        $requestPay->setPrice($cart['price']);
+        $requestPay->setPrice(10000);
         $requestPay->setPaidPrice(10000);
 
         $requestPay->setCurrency(\Iyzipay\Model\Currency::TL);
