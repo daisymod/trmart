@@ -232,7 +232,6 @@ class CartController extends Controller
             $basketItems[$index] = $firstBasketItem;
         }
 
-
         $requestPay->setBasketItems($basketItems);
         Log::info(print_r($requestPay,true));
         $checkoutFormInitialize = \Iyzipay\Model\CheckoutFormInitialize::create($requestPay, $options);
