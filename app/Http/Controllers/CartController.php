@@ -167,7 +167,6 @@ class CartController extends Controller
         $requestPay->setPrice($cart['price']);
         $requestPay->setPaidPrice(intval($cart['price']) + ceil($priceDelivery));
 
-        Log::info(print_r(intval($cart['price']) + ceil($priceDelivery),true));
         $requestPay->setCurrency(\Iyzipay\Model\Currency::TL);
         $requestPay->setBasketId($basket->id);
         $requestPay->setBasketItems($cart['count']);
@@ -224,7 +223,7 @@ class CartController extends Controller
             $firstBasketItem->setId($index);
             $firstBasketItem->setSubMerchantKey($key->key);
             $firstBasketItem->setSubMerchantPrice(intval($item['price']));
-            Log::info(print_r($key->key,true));
+
             $firstBasketItem->setName( 'turkiyemart');
 
             $firstBasketItem->setCategory1('turkiyemart');
@@ -235,7 +234,7 @@ class CartController extends Controller
 
 
         $requestPay->setBasketItems($basketItems);
-
+        Log::info(print_r($requestPay,true));
         $checkoutFormInitialize = \Iyzipay\Model\CheckoutFormInitialize::create($requestPay, $options);
         Log::info(print_r($checkoutFormInitialize,true));
         newOrderCopyJob::dispatch($request->all(),CartService::getCart(),Auth::user(),$hash);
