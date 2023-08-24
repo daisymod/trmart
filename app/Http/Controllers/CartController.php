@@ -241,7 +241,7 @@ class CartController extends Controller
 
             $firstBasketItem->setCategory1('turkiyemart');
             $firstBasketItem->setItemType(\Iyzipay\Model\BasketItemType::PHYSICAL);
-            $firstBasketItem->setPrice(floatval(str_replace(' ','',$item['price'])));
+            $firstBasketItem->setPrice(floatval(str_replace(' ','',$cart['price'])));
             $basketItems[$index] = $firstBasketItem;
         }
 
