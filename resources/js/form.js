@@ -17,6 +17,20 @@ jQuery(document).ready(function () {
         var colorText  = color.innerHTML.replace('addmore[0][color]', 'addmore['+ j +'][color]')
         var sizeText  = size.innerHTML.replace('addmore[0][size]', 'addmore['+ j +'][size]')
 
+
+        let placeholder = '';
+        switch (document.documentElement.lang){
+            case 'tr':
+                placeholder = 'Fotoğraf yükleniyor';
+                break;
+            case 'ru':
+                placeholder = 'Загрузить изображения';
+                break;
+            case 'kz':
+                placeholder = 'Сүретті жүктеу';
+                break;
+        }
+
         //'                <td><input type="text" name="addmore['+j+'][price]"  class="form-control" /></td>\n' +
         $('#productTable tr:last').after('<tr style="border: 3px solid #cccccc"><td>\n' +
             '                    ' + sizeText + ' \n' +
@@ -37,7 +51,7 @@ jQuery(document).ready(function () {
             '                                <div class="name">Загрузка изображения</div>\n' +
             '                            </div>\n' +
             '                                                    </div>\n' +
-            '                        <div id="image-load-'+j+'" class="select-file btn btn-primary btn-sm" >Загрузить изображения</div>\n' +
+            '                        <div id="image-load-'+j+'" class="select-file btn btn-primary btn-sm" >'+placeholder+'</div>\n' +
             '                    </div>\n' +
             '                </td>' +
             '<td><button type="button" onclick="$(this).parents(\'tr\').remove()" class="btn red-btn remove-tr">-</button></td></tr>');
