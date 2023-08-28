@@ -604,10 +604,27 @@ $(document).ready(function () {
     });
 
     $('#brand-item').select2({
+        placeholder: "Select a state",
+        allowClear: true,
         minimumResultsForSearch: 6,
         tags: true
     });
 
+    $('#brand-item').one('select2:open', function(e) {
+        let placeholder = '';
+        switch (document.documentElement.lang){
+            case 'tr':
+                 placeholder = 'Marka ekle';
+                break;
+            case 'ru':
+                 placeholder = 'Добавить бренд';
+                break;
+            case 'kz':
+                 placeholder = 'Бренд қосу';
+                break;
+        }
+        $('input.select2-search__field').prop('placeholder', placeholder);
+    });
 
     $('#language-data').select2({
         minimumResultsForSearch: 6,

@@ -89,7 +89,7 @@ button {
     @include placeholder {
         font-weight: 600;
         font-size: 13px;
-        color: rgba(#2B2A28, .7);
+        color: rgba(#000000, .7);
     }
 }
 
@@ -431,7 +431,7 @@ button {
 
     @include placeholder {
         font-size: 12px !important;
-        color: rgba(orange, .5) !important;
+        color: #000000 !important;
     }
 }
 
