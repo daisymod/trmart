@@ -72,7 +72,7 @@
                 </span>
             </div> -->
             @auth
-                <a href="#" class="marketplace popup">
+                <a href="{{ route("user.lk") }}" class="marketplace popup">
                     <span class="circle"></span>
                     <span class="text">{{ __("menu.merchant.reg") }}</span>
                 </a>
@@ -85,8 +85,8 @@
                         <p>Admin <br> <span>{{ Auth::user()->role }}</span></p>
                     @endif
 
-                    <a href="#" class="red-btn">{{ __("menu.lk") }}</a>
-                    <a href="#" class="green-btn sign-btn"><img src="/img/sign-up-icon.svg" alt=""></a>
+                    <a href="{{ route("user.lk") }}" class="red-btn">{{ __("menu.lk") }}</a>
+                    <a href="{{ route("user.exit") }}" class="green-btn sign-btn"><img src="/img/sign-up-icon.svg" alt=""></a>
                 </div>
             @else
                 <a href="#registration-popup" class="marketplace popup">
@@ -106,7 +106,7 @@
                 <span class="line"></span>
             </a>
             <a href="/" class="logo"><img src="/img/logo.svg" alt=""></a>
-            <form class="search-form" action="#">
+            <form class="search-form" action="{{ route("shop.find") }}">
                 <input id="search-item" autocomplete="off" class="search-data" type="text" list="search-items-result"  name="find" placeholder="@lang('search.searchProduct')">
                 <div style="display: none" id="search-result">
 
@@ -116,21 +116,21 @@
             <div class="basket">
                 <img src="/img/basket-icon.svg" alt="">
                 <span  id="cart-price" class="cart-price"></span><span id="symbol-cart"> </span>
-                <a href="#">@lang('body.toCart')</a>
+                <a href="{{ route("cart.index") }}">@lang('body.toCart')</a>
             </div>
             <div class="mobile-icons">
                 @auth
-                    <a href="#"><img src="/img/user-icon.svg" alt=""></a>
-                    <a href="#" class="green-btn sign-btn"><img src="/img/sign-up-icon.svg" alt=""></a>
+                    <a href="{{ route("user.lk") }}"><img src="/img/user-icon.svg" alt=""></a>
+                    <a href="{{ route("user.exit") }}" class="green-btn sign-btn"><img src="/img/sign-up-icon.svg" alt=""></a>
                 @else
                     <a href="#entrance-popup" onclick="openPopUpLogin()" id="UserLogin" class="popup"><img src="/img/user-icon.svg" alt=""></a>
                 @endauth
 
                 <a href="#" class="search-menu"><img src="/img/search-icon.svg" alt=""></a>
-                <a href="#"><img src="/img/basket-icon-mobile.svg" alt=""></a>
+                <a href="{{ route("cart.index") }}"><img src="/img/basket-icon-mobile.svg" alt=""></a>
             </div>
             <div class="search-menu-wrapper">
-                <form class="search-menu-wrapper-form" action="#">
+                <form class="search-menu-wrapper-form" action="{{ route("shop.find") }}">
                     <input id="search-item" autocomplete="off" class="form-control" type="text" list="search-items-result"  name="find" placeholder="@lang('search.searchProduct')">
                     <div style="display: none" id="search-result">
 
@@ -152,14 +152,14 @@
                                     @foreach($i->child()->orderBy("name_".app()->getLocale())->get() as $child)
                                         @if(count($child->child) > 0)
                                             <div class="info-wrap">
-                                                <a href="#"><h6>{{ $child->{"name_".app()->getLocale()} }}</h6></a>
+                                                <a href="{{ route("shop.list", $child->id) }}"><h6>{{ $child->{"name_".app()->getLocale()} }}</h6></a>
                                                 @foreach($child->child()->orderBy("name_".app()->getLocale())->get() as $c)
-                                                    <a href="#">{{ $c->{"name_".app()->getLocale()} }}</a>
+                                                    <a href="{{ route("shop.list", $c->id) }}">{{ $c->{"name_".app()->getLocale()} }}</a>
                                                 @endforeach
                                             </div>
                                         @else
                                             <div class="info-wrap">
-                                                <a href="#">{{ $child->{"name_".app()->getLocale()} }}</a>
+                                                <a href="{{ route("shop.list", $child->id) }}">{{ $child->{"name_".app()->getLocale()} }}</a>
                                             </div>
                                         @endif
                                     @endforeach
@@ -230,7 +230,7 @@
             </div>
             <div class="tab-content">
                 <div id="register-tab-content" class="tab-content-item active form-ajax">
-                    <form class="main-form2" method="POST" action="#">
+                    <form class="main-form2" method="POST" action="{{ route("user.login") }}">
                         @csrf
                         <div class="inputs-wrap">
                             <span>@lang('body.phone')</span>
@@ -255,7 +255,7 @@
                 </div>
                 <div id="login-tab-content" class="tab-content-item">
                     <div class="form-wrap form-ajax-reg-user">
-                        <form class="main-form3" method="POST" action="#">
+                        <form class="main-form3" method="POST" action="{{ route("user.reg") }}">
                             @csrf
                             <div class="inputs-wrap">
                                 <span>@lang('body.name')</span>
@@ -304,7 +304,7 @@
             <a href="javascript:history.back()" class="back"><img src="/img/back-icon.png" alt=""></a>
             <h3>@lang('body.writeCode')</h3>
             <div class="form-ajax">
-                <form action="#">
+                <form action="{{ route("user.reg.sms") }}">
                     @csrf
                     <p class="top"@lang('body.CodePhone') <span></span></p>
                     <input name="sms" required type="text" placeholder="• • • • • •">
@@ -326,7 +326,7 @@
         <div class="entrance-popup-wrap">
             <h3>@lang('body.resetPasswordText')</h3>
             <div class="form-wrap form-ajax-reg-user">
-               <form class="main-form3" method="POST" action="#">
+               <form class="main-form3" method="POST" action="{{ route("user.checkPhone") }}">
                    @csrf
                    <div class="inputs-wrap">
                        <span>@lang('body.phone')</span>
@@ -342,7 +342,7 @@
         <div class="enter-code-wrap enter-code-wrap-user">
             <h3>@lang('body.writeCode')</h3>
             <div class="form-ajax form-ajax-sms-user">
-                <form action="#">
+                <form action="{{ route("user.checkSMS") }}">
                     @csrf
                     <p class="top"@lang('body.CodePhone') <span></span></p>
                     <input name="sms" required type="text" placeholder="• • • • • •">
@@ -358,7 +358,7 @@
         <div class="enter-code-wrap enter-code-wrap-user-password">
             <h3>@lang('body.resetPasswordText')</h3>
             <div class="form-wrap form-ajax-sms-user-reset">
-                <form action="#">
+                <form action="{{ route("user.reset-password") }}">
                     @csrf
                     <input type="hidden" name="phone" id="phone-data-for-reset" value="">
                     <div class="inputs-wrap">
@@ -388,7 +388,7 @@
         <div class="registration-popup-wrap">
             <h2>@lang('body.register') </h2>
             <div class="form-ajax-reg-merchant">
-                <form class="main-form4" method="POST" action="#">
+                <form class="main-form4" method="POST" action="{{ route("merchant.reg") }}">
                     @csrf
                     <div class="inputs-wrap">
                         <span>@lang('body.phone')</span>
@@ -429,7 +429,7 @@
         <div class="enter-code-wrap enter-code-wrap-merchant">
             <h3>@lang('body.writeCode')</h3>
             <div class="form-ajax">
-                <form action="#">
+                <form action="{{ route("merchant.reg.sms") }}">
                     @csrf
                     <p class="top"@lang('body.CodePhone') <span></span></p>
                     <input name="first_name" id="first_name_merchant"  type="hidden" >
