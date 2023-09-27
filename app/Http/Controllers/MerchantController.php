@@ -17,6 +17,8 @@ use App\Http\Requests\UserRegSMSPostRequest;
 use App\Http\Resources\OrderInfoResource;
 use App\Http\Resources\OrderItemResource;
 use App\Http\Resources\OrdersResource;
+use App\Mail\MerchantVerifyMail;
+use App\Mail\NewMerchantMail;
 use App\Mail\RejectNewItemMail;
 use App\Mail\RejectVerificationMerchantMail;
 use App\Models\CatalogCharacteristicItem;
@@ -189,7 +191,10 @@ class MerchantController extends Controller
             );
         }
 
-
+        if ($request->status == 2){
+            $record->is_verify = 1;
+            $record->save();
+        }
         if ($request->status == 3 && !empty($request->reason) && Auth::user()->role == 'admin'){
             $user = User::where('id','=',$id)
                 ->first();
@@ -229,7 +234,9 @@ class MerchantController extends Controller
             'company_id' => $companyData->id
         ];
         $this->employee->create($data);
-
+        $user = User::where('id','=',1)
+            ->first();
+        Mail::to($user->email)->send(new NewMerchantMail($user, $companyData));
         //MerchantRegForm::reg(UserLoginService::getRegData());
         //return redirect(route("user.lk"));
         return ["redirect" => route("user.lk")];
@@ -338,6 +345,12 @@ class MerchantController extends Controller
         $this->user->updateMerchant($request->all(),Auth::user()->id);
         //$form = new MerchantSelfForm($record);
         //$form->formSave(request()->all());
+
+        if ($request->is_verify != 2){
+            $user = User::where('id','=',1)
+                ->first();
+            Mail::to($user->email)->send(new MerchantVerifyMail($user, $request->all()));
+        }
         $body = view("mail.merchant_verification", ["id" => Auth::user()->id])->render();
         //SendMailService::sendNotification("Проверка мерча", $body);
         return ["redirect" => route("merchant.self", ["send" => true])];
