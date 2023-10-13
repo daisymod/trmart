@@ -85,7 +85,7 @@ class UserLoginService
 
         $message = "Verification code - ". "turkiyemart.com:". $regSMS;
 
-        SMSTrafficService::sendSMS($data["phone"], $message);
+        SMSTrafficService::sendSMS(preg_replace("/[^0-9]/", "", $data["phone"]), $message);
     }
 
 
@@ -111,7 +111,7 @@ class UserLoginService
 
         $message = "Sms for reset password - ". "turkiyemart.com:". $regSMS;
 
-        SMSTrafficService::sendSMS($data["phone"], $message);
+        SMSTrafficService::sendSMS(preg_replace("/[^0-9]/", "", $data["phone"]), $message);
     }
 
     public static function getRegData()
