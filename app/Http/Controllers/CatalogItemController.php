@@ -55,7 +55,7 @@ class CatalogItemController
 
     public function actionListGet(CatalogItemActionService $service,Request $request)
     {
-        if (Auth::user()->role == 'admin') {
+       /* if (Auth::user()->role == 'admin') {
             $data = AdminSettings::where('user_id', '=', Auth::user()->id)
                 ->first()->toArray();
 
@@ -126,13 +126,11 @@ class CatalogItemController
             Gate::authorize("catalog-item-list");
 
             return view("catalog_item.list", $service->actionList($data));
-        }else{
+        }else{*/
+
             Gate::authorize("catalog-item-list");
 
             return view("catalog_item.list", $service->actionList($request->all()));
-        }
-
-
     }
 
 
