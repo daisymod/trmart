@@ -1,5 +1,11 @@
 <?php
 return [
+    'is_active' => 'Активен?',
+    'cant_active' => "Внимание!\n
+        В данной категории / категориях нижнего уровня имеются товары.   \n
+        Смените категории у товаров. 
+    ",
+    'clear' => 'Очистить',
     'warning000' => 'Ayrıştırıcı, görevi arka planda çalıştırır. Sonuç, Yöneticiye ve tüccara bir mektup şeklinde gelecektir.',
     'question100' =>'Siparişinizin durumunu değiştirmek istediğinizden emin misiniz? Bu eylem değiştirilemez.',
     'not-pr-found' =>'Üzgünüm, ürün stokta yok.',

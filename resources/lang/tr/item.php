@@ -24,4 +24,5 @@ return [
     'count' => 'Miktar',
     'status' => 'Durum',
     'created_at' => 'Oluşturuldu',
+    'gpt' => 'Translate GPT'
 ];
