@@ -45,7 +45,7 @@ class AppServiceProvider extends ServiceProvider
         view()->share("location", ['country_id'=> 1, 'city_id' => 2]);
         view()->share("langList", LanguageService::$lang);
         view()->share("catalogMenu", Catalog::query()
-
+            ->where('is_active','=',1)
             ->where("parent_id", 0)
             ->orderBy("name_ru")->get());
         view()->composer("*", function ($view) {
