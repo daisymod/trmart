@@ -22,7 +22,7 @@
                                     <div style="margin:50px 10px" class="mb-5 mt-5 ml-2 row">
                                         <label for="is_active">
                                             <input type="checkbox" name="is_active" @if($active == 1) checked @endif>
-                                            @lang('system.m22')
+                                            @lang('system.is_active')
                                         </label>
                                     </div>
                                 @endif
@@ -31,10 +31,10 @@
 
                         <div class="mb-3 row">
                             <div class="col-md-4">
-                                <a   href="{{ route("catalog.list", 0) }}" class="btn btn-back btn-block" >@lang('system.cancel')</a>
+                                <a href="{{ route("catalog.list", 0) }}" class="btn btn-back btn-block" >@lang('system.cancel')</a>
                             </div>
                             <div class="col-md-8">
-                                <button data-question="@lang('system.take_change')" class="btn btn-primary btn-block">
+                                <button class="btn btn-primary btn-block">
                                     @lang('system.save')
                                 </button>
                             </div>

@@ -5,7 +5,6 @@ return [
         В данной категории / категориях нижнего уровня имеются товары.   \n
         Смените категории у товаров. 
     ",
-    'take_change' => "Değişiklikleri kaydetmek istediğinizden emin misiniz?",
     'clear' => 'Очистить',
     'warning000' => 'Ayrıştırıcı, görevi arka planda çalıştırır. Sonuç, Yöneticiye ve tüccara bir mektup şeklinde gelecektir.',
     'question100' =>'Siparişinizin durumunu değiştirmek istediğinizden emin misiniz? Bu eylem değiştirilemez.',
@@ -81,7 +80,7 @@ return [
     'm19' => 'Bağlantı',
     'm20' => 'Tüccar',
     'm21' => 'Durum',
-    'm22' => 'Aktif',
+    'm22' => 'Aktivite',
     'm23' => 'Adım',
     'm24' => 'Derecelendirme',
     'm25' => 'Doğrulama isteği başarıyla gönderildi',
