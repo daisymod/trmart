@@ -34,9 +34,10 @@ class CatalogField extends RelationField
     public function getModelQuery()
     {
         $query = static::$model::query()
+            ->where('is_active','=',1)
             ->orderBy("name_ru");
         if ($this->level1Only) {
-            $query = $query->where("parent_id", 0);
+            $query = $query ->where('is_active','=',1)->where("parent_id", 0);
         }
         return $query;
     }
@@ -44,7 +45,7 @@ class CatalogField extends RelationField
     protected function getValue(array $data)
     {
 
-        return $this->record->{$this->field}()->getQuery()->pluck("catalogs.name_ru", "catalogs.id")->toArray();
+        return $this->record->{$this->field}()->where('is_active','=',1)->getQuery()->pluck("catalogs.name_ru", "catalogs.id")->toArray();
     }
 
     public function actionInit($date): string{
@@ -57,6 +58,7 @@ class CatalogField extends RelationField
         });
         $records = $records->where("parent_id", $config["parentId"]);
         $records = $records->where("id", "<>" , $config["ignoreId"]);
+        $records = $records->where('is_active','=',1);
         $records = $this->form->formCreateFind($records, $find);
         $records = $records->paginate(20);
         $breadcrumbs = [];
