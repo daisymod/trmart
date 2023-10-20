@@ -1,8 +1,9 @@
 <?php
 return [
     'is_active' => 'Активен?',
-    'cant_active' => "Dikkat! \n
-     Bu kategoride / alt kategorilerde ürünler bulunmaktadır. Ürünlerin kategorisini değiştiriniz.. 
+    'cant_active' => "Внимание!\n
+        В данной категории / категориях нижнего уровня имеются товары.   \n
+        Смените категории у товаров. 
     ",
     'take_change' => "Değişiklikleri kaydetmek istediğinizden emin misiniz?",
     'clear' => 'Очистить',
