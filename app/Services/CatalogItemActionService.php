@@ -20,11 +20,10 @@ use Illuminate\Support\Facades\Auth;
 
 class CatalogItemActionService
 {
-    public function actionList($request)
+    public function actionList(Request $request)
     {
-
-        if (!empty($request['limit'])){
-            session()->put('limit_catalog_item',$request['limit']);
+        if (!empty($request->limit)){
+            session()->put('limit_catalog_item',$request->limit);
         }else{
             session()->put('limit_catalog_item',100);
         }
@@ -35,74 +34,36 @@ class CatalogItemActionService
 
         $item = new CatalogItem();
 
-        if (!empty($request['user'])){
-            if (gettype($request['user']) == 'string'){
-                $user= str_replace('[','',$request['user']);
-                $user = str_replace(']','',$user);
-                $user = str_replace('"','',$user);
-
-                $item->user_id = explode(',',$user);
-            }else {
-                $item->user_id = $request['user'];
-            }
+        if (!empty($request->user)){
+            $item->user_id =  $request->user;
         }
 
-        if (!empty($request['catalog'])){
-            if (gettype($request['catalog']) == 'string'){
-                $catalog= str_replace('[','',$request['catalog']);
-                $catalog = str_replace(']','',$catalog);
-                $catalog = str_replace('"','',$catalog);
-                $item->catalog_id = explode(',',$catalog);
-            }else {
-                $item->catalog_id = $request['catalog'];
-            }
+        if (!empty($request->catalog)){
+            $item->catalog_id =  $request->catalog;
         }
 
-        if (!empty($request['brand'])){
-            $item->brand =  $request['brand'];
+        if (!empty($request->brand)){
+            $item->brand =  $request->brand;
         }
 
-        if (!empty($request['article'])){
-            $item->article =  $request['article'];
+        if (!empty($request->name)){
+            $item->name =  $request->name;
         }
 
-        if (!empty($request['barcode'])){
-            $item->barcode =  $request['barcode'];
+        if (!empty($request->price_from)){
+            $item->price_from =  $request->price_from;
         }
 
-        if (!empty($request['name'])){
-            $item->name = $request['name'];
+        if (!empty($request->price_to)){
+            $item->price_to =  $request->price_to;
         }
 
-        if (!empty($request['price_from'])){
-            $item->price_from =  $request['price_from'];
-        }
-
-        if (!empty($request['price_to'])){
-            $item->price_to =  $request['price_to'];
-        }
-
-        if (!empty($request['status'])){
-            $item->status =  $request['status'];
-        }
-
-        if (!empty($request['active'])){
-            $item->active =  $request['active'];
-        }
-
-        if (!empty($request['user'])){
-            if (gettype($request['user']) == 'string'){
-                $user= str_replace('[','',$request['user']);
-                $user = str_replace(']','',$user);
-                $user = str_replace('"','',$user);
-
-                $item->user = explode(',',$user);
-            }else {
-                $item->user = $request['user'];
-            }
+        if (!empty($request->user)){
+            $item->user =  $request->user;
         }
 
         $form = $this->getFormSearch($item);
+
 
         $sort = explode(".", request("sort_by", "updated_at.desc"));
         $records = CatalogItem::query()
@@ -112,64 +73,48 @@ class CatalogItemActionService
             $records = $records->where("user_id", Auth::user()->id);
         }
 
-        if (!empty($request['price_from'])){
-            $records->where("price",'>=', $request['price_from']);
+        if (!empty($request->price_from)){
+            $records->where("price",'>=', $request->price_from);
         }
 
-        if (!empty($request['price_to'])){
-            $records->where("price",'<=', $request['price_to']);
+        if (!empty($request->price_to)){
+            $records->where("price",'<=', $request->price_to);
         }
 
-        if (!empty($request['article'])){
-            $records->where("article",'=', $request['article']);
+        if (!empty($request->article)){
+            $records->where("article",'=', $request->article);
         }
 
-        if (!empty($request['barcode'])){
-            $records->where("barcode",'=', $request['barcode']);
+        if (!empty($request->barcode)){
+            $records->where("barcode",'=', $request->barcode);
         }
 
-        if (!empty($request['catalog'])){
-            if (gettype($request['catalog']) == 'string'){
-                $catalog = str_replace('[','',$request['catalog']);
-                $catalog = str_replace(']','',$catalog);
-                $catalog = str_replace('"','',$catalog);
-                $records->whereIn("catalog_id",explode(',',$catalog));
-            }else{
-                $records->whereIn("catalog_id",$request['catalog']);
-            }
-
+        if (!empty($request->catalog)){
+            $records->where("catalog_id",'=', $request->catalog);
         }
 
-        if (!empty($request['user'])){
-            if (gettype($request['user']) == 'string'){
-                $user = str_replace('[','',$request['user']);
-                $user = str_replace(']','',$user);
-                $user = str_replace('"','',$user);
-                $records->whereIn("user_id",explode(',',$user));
-            }else{
-                $records->whereIn("catalog_id",$request['user']);
-            }
-
+        if (!empty($request->user)){
+            $records->where("user_id",'=', $request->user);
         }
 
-        if (!empty($request['status'])){
-            $records->where("status", $request['status'] == 4 ? 0 : $request['status']);
+        if (!empty($request->status)){
+            $records->where("status", $request->status == 4 ? 0 : $request->status );
         }
 
-        if (!empty($request['active'])){
-            $records->where("active",'=', $request['active']);
+        if (!empty($request->active)){
+            $records->where("active",'=', $request->active);
         }
 
-        if (!empty($request['brand'])){
-            $records->where("brand",'=', $request['brand']);
+        if (!empty($request->brand)){
+            $records->where("brand",'=', $request->brand);
         }
 
-        if (!empty($request['name'])){
-            $records->where("name_".app()->getLocale(),'LIKE', '%'.$request['name'].'%');
+        if (!empty($request->name)){
+            $records->where("name_".app()->getLocale(),'LIKE', '%'.$request->name.'%');
         }
         //$records = $form->formCreateFind($records, request()->all());
 
-        $records = $records->paginate( session()->get('limit_catalog_item') ?? 100, ['*'], 'page', $request['page'] ?? 1);
+        $records = $records->paginate( session()->get('limit_catalog_item') ?? 100);
 
 
         $records->getCollection()->transform(function ($product) {
@@ -196,6 +141,7 @@ class CatalogItemActionService
 
         $size = CatalogCharacteristicItem::where('catalog_characteristic_id','=',16)
             ->get();
+
 
         return compact("records", "form",'size','color', "sortBy",'job');
     }

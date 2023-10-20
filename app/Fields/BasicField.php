@@ -42,7 +42,7 @@ abstract class BasicField
 
     public function find(array $data)
     {
-        return $this->standart($this->record->toArray() ?? $data, "find");
+        return $this->standart($data, "find");
     }
 
     protected function standart(array $data, $action)
@@ -72,6 +72,7 @@ abstract class BasicField
 
     protected function getValue(array $data)
     {
+
         $value = null;
         if (isset($data[$this->field])) {
             $value = $data[$this->field];

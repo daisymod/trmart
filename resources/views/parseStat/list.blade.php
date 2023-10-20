@@ -89,7 +89,11 @@
                             </td>
                             <td class="controls">
                                 @if($i->file != null)
-                                    <a href="/storage/files/{{$i->file}}" class="btn gren-btn">Файл результата</a>
+                                    @if($i->id < 49)
+                                        <a href="/files/{{$i->file}}" class="btn gren-btn">Файл результата</a>
+                                    @else
+                                        <a href="/storage/files/{{$i->file}}" class="btn gren-btn">Файл результата</a>
+                                    @endif
                                 @endif
                             </td>
                         </tr>

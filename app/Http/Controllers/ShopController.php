@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Catalog;
 use App\Models\CatalogCatalogCharacteristic;
 use App\Models\CatalogCharacteristic;
 use App\Models\CatalogItem;
@@ -88,14 +87,10 @@ class ShopController
         }
     }
 
-    public function actionList(Request $request,Catalog $id)
+    public function actionList(Request $request, $id)
     {
-        if ($id->is_active == 0){
-            abort(404);
-        }
-
         $checkProducts = $this->showProductService->getAll();
-        return view("shop.list", ShopService::actionList($request,$id->id),['checkProducts' => $checkProducts]);
+        return view("shop.list", ShopService::actionList($request,$id),['checkProducts' => $checkProducts]);
     }
 
     public function actionItem($id)
