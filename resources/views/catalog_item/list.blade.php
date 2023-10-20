@@ -79,11 +79,6 @@
                             </button>
                         </div>
 
-                        @if(\Illuminate\Support\Facades\Auth::user()->role == 'admin')
-                            <div class="form-group">
-                                <input type="submit" name="clear" class="btn btn-primary" value=" @lang('system.clear')">
-                            </div>
-                        @endif
                     </form>
                 </div>
                 <form method="POST">
@@ -97,7 +92,6 @@
                                     <option value="active_n">@lang('item.notActive')</option>
                                     @if(\Illuminate\Support\Facades\Auth::user()->role == "admin")
                                         <option value="status_2">@lang('item.verifyActive')</option>
-                                        <option value="gpt">@lang('item.gpt')</option>
                                     @endif
                                 </select>
                             </div>
@@ -176,10 +170,6 @@
                                             @can("catalog-item-edit", $i)
                                                 <a href="{{ route("catalog_item.edit", $i->id) }}" class="arrow"><img src="/img/arrow-right-small.svg" alt=""></a>
                                             @endcan
-                                                @if(\Illuminate\Support\Facades\Auth::user()->role == 'admin')
-                                                    <a data-question="Удалить {{ $i->name_tr }}?"  href="{{ route("catalog_item.del", $i->id) }}" class="arrow"><i class=" fa fa-trash"></i></a>
-                                                @endif
-
                                         </div>
                                     </td>
                                 </tr>

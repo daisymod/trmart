@@ -6,7 +6,6 @@ use App\Models\CatalogItem;
 use App\Models\Feedback;
 use App\Models\ItemCompound;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class ItemService
 {
@@ -53,11 +52,13 @@ class ItemService
 
 
     public function checkExist($attributes){
-        $item = $this->model->where('name_tr','=',$attributes['name']['tr'])
+        $item = $this->model->query()
+            ->where('name_tr','=',$attributes['name']['tr'])
             ->when(!empty($attributes['user'][0]),function ($q) use ($attributes){
                 $q->where('user_id','=',$attributes['user'][0]);
             })
             ->first();
+       
         return $item;
     }
 
