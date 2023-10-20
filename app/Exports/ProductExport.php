@@ -75,7 +75,7 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
             trans('system.body_tr'),
             trans('system.body_kz'),
             trans('system.images').' Main photo',
-            trans('catalog_item.form.barcode'),
+            trans('catalog_item.form.article'),
             trans('system.sale'),
             trans('system.price'),
             trans('system.color'),

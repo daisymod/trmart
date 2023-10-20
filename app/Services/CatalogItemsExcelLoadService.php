@@ -15,6 +15,7 @@ use App\Models\ProductItem;
 use App\Models\User;
 use App\Requests\ImageRequest;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -207,30 +208,30 @@ class CatalogItemsExcelLoadService
                 $model = new CatalogItem();
                 $item = new ItemService($model);
 
-                $checkCatalog = $item->checkExist($dataItem);
-
+                $checkCatalog = CatalogItem::where('name_tr','=',$dataItem['name']['tr'])
+                    ->when(!empty($dataItem['user'][0]),function ($q) use ($dataItem){
+                        $q->where('user_id','=',$dataItem['user'][0]);
+                    })
+                    ->first();
                 $modelCharacteristic =  new CatalogItemDynamicCharacteristic;
                 $characteristic = new CharacteristicService($modelCharacteristic);
                 $productItemModel = new ProductItem();
                 $productItemService = new ProductItemSerice($productItemModel);
                 $compoundModel = new Compound();
                 $compound = new CompoundModelService($compoundModel);
-
                 if (!empty($checkCatalog->id)) {
-                    $is_create = false;
 
                     if (!in_array($checkCatalog->id,$array_update)){
-                        $catalog_id = $checkCatalog;
+
                         $item->update($dataItem,$catalog_id->id,$user);
 
                         $productItemService->delete($catalog_id->id);
                         array_push($array_update,$checkCatalog->id);
                     }
-
+                    $catalog_id = $checkCatalog;
                     $characteristic->delete($catalog_id->id);
 
                 } else {
-                    $is_create = true;
                     $catalog_id = $item->create($dataItem,$user);
                     array_push($array_update,$catalog_id->id);
                 }
@@ -349,8 +350,6 @@ class CatalogItemsExcelLoadService
                     ->where('size','=',$sizeData)
                     ->where('item_id','=',$catalog_id->id)
                     ->first();
-
-
 
                 $checkProductItemColor = ProductItem::where('color','=',$colorData)
                     ->where('item_id','=',$catalog_id->id)

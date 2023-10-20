@@ -36,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
     {
 
 
-        if (request()->getHost() ==  "turkiyemart.com") {
+        if (request()->getHost() ==  "turkiyemart.com" || request()->getHost() ==  "test2.turkiyemart.com") {
             URL::forceScheme("https");
         }
 
@@ -44,7 +44,10 @@ class AppServiceProvider extends ServiceProvider
 
         view()->share("location", ['country_id'=> 1, 'city_id' => 2]);
         view()->share("langList", LanguageService::$lang);
-        view()->share("catalogMenu", Catalog::query()->where("parent_id", 0)->orderBy("name_ru")->get());
+        view()->share("catalogMenu", Catalog::query()
+            ->where('is_active','=',1)
+            ->where("parent_id", 0)
+            ->orderBy("name_ru")->get());
         view()->composer("*", function ($view) {
             $merchantStep = 1;
             if (Auth::hasUser()) {
