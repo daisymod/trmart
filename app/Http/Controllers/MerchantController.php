@@ -192,9 +192,9 @@ class MerchantController extends Controller
         }
 
         if ($request->status == 2){
-            $record->is_verify = 1;
-            $record->save();
+            $this->company->update(['is_verify' => 1],$id);
         }
+
         if ($request->status == 3 && !empty($request->reason) && Auth::user()->role == 'admin'){
             $user = User::where('id','=',$id)
                 ->first();
