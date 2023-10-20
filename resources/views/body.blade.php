@@ -154,7 +154,9 @@
                                             <div class="info-wrap">
                                                 <a href="{{ route("shop.list", $child->id) }}"><h6>{{ $child->{"name_".app()->getLocale()} }}</h6></a>
                                                 @foreach($child->child()->orderBy("name_".app()->getLocale())->get() as $c)
-                                                    <a href="{{ route("shop.list", $c->id) }}">{{ $c->{"name_".app()->getLocale()} }}</a>
+                                                    @if($c->is_active == 1)
+                                                        <a href="{{ route("shop.list", $c->id) }}">{{ $c->{"name_".app()->getLocale()} }}</a>
+                                                    @endif
                                                 @endforeach
                                             </div>
                                         @else
