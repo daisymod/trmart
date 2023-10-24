@@ -223,9 +223,9 @@ class CatalogItemsExcelLoadService
 
                     if (!in_array($checkCatalog->id,$array_update)){
 
-                        $item->update($dataItem,$catalog_id->id,$user);
+                        $item->update($dataItem,$checkCatalog->id,$user);
 
-                        $productItemService->delete($catalog_id->id);
+                        $productItemService->delete($checkCatalog->id);
                         array_push($array_update,$checkCatalog->id);
                     }
                     $catalog_id = $checkCatalog;
