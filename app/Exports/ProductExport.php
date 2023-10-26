@@ -165,7 +165,7 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
                 $item->sizeData->name_tr ?? '',
                 $item->count,
                 $item->catalogItem->status,
-                $item->catalogItem->barcode,
+                $item->catalogItem->active,
                 $item->catalogItem->catalog_id,
                 $item->catalogItem->user_id,
                 $item->catalogItem->brand,
