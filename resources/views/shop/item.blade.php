@@ -193,6 +193,13 @@ flex-wrap: wrap;">
                             @endforeach
 
                         </div>
+                        <div class="top" style="max-width: 384px;
+width: 100%;
+display: flex;
+flex-wrap: wrap;">
+                            <span>@lang('system.brand'):</span>
+                            <span style="display: flex;width: 100%" class="text">{{ $record->brand }}</span>
+                        </div>
                         <div class="top" style="max-width: 384px;width: 100%;display: flex;flex-wrap: wrap;">
                             <span>@lang('merchant.form.body'):</span>
                             <span class="text" style="font-size: 13px;font-weight: 500;line-height: 18px; width: 100%"> {{$record->{'body_'.app()->getLocale()} }} </span>
@@ -213,7 +220,6 @@ flex-wrap: wrap;">
                                         <p class="ogrn">IBAN :  {{$company->iban}}</p>
                                         <p class="ogrn">vkn :  {{$company->vkn}}</p>
                                         <p class="ogrn">tckn :  {{$company->tckn}}</p>
-                                        <p class="ogrn">{{$company->phone}}</p>
                                     </div>
                                 </div>
                             </div>
