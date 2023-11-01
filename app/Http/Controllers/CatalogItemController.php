@@ -216,7 +216,7 @@ class CatalogItemController
         }
 
         if (isset($request->addmore)){
-            for ($index=0;$index<30;$index++){
+            for ($index=0;$index<100;$index++){
                 if (!isset($request->addmore[$index])) {
                     continue;
                 } else {
@@ -309,7 +309,7 @@ class CatalogItemController
         }
 
         if (isset($request->addmore)){
-            for ($index=0;$index<30;$index++){
+            for ($index=0;$index<100;$index++){
                 if (!isset($request->addmore[$index])) {
                     continue;
                 } else {
