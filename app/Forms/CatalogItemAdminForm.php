@@ -15,7 +15,7 @@ class CatalogItemAdminForm extends CatalogItemMerchantForm
     protected function formGetFields($action): array
     {
         static::$formFields = array_merge(static::$formFields, [
-            "user" => [MerchantField::class],
+            "user" => [MerchantField::class,"multiple" => true],
             "sale" => [IntegerField::class],
             "status" => [SelectField::class, "data" => [
                 "0" => trans('system.verif1'),

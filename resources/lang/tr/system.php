@@ -1,5 +1,11 @@
 <?php
 return [
+    'is_active' => 'Активен?',
+    'cant_active' => "Dikkat! \n
+     Bu kategoride / alt kategorilerde ürünler bulunmaktadır. Ürünlerin kategorisini değiştiriniz.. 
+    ",
+    'take_change' => "Değişiklikleri kaydetmek istediğinizden emin misiniz?",
+    'clear' => 'Очистить',
     'warning000' => 'Ayrıştırıcı, görevi arka planda çalıştırır. Sonuç, Yöneticiye ve tüccara bir mektup şeklinde gelecektir.',
     'question100' =>'Siparişinizin durumunu değiştirmek istediğinizden emin misiniz? Bu eylem değiştirilemez.',
     'not-pr-found' =>'Üzgünüm, ürün stokta yok.',
@@ -74,7 +80,7 @@ return [
     'm19' => 'Bağlantı',
     'm20' => 'Tüccar',
     'm21' => 'Durum',
-    'm22' => 'Aktivite',
+    'm22' => 'Aktif',
     'm23' => 'Adım',
     'm24' => 'Derecelendirme',
     'm25' => 'Doğrulama isteği başarıyla gönderildi',

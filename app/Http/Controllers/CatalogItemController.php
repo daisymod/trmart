@@ -9,6 +9,8 @@ use App\Http\Requests\CatalogItemEditPostRequest;
 use App\Jobs\CatalogItemsExcelLoadJob;
 use App\Mail\RejectNewItemMail;
 use App\Mail\ResultImportMail;
+use App\Mail\VerifyProductMail;
+use App\Models\AdminSettings;
 use App\Models\CatalogCharacteristicItem;
 use App\Models\CatalogItem;
 use App\Models\Job;
@@ -16,6 +18,7 @@ use App\Models\MarketplaceBrands;
 use App\Models\ProductItem;
 use App\Models\ItemCompoundTable;
 use App\Models\User;
+use App\Services\AdminSettingsService;
 use App\Services\CatalogItemActionService;
 use App\Services\CatalogItemsExcelLoadService;
 use App\Services\CatalogItemStockService;
@@ -41,16 +44,93 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 class CatalogItemController
 {
 
-    public function __construct(protected ParseStatisticService $parserStatistic,protected ColorService $color,protected CompoundService $compound,protected ItemService $item,protected ProductItemSerice $product,protected CharacteristicService $characteristic)
+    public function __construct(protected ParseStatisticService $parserStatistic,
+                                protected ColorService $color,
+                                protected CompoundService $compound,protected ItemService $item,
+                                protected ProductItemSerice $product,protected CharacteristicService $characteristic,
+                                protected AdminSettingsService $adminSettingsService
+    )
     {
     }
 
     public function actionListGet(CatalogItemActionService $service,Request $request)
     {
+       /* if (Auth::user()->role == 'admin') {
+            $data = AdminSettings::where('user_id', '=', Auth::user()->id)
+                ->first()->toArray();
 
-        Gate::authorize("catalog-item-list");
+            $id = $data['id'] ?? null;
 
-        return view("catalog_item.list", $service->actionList($request));
+            if (empty($data['id'])) {
+
+
+                $data = [
+                    "user_id" => Auth::user()->id,
+                    "name" => $request->name ?? "",
+                    "catalog" => $request->catalog ?? "",
+                    'brand' => $request->brand ?? "",
+                    'article' => $request->article ?? "",
+                    'barcode' => $request->barcode ?? "",
+                    'price_from' => $request->price_from ?? "",
+                    'price_to' => $request->price_to ?? "",
+                    'user' => $request->user ?? "",
+                    'status' => $request->status ?? "",
+                    'sort_by' => $request->sort_by ?? "",
+                    'limit' => $request->limit ?? 100,
+                    'page' => $request->page ?? 1,
+                    'active' => $request->active ?? "",
+                ];
+
+                $data = $this->adminSettingsService->create($data);
+            } elseif (!empty($request->all()) && empty($request->clear)) {
+                $data = [
+                    "user_id" => Auth::user()->id,
+                    "name" => $request->name ?? "",
+                    "catalog" => $request->catalog ?? "",
+                    'brand' => $request->brand ?? "",
+                    'article' => $request->article ?? "",
+                    'barcode' => $request->barcode ?? "",
+                    'price_from' => $request->price_from ?? "",
+                    'price_to' => $request->price_to ?? "",
+                    'user' => $request->user ?? "",
+                    'status' => $request->status ?? "",
+                    'sort_by' => $request->sort_by ?? "",
+                    'limit' => $request->limit ?? 100,
+                    'page' => $request->page ?? 1,
+                    'active' => $request->active ?? "",
+                ];
+                $this->adminSettingsService->update($data, $id);
+
+            }elseif (!empty($request->clear)){
+
+                        $data = [
+                            "user_id" => Auth::user()->id,
+                            "name" => "",
+                            "catalog" =>  "",
+                            'brand' =>  "",
+                            'article' =>  "",
+                            'barcode' =>  "",
+                            'price_from'  => "",
+                            'price_to' => "",
+                            'user'  => "",
+                            'status' => "",
+                            'sort_by' => "",
+                            'limit' => 100,
+                            'page' => 1,
+                            'active' =>"",
+                        ];
+                        $this->adminSettingsService->update($data,$id);
+                        return  redirect(route("catalog_item.list"));
+            }
+
+            Gate::authorize("catalog-item-list");
+
+            return view("catalog_item.list", $service->actionList($data));
+        }else{*/
+
+            Gate::authorize("catalog-item-list");
+
+            return view("catalog_item.list", $service->actionList($request->all()));
     }
 
 
@@ -145,6 +225,24 @@ class CatalogItemController
             }
         }
 
+        if (Auth::user()->role == 'merchant'){
+            $dataUser = User::with('company')
+                        ->where('id','=',Auth::user()->id)
+                        ->first();
+            $user = User::where('id','=',1)
+                ->first();
+
+            $dataMail = [
+                'company_name' =>$dataUser->company->company_name,
+                'shop_name' => $dataUser->company->shop_name,
+                'first_name' => $dataUser->company->first_name,
+                'last_name' =>  $dataUser->company->last_name,
+                'email' => Auth::user()->email,
+            ];
+
+            Mail::to($user->email)->send(new VerifyProductMail($user, $dataMail));
+        }
+
         return ["redirect" => route("catalog_item.list")];
     }
 
@@ -236,7 +334,20 @@ class CatalogItemController
             Mail::to($user->email)->send(new RejectNewItemMail($user, $request->all()));
         }
 
+        if (Auth::user()->role == 'merchant'){
+            $user = User::where('id','=',1)
+                ->first();
 
+            $dataMail = [
+                'company_name' => Auth::user()->company()->company_name,
+                'shop_name' => Auth::user()->company()->shop_name,
+                'first_name' => Auth::user()->company()->first_name,
+                'last_name' =>  Auth::user()->company()->last_name,
+                'email' => Auth::user()->email,
+            ];
+
+            Mail::to($user->email)->send(new VerifyProductMail($user, $dataMail));
+        }
 
         return ["redirect" => route("catalog_item.list")];
     }
