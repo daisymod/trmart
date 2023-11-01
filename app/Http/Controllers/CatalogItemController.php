@@ -195,7 +195,6 @@ class CatalogItemController
             }
 
         }
-
         if (!isset($request->value[0])) {
             if (isset($request->characteristic)) {
                 for ($index = 0; $index < 100; $index++) {
@@ -216,7 +215,7 @@ class CatalogItemController
         }
 
         if (isset($request->addmore)){
-            for ($index=0;$index<30;$index++){
+            for ($index=0;$index<100;$index++){
                 if (!isset($request->addmore[$index])) {
                     continue;
                 } else {
@@ -224,7 +223,6 @@ class CatalogItemController
                 }
             }
         }
-
         if (Auth::user()->role == 'merchant'){
             $dataUser = User::with('company')
                         ->where('id','=',Auth::user()->id)
@@ -309,7 +307,7 @@ class CatalogItemController
         }
 
         if (isset($request->addmore)){
-            for ($index=0;$index<30;$index++){
+            for ($index=0;$index<100;$index++){
                 if (!isset($request->addmore[$index])) {
                     continue;
                 } else {
