@@ -95,6 +95,11 @@ class ShopController
         }
 
         $checkProducts = $this->showProductService->getAll();
+        if (count($checkProducts) > 0){
+            foreach ($checkProducts as $product){
+                $product->product->new_price = $product->product->price - ($product->product->price * $product->product->sale / 100) ;
+            }
+        }
         return view("shop.list", ShopService::actionList($request,$id->id),['checkProducts' => $checkProducts]);
     }
 
@@ -102,6 +107,11 @@ class ShopController
     {
 
         $checkProducts = $this->showProductService->getAll();
+        if (count($checkProducts) > 0){
+            foreach ($checkProducts as $product){
+                $product->product->new_price = $product->product->price - ($product->product->price * $product->product->sale / 100) ;
+            }
+        }
 
         $feedback = $this->feedback->getAll($id);
         $rating = $this->feedback->ratingById($id);
@@ -211,6 +221,12 @@ class ShopController
     {
 
         $checkProducts = $this->showProductService->getAll();
+        if (count($checkProducts) > 0){
+            foreach ($checkProducts as $product){
+                $product->product->new_price = $product->product->price - ($product->product->price * $product->product->sale / 100) ;
+            }
+        }
+
         $compact  = ShopService::actionFind(request()->get("find", ""));
         return view("shop.find", array_merge($compact,['checkProducts' =>$checkProducts]));
     }

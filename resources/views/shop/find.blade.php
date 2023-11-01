@@ -148,9 +148,9 @@
                                     @if(!empty($i->image()))
                                     <a href="{{ route("shop.item", $i->id) }}" class="sale-item">
                                         <span class="img-wrap"><img src="{{ $i->image() }}" alt="">
-                                         @if($item->sale > 0)
-                                                <b>- {{$item->sale}} %</b>
-                                            @endif
+                                         @if($i->sale > 0)
+                                            <b>- {{$i->sale}} %</b>
+                                         @endif
                                         </span>
                                         <p>
                                             <span class="new price-product"  data-price="{{ number_format($i->new_price, 0, ".", " ") }}">{{ number_format($i->new_price, 0, ".", " ") }} </span>
@@ -191,7 +191,10 @@
                             @endif
                         </span>
                             <p>
-                                <span class="new price-product" data-price="{{$item->product->price}}">{{$item->product->price}}</span>
+                                <span class="new price-product"  data-price="{{ number_format($item->product->new_price, 0, ".", " ") }}">{{ number_format($item->product->new_price, 0, ".", " ") }} </span>
+                                @if($i->sale > 0)
+                                    <span class="old-price" data-old-price="{{ $item->product->price }}">{{ $item->product->price }}</span>
+                                @endif
                             </p>
                             <span class="text">{{$item->product->{'name_'.app()->getLocale()} }}</span>
                         </a>
