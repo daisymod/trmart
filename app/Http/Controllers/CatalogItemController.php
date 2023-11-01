@@ -336,12 +336,16 @@ class CatalogItemController
             $user = User::where('id','=',1)
                 ->first();
 
+            $userCompany = User::where('id','=',Auth::user()->id)
+                ->with('company')
+                ->first();
+
             $dataMail = [
-                'company_name' => Auth::user()->company()->company_name,
-                'shop_name' => Auth::user()->company()->shop_name,
-                'first_name' => Auth::user()->company()->first_name,
-                'last_name' =>  Auth::user()->company()->last_name,
-                'email' => Auth::user()->email,
+                'company_name' => $userCompany->company()->company_name ?? null,
+                'shop_name' => $userCompany->company()->shop_name ?? null,
+                'first_name' => $userCompany->company()->first_name ?? null,
+                'last_name' =>  $userCompany->company()->last_name ?? null,
+                'email' => $userCompany->email ?? Auth::user()->email,
             ];
 
             Mail::to($user->email)->send(new VerifyProductMail($user, $dataMail));

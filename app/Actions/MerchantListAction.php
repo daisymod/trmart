@@ -109,6 +109,7 @@ class MerchantListAction
                 });
             })
             ->where("role", "merchant")
+            ->with("company")
             ->orderBy($sort[0], $sort[1]);
         $records = $form->formCreateFind($records, request()->all());
         $records = $records->paginate(50);
