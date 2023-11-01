@@ -50,7 +50,7 @@
                     @foreach($records as $k=>$i)
                         <tr>
                             <td>{{ $i->id }}</td>
-                            <td>{{ $i->name }} {{ $i->s_name }}</td>
+                            <td>{{ $i->name }} {{ $i->s_name }} / {{$i->company->company_name ?? null}}</td>
                             <td>{{ $i->phone }}</td>
                             <td>
                                 {{ \App\Forms\MerchantAdminForm::statusText($i->status) }}<br>
