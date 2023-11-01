@@ -15,7 +15,7 @@ class CatalogField extends RelationField
     protected static Model|string $model = Catalog::class;
     protected BasicForm|string $form = CatalogAdminForm::class;
     protected array $findFields = [
-        "name_ru"
+        "name_tr"
     ];
     public int $parentId = 0; //ИД родителя
     public int $ignoreId = 0; //Пропускать ид
@@ -44,8 +44,7 @@ class CatalogField extends RelationField
 
     protected function getValue(array $data)
     {
-
-        return $this->record->{$this->field}()->where('is_active','=',1)->getQuery()->pluck("catalogs.name_ru", "catalogs.id")->toArray();
+        return $this->record->{$this->field}()->where('is_active','=',1)->getQuery()->pluck("catalogs.name_ru","catalogs.name_tr","catalogs.name_kz", "catalogs.id")->toArray();
     }
 
     public function actionInit($date): string{

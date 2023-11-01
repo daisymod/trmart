@@ -47,9 +47,12 @@ abstract class BasicField
 
     protected function standart(array $data, $action)
     {
+
         $value = $this->getValue($data);
+
         $class = $this;
         $readonly = $this->readOnly;
+
         return view("fields." . class_basename($this), compact("action", 'readonly',"value", "class"))->toHtml();
     }
 
