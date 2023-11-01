@@ -8,9 +8,9 @@ use App\Models\CatalogCharacteristicItem;
 use App\Models\CatalogItem;
 use App\Models\CatalogItemDynamicCharacteristic;
 use App\Models\Compound;
-use App\Models\ParseStatistic;
 use App\Models\ItemCompoundTable;
 use App\Models\MarketplaceBrands;
+use App\Models\ParseStatistic;
 use App\Models\ProductItem;
 use App\Models\User;
 use App\Requests\ImageRequest;
@@ -257,12 +257,17 @@ class CatalogItemsExcelLoadService
 
 
                 $compoundData =  str_replace(']', '', str_replace('[', '', $row[3]));
+                Log::info(print_r($catalog_id->id,true));
                 if (substr($compoundData, -1) == ','){
                     $compoundData = substr($compoundData, 0, -1);
                 }
 
-                $compoundDataRu = str_replace(']', '', str_replace('[', '', $row[19]));
-                $compoundDataKz = str_replace(']', '', str_replace('[', '', $row[20]));
+                $compoundDataRu = str_replace(']', '', str_replace('[', '',
+                    !empty($row[19]) ? $row[19] : $row[3]));
+
+                $compoundDataKz = str_replace(']', '', str_replace('[', '',
+                    !empty($row[20]) ? $row[20] : $row[3]));
+
                 $compoundData = explode(",", $compoundData);
                 $compoundDataRu = explode(",", $compoundDataRu);
                 $compoundDataKz = explode(",", $compoundDataKz);

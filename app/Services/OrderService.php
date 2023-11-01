@@ -6,7 +6,6 @@ use App\Clients\KazPost;
 use App\Mail\NewOrderMail;
 use App\Models\Catalog;
 use App\Models\CatalogItem;
-use App\Models\City;
 use App\Models\Country;
 use App\Models\DeliveryPrice;
 use App\Models\KPLocation;
@@ -14,16 +13,11 @@ use App\Models\KPPostCode;
 use App\Models\Order;
 use App\Models\OrderCommission;
 use App\Models\OrderItem;
-use App\Models\Page;
+use App\Models\User;
 use App\Requests\KazPostRequest;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-
 
 
 class OrderService

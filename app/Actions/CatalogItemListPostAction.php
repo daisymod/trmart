@@ -3,7 +3,6 @@
 namespace App\Actions;
 
 use App\Models\CatalogItem;
-use App\Requests\GptRequest;
 use Illuminate\Support\Facades\Gate;
 
 class CatalogItemListPostAction

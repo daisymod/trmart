@@ -5,14 +5,8 @@ namespace App\Requests;
 
 use App\Enums\KazPost\KazPostStatus;
 use App\Enums\KazPost\KazPostTypePo;
-use App\Models\Company;
-use App\Models\User;
-use Exception;
 use GuzzleHttp\Psr7\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\URL;
 use Throwable;
 
 class KazPostRequest extends BaseRequest
