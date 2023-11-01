@@ -34,7 +34,7 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
                 'colorData',
                 'catalogItem.compound',
                 'catalogItem.compound.compound'
-            ]
+                ]
         )
             ->when($this->user->role == 'merchant',function ($q){
                 $q->whereHas('catalogItem',function ($query){
@@ -126,8 +126,8 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
                 $item_string = '';
 
                 $value = CatalogItemDynamicCharacteristic::where('item_id',$item->catalogItem->id)
-                    ->where('characteristic_id','=',$itemDataCharacteristic->id)
-                    ->first();
+                        ->where('characteristic_id','=',$itemDataCharacteristic->id)
+                        ->first();
 
                 if (empty($value->id)){
                     $item_string = "['','','']";
@@ -165,7 +165,7 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
                 $item->sizeData->name_tr ?? '',
                 $item->count,
                 $item->catalogItem->status,
-                $item->catalogItem->active,
+                $item->catalogItem->barcode,
                 $item->catalogItem->catalog_id,
                 $item->catalogItem->user_id,
                 $item->catalogItem->brand,
@@ -208,4 +208,3 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
     }
 
 }
-

@@ -6,6 +6,7 @@ use App\Forms\CatalogAdminForm;
 use App\Http\Requests\CatalogEditPostRequest;
 use App\Models\Catalog;
 use App\Models\CatalogCatalogCharacteristic;
+use App\Models\CatalogItem;
 use App\Services\BreadcrumbService;
 use Illuminate\Support\Facades\Gate;
 use JetBrains\PhpStorm\ArrayShape;
@@ -49,7 +50,23 @@ class CatalogController
         Gate::authorize("catalog-edit", $record);
         $form = new CatalogAdminForm($record);
         $form = $form->formRenderEdit();
-        return view("catalog.edit", compact("record", "form"));
+        $active = $record->is_active;
+
+        $array = array();
+
+        array_push($array,intval($id));
+
+        foreach ($record->recursiveChildren as $category){
+            array_push($array,$category->id);
+            foreach ($category->recursiveChildren as $last){
+                array_push($array,$last->id);
+            }
+        }
+
+        $items = CatalogItem::whereIn('catalog_id',$array)
+                    ->count();
+
+        return view("catalog.edit", compact("record", "form","active","items"));
     }
 
     public function actionEditPost($id, CatalogEditPostRequest $request): array
@@ -87,6 +104,12 @@ class CatalogController
                 }
             }
         }
+
+        Catalog::query()->whereIn('id',$array)
+            ->update([
+                'is_active' => $request->is_active == 'on' ? 1 : 0
+            ]);
+
 
         return ["redirect" => route("catalog.list", 0)];
     }
