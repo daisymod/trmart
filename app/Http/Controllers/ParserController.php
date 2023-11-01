@@ -2,25 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\ParseExport;
-
 use App\Forms\AdminParserForm;
-use App\Forms\BrandEditForm;;
-
-use App\Forms\CatalogCharacteristicItemAdminForm;
 use App\Forms\MerchantParserForm;
-use App\Forms\ParserAdminForm;
 use App\Jobs\ParserJob;
-use App\Models\Brand;
-use App\Models\CatalogCharacteristic;
 use App\Models\CatalogItem;
 use App\Requests\MSRequest;
-use App\Services\CatalogItemsExcelLoadService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Maatwebsite\Excel\Facades\Excel;
-use Nette\Schema\ValidationException;
+
+;
 
 
 class ParserController extends Controller

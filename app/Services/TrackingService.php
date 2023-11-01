@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\Order;
-use Illuminate\Support\Carbon;
 use App\Requests\KazPostRequest;
+use Illuminate\Support\Carbon;
 
 class TrackingService
 {
