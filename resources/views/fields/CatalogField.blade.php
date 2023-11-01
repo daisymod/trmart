@@ -9,13 +9,12 @@
          data-ignore-id="{{ $class->ignoreId }}"
     >
         <div class="relation-ids">
-
             @foreach($value as $k=>$i)
                 @php
                     $catalog = \App\Models\Catalog::where('name_ru','=',$i)
                             ->first();
                 @endphp
-                <div class="relation-id" data-id="{{ $k }}" data-name="{{ $catalog->{'name_'.app()->getLocale() } ?? $i }}">
+                <div class="relation-id" data-id="{{ $k }}" data-name="{{ $i }}">
                     <input type="hidden" name="{{ $class->field }}[]" value="{{ $k }}">{{  $catalog->{'name_'.app()->getLocale() } ?? $i  }}
                     <div class="close">
                         <i class="fas fa-times-circle"></i>
