@@ -27,14 +27,6 @@ class CatalogItemEditPostRequest extends FormRequest
         ];
 
 
-        if (empty((request('name')['ru']))) {
-
-            $rules["name_ru"] = "required";
-        }
-
-        if (empty(request('name')['kz'])) {
-            $rules["name_kz"] = "required";
-        }
 
         if (empty(request('name')['tr'])) {
             $rules["name_tr"] = "required";

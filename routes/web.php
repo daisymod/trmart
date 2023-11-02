@@ -193,7 +193,7 @@ Route::group(["middleware" => ["auth"]], function () {
         Route::get("/{id}", [\App\Http\Controllers\BrandController::class, "show"])->name("brand.edit");
         Route::post("/{id}", [\App\Http\Controllers\BrandController::class, "update"])->name("brand.update");
 
-        Route::delete("/{id}", [\App\Http\Controllers\BrandController::class, "delete"])->name("brand.delete");
+        Route::get("/{id}/delete", [\App\Http\Controllers\BrandController::class, "delete"])->name("brand.delete");
     });
 
 

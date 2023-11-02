@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Models\CatalogItem;
+use App\Requests\GptRequest;
 use Illuminate\Support\Facades\Gate;
 
 class CatalogItemListPostAction
@@ -34,11 +35,12 @@ class CatalogItemListPostAction
                 $record->save();
             }
             elseif (str_contains($action, "gpt")) {
-                //$request = new GptRequest();
+                $request = new GptRequest();
                 //dd(1);
+                $dataNameRu = $request->getData($record->name_tr,'Russian');
+                dd($dataNameRu);
                // $dataNameRu = $request->getData($record->name_tr,'Russian');
                // $dataNameRu = $request->getData($record->name_tr,'Russian');
-                //$dataNameRu = $request->getData($record->name_tr,'Russian');
                // $dataNameRu = $request->getData($record->name_tr,'Russian');
                // $record->gpt_translate = 1;
                // $record->save();
