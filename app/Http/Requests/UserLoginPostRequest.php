@@ -39,12 +39,17 @@ class UserLoginPostRequest extends FormRequest
             $user = User::getOnPhone(request("phone"));
             if (empty($user)) {
                 $validator->errors()->add("phone", "Пользователь с таким номером телефона не найден.");
-            } elseif (!Hash::check(request("pass"), $user->password)) {
+            } else{
                 $validator->errors()->add("pass", "Не удаётся войти. Пожалуйста, проверьте правильность написания номера телефона и пароля.");
-            }elseif ($user->active <> "Y" && ($user->role != 'admin') )  {
-                $validator->errors()->add("phone", "Ваш Аккаунт заблокирован Администратором проекта.");
             }
         });
+        /*
+         *  elseif (!Hash::check(request("pass"), $user->password)) {
+                $validator->errors()->add("pass", "Не удаётся войти. Пожалуйста, проверьте правильность написания номера телефона и пароля.");
+            }
+         * elseif ($user->active <> "Y" && ($user->role != 'admin') )  {
+                $validator->errors()->add("phone", "Ваш Аккаунт заблокирован Администратором проекта.");
+            }*/
     }
 
     public function messages()
