@@ -59,7 +59,7 @@ class UserLoginService
         $user->email = $data['email'];
         $user->phone = $data['phone'];
         $user->role = 'merchant';
-        $user->active = 'N';
+        $user->active = 'Y';
         $user->status = 0;
         $user->save();
         Auth::login($user);
