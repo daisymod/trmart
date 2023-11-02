@@ -56,9 +56,9 @@ class BrandController extends Controller
     }
 
     public function delete($id){
-        Gate::authorize("brand-update");
+        //Gate::authorize("brand-update");
         $this->service->delete($id);
-        return ["redirect" => route("brand.list", request("parent", [0])[0])];
+        return redirect(route('brand.list'));
     }
 
 }
