@@ -55,83 +55,9 @@ class CatalogItemController
 
     public function actionListGet(CatalogItemActionService $service,Request $request)
     {
-        if (Auth::user()->role == 'admin') {
-            $data = AdminSettings::where('user_id', '=', Auth::user()->id)
-                ->first()->toArray();
+        Gate::authorize("catalog-item-list");
 
-            $id = $data['id'] ?? null;
-
-            if (empty($data['id'])) {
-
-
-                $data = [
-                    "user_id" => Auth::user()->id,
-                    "name" => $request->name ?? "",
-                    "catalog" => $request->catalog ?? "",
-                    'brand' => $request->brand ?? "",
-                    'article' => $request->article ?? "",
-                    'barcode' => $request->barcode ?? "",
-                    'price_from' => $request->price_from ?? "",
-                    'price_to' => $request->price_to ?? "",
-                    'user' => $request->user ?? "",
-                    'status' => $request->status ?? "",
-                    'sort_by' => $request->sort_by ?? "",
-                    'limit' => $request->limit ?? 100,
-                    'page' => $request->page ?? 1,
-                    'active' => $request->active ?? "",
-                ];
-
-                $data = $this->adminSettingsService->create($data);
-            } elseif (!empty($request->all()) && empty($request->clear)) {
-                $data = [
-                    "user_id" => Auth::user()->id,
-                    "name" => $request->name ?? "",
-                    "catalog" => $request->catalog ?? "",
-                    'brand' => $request->brand ?? "",
-                    'article' => $request->article ?? "",
-                    'barcode' => $request->barcode ?? "",
-                    'price_from' => $request->price_from ?? "",
-                    'price_to' => $request->price_to ?? "",
-                    'user' => $request->user ?? "",
-                    'status' => $request->status ?? "",
-                    'sort_by' => $request->sort_by ?? "",
-                    'limit' => $request->limit ?? 100,
-                    'page' => $request->page ?? 1,
-                    'active' => $request->active ?? "",
-                ];
-                $this->adminSettingsService->update($data, $id);
-
-            }elseif (!empty($request->clear)){
-
-                        $data = [
-                            "user_id" => Auth::user()->id,
-                            "name" => "",
-                            "catalog" =>  "",
-                            'brand' =>  "",
-                            'article' =>  "",
-                            'barcode' =>  "",
-                            'price_from'  => "",
-                            'price_to' => "",
-                            'user'  => "",
-                            'status' => "",
-                            'sort_by' => "",
-                            'limit' => 100,
-                            'page' => 1,
-                            'active' =>"",
-                        ];
-                        $this->adminSettingsService->update($data,$id);
-                        return  redirect(route("catalog_item.list"));
-            }
-
-            Gate::authorize("catalog-item-list");
-
-            return view("catalog_item.list", $service->actionList($data));
-        }else {
-
-            Gate::authorize("catalog-item-list");
-
-            return view("catalog_item.list", $service->actionList($request->all()));
-        }
+        return view("catalog_item.list", $service->actionList($request->all()));
     }
 
 
@@ -140,7 +66,6 @@ class CatalogItemController
         $items =  CatalogItem::query()->orderByDesc('id')
             ->where("status", 2)
             ->where("active", "Y")
-            ->where('sale','=',0)
             ->paginate(30);
 
         return response()->json(['items' =>
