@@ -18,6 +18,7 @@ use App\Models\MarketplaceBrands;
 use App\Models\ProductItem;
 use App\Models\ItemCompoundTable;
 use App\Models\User;
+use App\Requests\GptRequest;
 use App\Services\AdminSettingsService;
 use App\Services\CatalogItemActionService;
 use App\Services\CatalogItemsExcelLoadService;
@@ -105,8 +106,37 @@ class CatalogItemController
             $brandService = new MarketPlaceBrandService($marketBrandModel);
             $brandService->create($request->get('brand'));
         }
+        $requestGpt = new GptRequest();
+        $array = $request->all();
+        if (empty($array['name']['ru'])){
+            $dataNameRu = $requestGpt->getData($array['name']['tr'],'Russian');
+            if (isset($dataNameRu['data']['choices'][0]['message']['content'])){
+                $array['name']['ru'] = $dataNameRu['data']['choices'][0]['message']['content'];
+            }
+        }
 
-        $data  = $this->item->create($request->all(),Auth::user());
+        if (empty($array['name']['kz'])){
+            $dataNameKz = $requestGpt->getData($array['name']['tr'],'Kazakh');
+            if (isset($dataNameKz['data']['choices'][0]['message']['content'])){
+                $array['name']['kz'] = $dataNameKz['data']['choices'][0]['message']['content'];
+            }
+        }
+
+        if (empty($array['body']['ru'])){
+            $dataNameRu = $requestGpt->getData($array['body']['tr'],'Russian');
+            if (isset($dataNameRu['data']['choices'][0]['message']['content'])){
+                $array['body']['ru'] = $dataNameRu['data']['choices'][0]['message']['content'];
+            }
+        }
+
+        if (empty($array['body']['kz'])){
+            $dataNameKz = $requestGpt->getData($array['body']['tr'],'Kazakh');
+            if (isset($dataNameKz['data']['choices'][0]['message']['content'])){
+                $array['body']['kz'] = $dataNameKz['data']['choices'][0]['message']['content'];
+            }
+        }
+
+        $data  = $this->item->create($array,Auth::user());
 
         for ($index=0;$index<count($request->compound);$index++){
             if (isset($request->percent[$index])){
