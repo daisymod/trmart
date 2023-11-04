@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CatalogCharacteristicItem;
+use App\Requests\GptRequest;
 use App\Services\CatalogCharacteristicItemActionService;
 use Illuminate\Support\Facades\Gate;
 
@@ -32,6 +33,22 @@ class CatalogCharacteristicItemController
         $record = CatalogCharacteristicItem::query()->findOrFail($id);
         Gate::authorize("catalog-characteristic-item-edit", $record);
         return view("catalog_characteristic_item.edit", $service->actionEditGet($record));
+    }
+
+    public function actionEditPostGpt(CatalogCharacteristicItem $id){
+        $requestGpt = new GptRequest();
+        $dataNameRu = $requestGpt->getData($id->name_tr,'Russian');
+        if (isset($dataNameRu['data']['choices'][0]['message']['content'])){
+            $id->name_ru = $dataNameRu['data']['choices'][0]['message']['content'];
+        }
+
+        $dataNameKz = $requestGpt->getData($id->name_tr,'Kazakh');
+        if (isset($dataNameKz['data']['choices'][0]['message']['content'])){
+            $id->name_kz = $dataNameKz['data']['choices'][0]['message']['content'];
+        }
+        $id->save();
+
+        return redirect(route('catalog_characteristic_item.edit',['id'=> $id->id]));
     }
 
     public function actionEditPost($id, CatalogCharacteristicItemActionService $service)

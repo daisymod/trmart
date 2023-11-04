@@ -203,6 +203,7 @@ Route::group(["middleware" => ["auth"]], function () {
         Route::post("/create", [\App\Http\Controllers\CompoundController::class, "store"])->name("compound.store");
         Route::get("/{id}", [\App\Http\Controllers\CompoundController::class, "show"])->name("compound.edit");
         Route::post("/{id}", [\App\Http\Controllers\CompoundController::class, "update"])->name("compound.update");
+        Route::post("/{id}/gpt", [\App\Http\Controllers\CompoundController::class, "actionEditPostGpt"])->name("compound.gpt");
         Route::get("/{id}/delete", [\App\Http\Controllers\CompoundController::class, "delete"])->name("compound.delete");
     });
 
@@ -279,6 +280,8 @@ Route::group(["middleware" => ["auth"]], function () {
     Route::post("/catalog_characteristic_item/add", [\App\Http\Controllers\CatalogCharacteristicItemController::class, "actionAddPost"]);
     Route::get("/catalog_characteristic_item/edit/{id}", [\App\Http\Controllers\CatalogCharacteristicItemController::class, "actionEditGet"])->name("catalog_characteristic_item.edit");
     Route::post("/catalog_characteristic_item/edit/{id}", [\App\Http\Controllers\CatalogCharacteristicItemController::class, "actionEditPost"]);
+    Route::post("/catalog_characteristic_item/edit/{id}/gpt", [\App\Http\Controllers\CatalogCharacteristicItemController::class, "actionEditPostGpt"])->name('translate_catalog_characteristic_item.gpt');
+
     Route::get("/catalog_characteristic_item/del/{id}", [\App\Http\Controllers\CatalogCharacteristicItemController::class, "actionDel"])->name("catalog_characteristic_item.del");
 
     Route::get("/admin/list", [\App\Http\Controllers\AdminController::class, "actionList"])->name("admin.list");

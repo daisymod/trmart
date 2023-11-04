@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Forms\CompoundEditForm;
+use App\Models\CatalogCharacteristicItem;
+use App\Requests\GptRequest;
 use App\Services\CompoundModelService;
 use App\Models\Compound;
 use Illuminate\Http\Request;
@@ -50,6 +52,22 @@ class CompoundController extends Controller
         $attributes = $request->all();
         $this->service->update($attributes,$id);
         return ["redirect" => route("compound.list", request("parent", [0])[0])];
+    }
+
+    public function actionEditPostGpt(Compound $id){
+        $requestGpt = new GptRequest();
+        $dataNameRu = $requestGpt->getData($id->name_tr,'Russian');
+        if (isset($dataNameRu['data']['choices'][0]['message']['content'])){
+            $id->name_ru = $dataNameRu['data']['choices'][0]['message']['content'];
+        }
+
+        $dataNameKz = $requestGpt->getData($id->name_tr,'Kazakh');
+        if (isset($dataNameKz['data']['choices'][0]['message']['content'])){
+            $id->name_kz = $dataNameKz['data']['choices'][0]['message']['content'];
+        }
+        $id->save();
+
+        return redirect(route('compound.edit',['id'=> $id->id]));
     }
 
     public function delete($id){

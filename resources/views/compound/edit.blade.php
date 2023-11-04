@@ -6,6 +6,11 @@
             <div class="card-header">@lang('system.m35')<div class="menu">@include("menu")</div></div>
             <div class="card-body">
                 <div class="form-ajax">
+                    <form action="{{route('compound.gpt',['id' => $record->id])}}" method="post">
+                        @csrf
+                        <input type="submit" class="btn btn-primary btn-block" value="@lang('item.gpt')">
+                    </form>
+
                     <form class="form-main-box">
                         @foreach($form as $k=>$i)
                             {!! $i !!}

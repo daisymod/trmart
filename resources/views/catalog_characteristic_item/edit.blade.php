@@ -6,6 +6,12 @@
             <div class="card-header">@lang('system.sense') <div class="menu">@include("menu")</div></div>
             <div class="card-body">
                 <div class="form-ajax">
+                    <form action="{{route('translate_catalog_characteristic_item.gpt',['id' => $record->id])}}" method="post">
+                        @csrf
+                        <input type="submit" class="btn btn-primary btn-block" value="@lang('item.gpt')">
+                    </form>
+
+
                     <form class="form-main-box">
                         @foreach($form as $k=>$i)
                             {!! $i !!}

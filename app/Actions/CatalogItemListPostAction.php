@@ -36,15 +36,27 @@ class CatalogItemListPostAction
             }
             elseif (str_contains($action, "gpt")) {
                 $request = new GptRequest();
-                //dd(1);
+
                 $dataNameRu = $request->getData($record->name_tr,'Russian');
-                dd($dataNameRu);
-               // $dataNameRu = $request->getData($record->name_tr,'Russian');
-               // $dataNameRu = $request->getData($record->name_tr,'Russian');
-               // $dataNameRu = $request->getData($record->name_tr,'Russian');
-               // $record->gpt_translate = 1;
-               // $record->save();
-               // dd($request->getData($record->name_tr,'Russian'));
+                $dataNameKz = $request->getData($record->name_tr,'Kazakh');
+                if (isset($dataNameRu['data']['choices'][0]['message']['content'])){
+                    $record->name_ru = $dataNameRu['data']['choices'][0]['message']['content'];
+                }
+                if (isset($dataNameKz['data']['choices'][0]['message']['content'])){
+                    $record->name_kz = $dataNameKz['data']['choices'][0]['message']['content'];
+                }
+                if (!empty($record->body_tr)){
+                    $dataBodyRu = $request->getData($record->name_tr,'Russian');
+                    $dataBodyKz = $request->getData($record->name_tr,'Kazakh');
+                    if (isset($dataBodyKz['data']['choices'][0]['message']['content'])){
+                        $record->body_kz = $dataBodyKz['data']['choices'][0]['message']['content'];
+                    }
+                    if (isset($dataBodyRu['data']['choices'][0]['message']['content'])){
+                        $record->body_ru = $dataBodyRu['data']['choices'][0]['message']['content'];
+                    }
+                }
+                $record->gpt_translate = 1;
+                $record->save();
             }
         }
 

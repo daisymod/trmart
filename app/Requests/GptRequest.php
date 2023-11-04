@@ -11,22 +11,37 @@ use GuzzleHttp\Psr7\Request;
 class GptRequest extends BaseRequest
 {
     public function getData($text,$language){
+        $post_fields = '{
+              "model": "gpt-4",
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "You will be provided with a sentence in Turkish, and your task is to translate it into '.$language.'."
+                    },
+                    {
+                        "role": "user",
+                        "content": "'.$text.'"
+                    }
+                ],
+                "temperature": 1,
+                "max_tokens": 512,
+                "top_p": 1,
+                "temperature": 0.5,
+                "frequency_penalty": 0,
+                "presence_penalty": 0 
+        }';
 
-        $this->request = new Request('GET', "https://api.openai.com/v1/chat/completions",
+        $this->request = new Request('POST', "https://api.openai.com/v1/chat/completions",
             [
                 'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer: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'
-            ]);
+                'Authorization' => 'Bearer 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'
+            ],$post_fields);
 
         try {
             // отправка запроса и получение результата
             $response = $this->client->send($this->request,[
                 'verify' => false,
                 'connect_timeout' => 60,
-                'json' => [
-                    'SYSTEM' => 'You will be provided with a sentence in English, and your task is to translate it into '.$language.'.',
-                    'USER'  => $text,
-                ]
             ]);
 
             return ['data' => json_decode($response->getBody()->getContents(), true), 'code' => 200];
