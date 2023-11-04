@@ -374,10 +374,10 @@ $(document).ready(function () {
                             if (element.sale > 0){
                                 let new_price = element.price - (element.price * element.sale / 100) ;
                                  html = "<a href=\"https://turkiyemart.com/shop/"+element.id+".html\" class=\"sale-item\">\n" +
-                                    "                    <span class=\"img-wrap\"><img src="+img[0].file+" alt=\"\"></span>\n" +
+                                    "                    <span class=\"img-wrap\"><img src="+img[0].file+" alt=\"\">\n" +
                                     "                                                    <b>- "+ element.sale +" %</b>\n" +
                                     "                                            </span>\n" +
-                                    "                    <p>\n" +
+                                    " </span>                   <p>\n" +
                                     "                        <span class=\"new price-product\" data-price="+new_price+">"+getCountPrice(new_price)+ ' ' + localStorage.getItem('symbol') +"</span>\n" +
                                     "                                                    <span class=\"old-price\" data-old-price="+element.price+">"+getCountPrice(element.price )+ ' ' + localStorage.getItem('symbol') +"</span>\n" +
                                     "                                            </p>\n" +
@@ -412,7 +412,7 @@ $(document).ready(function () {
         var price = data;
         var result  = parseFloat(price).toFixed(2) * parseFloat(localStorage.getItem('coefficient')).toFixed(2);
 
-        return result.toFixed(2);
+        return new Intl.NumberFormat('ru-RU').format(Math.ceil(result));
     }
 
     jQuery('#input-phone-reset-data').init(function() {
