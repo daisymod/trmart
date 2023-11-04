@@ -371,7 +371,16 @@ $(document).ready(function () {
                                 return;
                             }
                             if (element.sale > 0){
-                                let html = ""
+                                let html = "<a href=\"https://turkiyemart.com/shop/"+element.id+".html\" class=\"sale-item\">\n" +
+                                    "                    <span class=\"img-wrap\"><img src="+img[0].file+" alt=\"\"></span>\n" +
+                                    "                                                    <b>- "+ element.sale +" %</b>\n" +
+                                    "                                            </span>\n" +
+                                    "                    <p>\n" +
+                                    "                        <span class=\"new price-product\" data-price="+element.price+">"+getCountPrice(element.price )+ ' ' + localStorage.getItem('symbol') +"</span>\n" +
+                                    "                                                    <span class=\"old-price\" data-old-price="+element.price+">"+getCountPrice(element.price )+ ' ' + localStorage.getItem('symbol') +"</span>\n" +
+                                    "                                            </p>\n" +
+                                    "                    <span class=\"text\">"+ name_product +"</span>\n" +
+                                    "                </a>"
                             }else{
                                 let html = "<a href=\"https://turkiyemart.com/shop/"+element.id+".html\" class=\"sale-item\">\n" +
                                     "                    <span class=\"img-wrap\"><img src="+img[0].file+" alt=\"\"></span>\n" +
