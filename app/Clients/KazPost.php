@@ -30,7 +30,7 @@ class KazPost
             $client = new SoapClient($wsdlUrl, $soapClientOptions);
 
             $body = [
-                'Key'                   => 'EMKWG7x5dSrCowxnKd1adBItLi0lcwkR',
+                'key' => '70981f7073af4bd6815b21477222f5ff',
                 'AddrInfo' => [
                     'RcpnName'          => $order->surname.' '.$order->name ,
                     'RcpnPhone'         => $order->phone,
@@ -161,6 +161,7 @@ class KazPost
             $client = new SoapClient($wsdlUrl, $soapClientOptions);
 
             $body = [
+                'key' => '70981f7073af4bd6815b21477222f5ff',
                 'barcode' => $barcode
             ];
 
