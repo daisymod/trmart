@@ -224,8 +224,37 @@ class CatalogItemController
             $brandService = new MarketPlaceBrandService($marketBrandModel);
             $brandService->create($request->get('brand'));
         }
+        $requestGpt = new GptRequest();
+        $array = $request->all();
+        if (empty($array['name']['ru'])){
+            $dataNameRu = $requestGpt->getData($array['name']['tr'],'Russian');
+            if (isset($dataNameRu['data']['choices'][0]['message']['content'])){
+                $array['name']['ru'] = $dataNameRu['data']['choices'][0]['message']['content'];
+            }
+        }
 
-        $this->item->update($request->all(),$id,Auth::user());
+        if (empty($array['name']['kz'])){
+            $dataNameKz = $requestGpt->getData($array['name']['tr'],'Kazakh');
+            if (isset($dataNameKz['data']['choices'][0]['message']['content'])){
+                $array['name']['kz'] = $dataNameKz['data']['choices'][0]['message']['content'];
+            }
+        }
+
+        if (empty($array['body']['ru'])){
+            $dataNameRu = $requestGpt->getData($array['body']['tr'],'Russian');
+            if (isset($dataNameRu['data']['choices'][0]['message']['content'])){
+                $array['body']['ru'] = $dataNameRu['data']['choices'][0]['message']['content'];
+            }
+        }
+
+        if (empty($array['body']['kz'])){
+            $dataNameKz = $requestGpt->getData($array['body']['tr'],'Kazakh');
+            if (isset($dataNameKz['data']['choices'][0]['message']['content'])){
+                $array['body']['kz'] = $dataNameKz['data']['choices'][0]['message']['content'];
+            }
+        }
+
+        $this->item->update($array,$id,Auth::user());
 
         ItemCompoundTable::where('item_id','=',$id)
             ->delete();
