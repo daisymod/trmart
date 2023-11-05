@@ -21,7 +21,7 @@ class KazPostRequest extends BaseRequest
         $this->request = new Request(
             'GET',
             'https://track.post.kz/api/v2/'.$order->barcode.'/events',
-            [ 'Content-Type' => 'application/json', ]
+            [ 'Content-Type' => 'application/json','key' => '70981f7073af4bd6815b21477222f5ff' ]
         );
 
         // отправка запроса и получение результата
@@ -130,6 +130,7 @@ class KazPostRequest extends BaseRequest
 
         $toIndex = $cities->searchCity(
             [
+                'key' => '70981f7073af4bd6815b21477222f5ff',
                 "depname" => $cityName,
                 "oblast" => "",
                 "rayon" => ""
