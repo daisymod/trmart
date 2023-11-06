@@ -108,7 +108,7 @@ class CatalogItemController
         }
         $requestGpt = new GptRequest();
         $array = $request->all();
-        if (empty($array['name']['ru'])){
+        /*if (empty($array['name']['ru'])){
             $dataNameRu = $requestGpt->getData($array['name']['tr'],'Russian');
             if (isset($dataNameRu['data']['choices'][0]['message']['content'])){
                 $array['name']['ru'] = $dataNameRu['data']['choices'][0]['message']['content'];
@@ -134,7 +134,7 @@ class CatalogItemController
             if (isset($dataNameKz['data']['choices'][0]['message']['content'])){
                 $array['body']['kz'] = $dataNameKz['data']['choices'][0]['message']['content'];
             }
-        }
+        }*/
 
         $data  = $this->item->create($array,Auth::user());
 
@@ -226,7 +226,7 @@ class CatalogItemController
         }
         $requestGpt = new GptRequest();
         $array = $request->all();
-        if (empty($array['name']['ru'])){
+       /* if (empty($array['name']['ru'])){
             $dataNameRu = $requestGpt->getData($array['name']['tr'],'Russian');
             if (isset($dataNameRu['data']['choices'][0]['message']['content'])){
                 $array['name']['ru'] = $dataNameRu['data']['choices'][0]['message']['content'];
@@ -252,7 +252,7 @@ class CatalogItemController
             if (isset($dataNameKz['data']['choices'][0]['message']['content'])){
                 $array['body']['kz'] = $dataNameKz['data']['choices'][0]['message']['content'];
             }
-        }
+        }*/
 
         $this->item->update($array,$id,Auth::user());
 
