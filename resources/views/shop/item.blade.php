@@ -213,7 +213,6 @@ flex-wrap: wrap;">
                                         <p class="ogrn">IBAN :  {{$company->iban}}</p>
                                         <p class="ogrn">vkn :  {{$company->vkn}}</p>
                                         <p class="ogrn">tckn :  {{$company->tckn}}</p>
-                                        <p class="ogrn">{{$company->phone}}</p>
                                     </div>
                                 </div>
                             </div>
