@@ -46,8 +46,8 @@ class CatalogItemListPostAction
                     $record->name_kz = $dataNameKz['data']['choices'][0]['message']['content'];
                 }
                 if (!empty($record->body_tr)){
-                    $dataBodyRu = $request->getData($record->name_tr,'Russian');
-                    $dataBodyKz = $request->getData($record->name_tr,'Kazakh');
+                    $dataBodyRu = $request->getData($record->body_tr,'Russian');
+                    $dataBodyKz = $request->getData($record->body_tr,'Kazakh');
                     if (isset($dataBodyKz['data']['choices'][0]['message']['content'])){
                         $record->body_kz = $dataBodyKz['data']['choices'][0]['message']['content'];
                     }
