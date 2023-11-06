@@ -22,7 +22,6 @@ class CatalogItemActionService
 {
     public function actionList($request)
     {
-
         if (!empty($request['limit'])){
             session()->put('limit_catalog_item',$request['limit']);
         }else{
@@ -36,26 +35,11 @@ class CatalogItemActionService
         $item = new CatalogItem();
 
         if (!empty($request['user'])){
-            if (gettype($request['user']) == 'string'){
-                $user= str_replace('[','',$request['user']);
-                $user = str_replace(']','',$user);
-                $user = str_replace('"','',$user);
-
-                $item->user_id = explode(',',$user);
-            }else {
-                $item->user_id = $request['user'];
-            }
+          $item->user_id = $request['user'];
         }
 
         if (!empty($request['catalog'])){
-            if (gettype($request['catalog']) == 'string'){
-                $catalog= str_replace('[','',$request['catalog']);
-                $catalog = str_replace(']','',$catalog);
-                $catalog = str_replace('"','',$catalog);
-                $item->catalog_id = explode(',',$catalog);
-            }else {
-                $item->catalog_id = $request['catalog'];
-            }
+           $item->catalog_id = $request['catalog'];
         }
 
         if (!empty($request['brand'])){
@@ -91,15 +75,7 @@ class CatalogItemActionService
         }
 
         if (!empty($request['user'])){
-            if (gettype($request['user']) == 'string'){
-                $user= str_replace('[','',$request['user']);
-                $user = str_replace(']','',$user);
-                $user = str_replace('"','',$user);
-
-                $item->user = explode(',',$user);
-            }else {
-                $item->user = $request['user'];
-            }
+           $item->user = $request['user'];
         }
 
         $form = $this->getFormSearch($item);
@@ -129,27 +105,11 @@ class CatalogItemActionService
         }
 
         if (!empty($request['catalog'])){
-            if (gettype($request['catalog']) == 'string'){
-                $catalog = str_replace('[','',$request['catalog']);
-                $catalog = str_replace(']','',$catalog);
-                $catalog = str_replace('"','',$catalog);
-                $records->whereIn("catalog_id",explode(',',$catalog));
-            }else{
-                $records->whereIn("catalog_id",$request['catalog']);
-            }
-
+            $records->whereIn("catalog_id",$request['catalog']);
         }
 
         if (!empty($request['user'])){
-            if (gettype($request['user']) == 'string'){
-                $user = str_replace('[','',$request['user']);
-                $user = str_replace(']','',$user);
-                $user = str_replace('"','',$user);
-                $records->whereIn("user_id",explode(',',$user));
-            }else{
-                $records->whereIn("catalog_id",$request['user']);
-            }
-
+           $records->whereIn("user_id",$request['user']);
         }
 
         if (!empty($request['status'])){
