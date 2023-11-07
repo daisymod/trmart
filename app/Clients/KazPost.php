@@ -30,7 +30,7 @@ class KazPost
             $client = new SoapClient($wsdlUrl, $soapClientOptions);
 
             $body = [
-                'key' => '70981f7073af4bd6815b21477222f5ff',
+                'key' => 'EMKWG7x5dSrCowxnKd1adBItLi0lcwkR',
                 'AddrInfo' => [
                     'RcpnName'          => $order->surname.' '.$order->name ,
                     'RcpnPhone'         => $order->phone,
@@ -89,6 +89,7 @@ class KazPost
             $client = new SoapClient($wsdlUrl, $soapClientOptions);
 
             $body = [
+                'key' => 'EMKWG7x5dSrCowxnKd1adBItLi0lcwkR',
                 'depname' => $city
             ];
 
@@ -121,7 +122,7 @@ class KazPost
             $client = new SoapClient($wsdlUrl, $soapClientOptions);
 
             $body = [
-                'key' => '70981f7073af4bd6815b21477222f5ff',
+                'key' => 'EMKWG7x5dSrCowxnKd1adBItLi0lcwkR',
                 'GetPostRateInfo' => [
                     'SndrCtg' => '2',
                     'Product' => 'P103',
@@ -160,7 +161,7 @@ class KazPost
             $client = new SoapClient($wsdlUrl, $soapClientOptions);
 
             $body = [
-                'key' => '70981f7073af4bd6815b21477222f5ff',
+                'key' => 'EMKWG7x5dSrCowxnKd1adBItLi0lcwkR',
                 'barcode' => $barcode
             ];
 
