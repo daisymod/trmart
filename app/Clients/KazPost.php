@@ -15,7 +15,7 @@ class KazPost
     {
         try {
             $opts = array(
-                'http' => array(
+                'https' => array(
                     'user_agent' => 'PHPSoapClient'
                 )
             );
@@ -74,7 +74,7 @@ class KazPost
     {
         try {
             $opts = array(
-                'http' => array(
+                'https' => array(
                     'user_agent' => 'PHPSoapClient'
                 )
             );
@@ -107,7 +107,7 @@ class KazPost
         Log::info(print_r($postcode,true));
         try {
             $opts = array(
-                'http' => array(
+                'https' => array(
                     'user_agent' => 'PHPSoapClient'
                 )
             );
@@ -146,7 +146,7 @@ class KazPost
     {
         try {
             $opts = array(
-                'http' => array(
+                'https' => array(
                     'user_agent' => 'PHPSoapClient'
                 )
             );
