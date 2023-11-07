@@ -116,7 +116,6 @@ class KazPost
             $soapClientOptions = array(
                 'stream_context' => $context,
                 'cache_wsdl' => WSDL_CACHE_NONE,
-                'key' => '70981f7073af4bd6815b21477222f5ff',
             );
 
             $client = new SoapClient($wsdlUrl, $soapClientOptions);
