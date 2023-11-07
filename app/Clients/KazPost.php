@@ -21,7 +21,7 @@ class KazPost
             );
             $context = stream_context_create($opts);
 
-            $wsdlUrl = 'https://rates.kazpost.kz/postrateprod/postratesws.wsdl';
+            $wsdlUrl = 'https://rates.kazpost.kz/postratesprod/postratesws.wsdl';
             $soapClientOptions = array(
                 'stream_context' => $context,
                 'cache_wsdl' => WSDL_CACHE_NONE
@@ -80,7 +80,7 @@ class KazPost
             );
             $context = stream_context_create($opts);
 
-            $wsdlUrl = 'https://rates.kazpost.kz/postrateprod/postratesws.wsdl';
+            $wsdlUrl = 'https://rates.kazpost.kz/postratesprod/postratesws.wsdl';
             $soapClientOptions = array(
                 'stream_context' => $context,
                 'cache_wsdl' => WSDL_CACHE_NONE
@@ -106,20 +106,7 @@ class KazPost
         Log::info(print_r($price,true));
         Log::info(print_r($postcode,true));
         try {
-            $opts = array(
-                'https' => array(
-                    'user_agent' => 'PHPSoapClient'
-                )
-            );
-            $context = stream_context_create($opts);
-
-            $wsdlUrl = 'https://rates.kazpost.kz/postrateprod/postratesws.wsdl';
-            $soapClientOptions = array(
-                'stream_context' => $context,
-                'cache_wsdl' => WSDL_CACHE_NONE,
-            );
-
-            $client = new SoapClient($wsdlUrl, $soapClientOptions);
+            $client = new SoapClient('https://rates.kazpost.kz/postratesprod/postratesws.wsdl');
 
             $body = [
                 'key' => '70981f7073af4bd6815b21477222f5ff',
@@ -145,20 +132,7 @@ class KazPost
     public function GetAddrLetterUsingBarcodeRequest($barcode)
     {
         try {
-            $opts = array(
-                'https' => array(
-                    'user_agent' => 'PHPSoapClient'
-                )
-            );
-            $context = stream_context_create($opts);
-
-            $wsdlUrl = 'https://rates.kazpost.kz/postrateprod/postratesws.wsdl';
-            $soapClientOptions = array(
-                'stream_context' => $context,
-                'cache_wsdl' => WSDL_CACHE_NONE
-            );
-
-            $client = new SoapClient($wsdlUrl, $soapClientOptions);
+            $client = new SoapClient('http://rates.kazpost.kz/postrateprodv2/postratesws.wsdl');
 
             $body = [
                 'key' => '70981f7073af4bd6815b21477222f5ff',
