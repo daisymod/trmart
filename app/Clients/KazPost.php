@@ -21,7 +21,7 @@ class KazPost
             );
             $context = stream_context_create($opts);
 
-            $wsdlUrl = 'http://rates.kazpost.kz/postrateprod/postratesws.wsdl';
+            $wsdlUrl = 'https://rates.kazpost.kz/postrateprod/postratesws.wsdl';
             $soapClientOptions = array(
                 'stream_context' => $context,
                 'cache_wsdl' => WSDL_CACHE_NONE
@@ -30,7 +30,7 @@ class KazPost
             $client = new SoapClient($wsdlUrl, $soapClientOptions);
 
             $body = [
-                'key' => 'EMKWG7x5dSrCowxnKd1adBItLi0lcwkR',
+                'key' => '70981f7073af4bd6815b21477222f5ff',
                 'AddrInfo' => [
                     'RcpnName'          => $order->surname.' '.$order->name ,
                     'RcpnPhone'         => $order->phone,
@@ -80,7 +80,7 @@ class KazPost
             );
             $context = stream_context_create($opts);
 
-            $wsdlUrl = 'http://rates.kazpost.kz/postrateprod/postratesws.wsdl';
+            $wsdlUrl = 'https://rates.kazpost.kz/postrateprod/postratesws.wsdl';
             $soapClientOptions = array(
                 'stream_context' => $context,
                 'cache_wsdl' => WSDL_CACHE_NONE
@@ -89,7 +89,7 @@ class KazPost
             $client = new SoapClient($wsdlUrl, $soapClientOptions);
 
             $body = [
-                'key' => 'EMKWG7x5dSrCowxnKd1adBItLi0lcwkR',
+                'key' => '70981f7073af4bd6815b21477222f5ff',
                 'depname' => $city
             ];
 
@@ -113,7 +113,7 @@ class KazPost
             );
             $context = stream_context_create($opts);
 
-            $wsdlUrl = 'http://rates.kazpost.kz/postrateprod/postratesws.wsdl';
+            $wsdlUrl = 'https://rates.kazpost.kz/postrateprod/postratesws.wsdl';
             $soapClientOptions = array(
                 'stream_context' => $context,
                 'cache_wsdl' => WSDL_CACHE_NONE,
@@ -122,7 +122,7 @@ class KazPost
             $client = new SoapClient($wsdlUrl, $soapClientOptions);
 
             $body = [
-                'key' => 'EMKWG7x5dSrCowxnKd1adBItLi0lcwkR',
+                'key' => '70981f7073af4bd6815b21477222f5ff',
                 'GetPostRateInfo' => [
                     'SndrCtg' => '2',
                     'Product' => 'P103',
@@ -152,7 +152,7 @@ class KazPost
             );
             $context = stream_context_create($opts);
 
-            $wsdlUrl = 'http://rates.kazpost.kz/postrateprod/postratesws.wsdl';
+            $wsdlUrl = 'https://rates.kazpost.kz/postrateprod/postratesws.wsdl';
             $soapClientOptions = array(
                 'stream_context' => $context,
                 'cache_wsdl' => WSDL_CACHE_NONE
@@ -161,7 +161,7 @@ class KazPost
             $client = new SoapClient($wsdlUrl, $soapClientOptions);
 
             $body = [
-                'key' => 'EMKWG7x5dSrCowxnKd1adBItLi0lcwkR',
+                'key' => '70981f7073af4bd6815b21477222f5ff',
                 'barcode' => $barcode
             ];
 
