@@ -21,7 +21,7 @@ class KazPost
             );
             $context = stream_context_create($opts);
 
-            $wsdlUrl = 'http://rates.kazpost.kz/postratesws/postratesws.wsdl';
+            $wsdlUrl = 'http://rates.kazpost.kz/postrateprod/postratesws.wsdl';
             $soapClientOptions = array(
                 'stream_context' => $context,
                 'cache_wsdl' => WSDL_CACHE_NONE
@@ -80,7 +80,7 @@ class KazPost
             );
             $context = stream_context_create($opts);
 
-            $wsdlUrl = 'http://rates.kazpost.kz/postratesws/postratesws.wsdl';
+            $wsdlUrl = 'http://rates.kazpost.kz/postrateprod/postratesws.wsdl';
             $soapClientOptions = array(
                 'stream_context' => $context,
                 'cache_wsdl' => WSDL_CACHE_NONE
@@ -112,7 +112,7 @@ class KazPost
             );
             $context = stream_context_create($opts);
 
-            $wsdlUrl = 'http://rates.kazpost.kz/postratesws/postratesws.wsdl';
+            $wsdlUrl = 'http://rates.kazpost.kz/postrateprod/postratesws.wsdl';
             $soapClientOptions = array(
                 'stream_context' => $context,
                 'cache_wsdl' => WSDL_CACHE_NONE,
@@ -152,7 +152,7 @@ class KazPost
             );
             $context = stream_context_create($opts);
 
-            $wsdlUrl = 'http://rates.kazpost.kz/postratesws/postratesws.wsdl';
+            $wsdlUrl = 'http://rates.kazpost.kz/postrateprod/postratesws.wsdl';
             $soapClientOptions = array(
                 'stream_context' => $context,
                 'cache_wsdl' => WSDL_CACHE_NONE
