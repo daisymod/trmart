@@ -37,17 +37,19 @@ class CatalogItemListPostAction
             elseif (str_contains($action, "gpt")) {
                 $request = new GptRequest();
 
-                $dataNameRu = $request->getData($record->name_tr,'Russian');
-                $dataNameKz = $request->getData($record->name_tr,'Kazakh');
+                $dataNameRu = $request->getData($record->name_tr,'русский');
                 if (isset($dataNameRu['data']['choices'][0]['message']['content'])){
                     $record->name_ru = $dataNameRu['data']['choices'][0]['message']['content'];
                 }
+
+
+                $dataNameKz = $request->getData($record->name_tr,'казахский');
                 if (isset($dataNameKz['data']['choices'][0]['message']['content'])){
                     $record->name_kz = $dataNameKz['data']['choices'][0]['message']['content'];
                 }
                 if (!empty($record->body_tr)){
-                    $dataBodyRu = $request->getData($record->body_tr,'Russian');
-                    $dataBodyKz = $request->getData($record->body_tr,'Kazakh');
+                    $dataBodyRu = $request->getData($record->body_tr,'русский');
+                    $dataBodyKz = $request->getData($record->body_tr,'казахский');
                     if (isset($dataBodyKz['data']['choices'][0]['message']['content'])){
                         $record->body_kz = $dataBodyKz['data']['choices'][0]['message']['content'];
                     }
@@ -55,8 +57,14 @@ class CatalogItemListPostAction
                         $record->body_ru = $dataBodyRu['data']['choices'][0]['message']['content'];
                     }
                 }
-                $record->gpt_translate = 1;
-                $record->save();
+                CatalogItem::query()->where('id','=',$record->id)
+                    ->update([
+                        'name_ru' => $record->name_ru,
+                        'name_kz' => $record->name_kz,
+                        'body_ru' => $record->body_ru,
+                        'body_kz' => $record->body_kz,
+
+                    ]);
             }
         }
 
