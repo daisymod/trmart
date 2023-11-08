@@ -12,7 +12,7 @@ class GptRequest extends BaseRequest
 {
     public function getData($text,$language){
         $post_fields = '{
-              "model": "gpt-4",
+              "model": "gpt-3.5-turbo",
                 "messages": [
                     {
                         "role": "system",
@@ -25,8 +25,7 @@ class GptRequest extends BaseRequest
                 ],
                 "temperature": 1,
                 "max_tokens": 512,
-                "top_p": 1,
-                "temperature": 0.5,
+                "top_p": 1,    
                 "frequency_penalty": 0,
                 "presence_penalty": 0 
         }';

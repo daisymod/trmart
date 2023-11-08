@@ -59,7 +59,15 @@ class CatalogItemListPostAction
                     }
                 }
 
-                $record->save();
+                CatalogItem::query()->where('id','=',$record->id)
+                    ->update([
+                        'name_ru' => $record->name_ru,
+                        'name_kz' => $record->name_kz,
+                        'body_ru' => $record->body_ru,
+                        'body_kz' => $record->body_kz,
+
+                    ]);
+
             }
         }
 
