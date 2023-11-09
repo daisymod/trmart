@@ -12,11 +12,11 @@ class GptRequest extends BaseRequest
 {
     public function getData($text,$language){
         $post_fields = '{
-              "model": "gpt-3.5-turbo",
+              "model": "gpt-4",
                 "messages": [
                     {
                         "role": "system",
-                        "content": "Переведи данный текст с турецкого языка на'.$language.':"
+                        "content": "Переведи данный текст с турецкого языка на '.$language.':"
                     },
                     {
                         "role": "user",
