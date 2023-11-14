@@ -14,7 +14,6 @@ deploy_job:
     - php artisan migrate
     - composer install
     - npm install
-    - npm audit fix
     - npm run prod
     - sudo systemctl restart supervisord
   only:
