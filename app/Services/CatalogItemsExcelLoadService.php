@@ -111,7 +111,7 @@ class CatalogItemsExcelLoadService
         try {
 
             foreach ($excelArray as $number => $row) {
-                if ($row[0] == null && $row[1] == null  && $row[2] == null ){
+                if ($row[1] == null){
                     break;
                 }
 
@@ -287,7 +287,7 @@ class CatalogItemsExcelLoadService
                             'name_kz' =>  $compoundDataKz[$indexForCreate] ?? '',
                         ];
 
-                        $percent = intval($compoundData[$indexForCreate + 1]) ?? '0';
+                        $percent = intval(isset($compoundData[$indexForCreate + 1]) ?? 0) ?? '0';
                         $compoundExist = Compound::where('name_tr','=',$attribute['name_tr'])
                             ->first();
                         if (!empty($compoundExist->name_tr)){
