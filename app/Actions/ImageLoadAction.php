@@ -13,6 +13,7 @@ class ImageLoadAction
         $ext = $file->extension();
         $fileName = public_path() . "/files/$md5.$ext";
         $name = $file->hashName();
+
         move_uploaded_file($file->getPathname(), $fileName);
 
         $manager = new ImageManager(["driver" => "gd"]);
