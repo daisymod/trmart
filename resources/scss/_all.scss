@@ -278,6 +278,12 @@
     }
 }
 
+@media(max-width: 767px) {
+    .main-form.customer{
+        display: flex !important;
+        flex-wrap: wrap;
+    }
+}
 .client-top {
     @media(max-width: 767px) {
         @include dir-col;
