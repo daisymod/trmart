@@ -18,10 +18,7 @@
                     <p class="requisites-page__info__row__text">@lang('system.k1')</p>
                     <p class="requisites-page__info__row__text">«Global Contract Service Sanal mağazacılık» Limited Şirketi</p>
                 </div>
-                <div class="requisites-page__info__row">
-                    <p class="requisites-page__info__row__text">@lang('system.k2')</p>
-                    <p class="requisites-page__info__row__text">Трумов Айбек Маратович</p>
-                </div>
+
                 <div class="requisites-page__info__row">
                     <p class="requisites-page__info__row__text">@lang('system.k3')</p>
                     <p class="requisites-page__info__row__text">Merdivenköy Mah., Dikyol Sk. B-Blok, No:2D:179  Kadıköy /Istanbul/Türkıye</p>
@@ -42,10 +39,6 @@
                 <div class="requisites-page__info__row">
                     <p class="requisites-page__info__row__text">@lang('system.k6')</p>
                     <p class="requisites-page__info__row__text">admin@turkiyemart.com, sales@turkiyemart.com, info@turkiyemart.com</p>
-                </div>
-                <div class="requisites-page__info__row">
-                    <p class="requisites-page__info__row__text">@lang('system.k7')</p>
-                    <p class="requisites-page__info__row__text">+90 536 239 92 67</p>
                 </div>
                 <hr class="requisites-page__info__hr">
             </div>
