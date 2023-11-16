@@ -257,37 +257,31 @@ class CatalogItemsExcelLoadService
 
 
                 $compoundData =  str_replace(']', '', str_replace('[', '', $row[3]));
-                Log::info(print_r($catalog_id->id,true));
+                $compoundData =  str_replace(',,', ',', $compoundData);
                 if (substr($compoundData, -1) == ','){
                     $compoundData = substr($compoundData, 0, -1);
                 }
 
-                $compoundDataRu = str_replace(']', '', str_replace('[', '',
-                    !empty($row[19]) ? $row[19] : $row[3]));
-
-                $compoundDataKz = str_replace(']', '', str_replace('[', '',
-                    !empty($row[20]) ? $row[20] : $row[3]));
 
                 $compoundData = explode(",", $compoundData);
-                $compoundDataRu = explode(",", $compoundDataRu);
-                $compoundDataKz = explode(",", $compoundDataKz);
-
-
                 $indexForCreate = 0;
 
-
-                foreach ($compoundDataRu as $compoundItem) {
+                log::info(print_r($compoundData,true));
+                foreach ($compoundData as $compoundItem) {
+                    if ($compoundItem == '[]'){
+                        break;
+                    }
                     if ($indexForCreate % 2 == 1 || empty($compoundItem)) {
                         $indexForCreate++;
                         continue;
                     } else {
                         $attribute = [
-                            'name_ru' =>  $compoundDataRu[$indexForCreate] ?? '',
+                            'name_ru' =>  $compoundData[$indexForCreate] ?? '',
                             'name_tr' =>  $compoundData[$indexForCreate] ?? '',
-                            'name_kz' =>  $compoundDataKz[$indexForCreate] ?? '',
+                            'name_kz' =>  $compoundData[$indexForCreate] ?? '',
                         ];
 
-                        $percent = intval(isset($compoundData[$indexForCreate + 1]) ?? 0) ?? '0';
+                        $percent = isset($compoundData[$indexForCreate + 1]) ? $compoundData[$indexForCreate + 1] : 0;
                         $compoundExist = Compound::where('name_tr','=',$attribute['name_tr'])
                             ->first();
                         if (!empty($compoundExist->name_tr)){
