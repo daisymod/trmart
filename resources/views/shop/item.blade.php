@@ -258,10 +258,12 @@ flex-wrap: wrap;">
                                 <div class="img-wrap"><img src="/img/user-icon-dark.svg" alt=""></div>
                                 <div class="texts">
                                     <div class="top-info">
-                                        @if($item->user->role == 'user')
-                                            <span>{{$item->user->name}} {{$item->user->s_name}}</span>
-                                        @else
-                                            <span>{{$item->user->company->company_name}} / {{$item->user->company->shop_name}}</span>
+                                        @if(isset($item->user->role))
+                                            @if($item->user->role == 'user')
+                                                <span>{{$item->user->name}} {{$item->user->s_name}}</span>
+                                            @else
+                                                <span>{{$item->user->company->company_name}} / {{$item->user->company->shop_name}}</span>
+                                            @endif
                                         @endif
 
                                         <span class="gray">{{$item->created_at}}</span>
