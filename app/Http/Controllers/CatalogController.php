@@ -113,7 +113,7 @@ class CatalogController
 
         Catalog::query()->whereIn('id',$array)
             ->update([
-                'is_active' => $request->is_active == 'on' ? 1 : 0
+                'is_active' =>  $data['is_active']
             ]);
 
 
