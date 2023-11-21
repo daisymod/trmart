@@ -108,11 +108,13 @@ class CatalogController
             }
         }
 
+        if (!empty($request->is_active)){
+            Catalog::query()->whereIn('id',$array)
+                ->update([
+                    'is_active' => $data['is_active']
+                ]);
+        }
 
-        Catalog::query()->whereIn('id',$array)
-        ->update([
-            'is_active' => $data['is_active']
-        ]);
 
 
 
