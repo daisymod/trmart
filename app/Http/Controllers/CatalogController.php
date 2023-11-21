@@ -74,7 +74,13 @@ class CatalogController
         $record = Catalog::query()->findOrFail($id);
         Gate::authorize("catalog-edit", $record);
         $form = new CatalogAdminForm($record);
-        $form->formSave(request()->all());
+        $data = request()->all();
+        if (isset($request->is_active)){
+            $data['is_active'] = $request->is_active;
+        }else{
+            $data['is_active'] = $record->is_active;
+        }
+        $form->formSave($data);
 
         $record = Catalog::query()
             ->with('recursiveChildren')
