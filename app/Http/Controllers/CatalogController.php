@@ -9,6 +9,7 @@ use App\Models\CatalogCatalogCharacteristic;
 use App\Models\CatalogItem;
 use App\Services\BreadcrumbService;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use JetBrains\PhpStorm\ArrayShape;
 
 class CatalogController
@@ -74,7 +75,12 @@ class CatalogController
         $record = Catalog::query()->findOrFail($id);
         Gate::authorize("catalog-edit", $record);
         $form = new CatalogAdminForm($record);
-        $form->formSave(request()->all());
+        $data = request()->all();
+        if (isset($request->is_active)){
+            $data['is_active'] = $request->is_active == 'on' ? 1 : 0;
+            Log::info(print_r($data['is_active'],true));
+        }
+        $form->formSave($data);
 
         $record = Catalog::query()
             ->with('recursiveChildren')
@@ -104,7 +110,7 @@ class CatalogController
                 }
             }
         }
-
+        Log::info(print_r($array,true));
         if (isset($request->is_active)){
             Catalog::query()->whereIn('id',$array)
                 ->update([
