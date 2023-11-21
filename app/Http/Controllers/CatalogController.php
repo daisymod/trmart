@@ -74,19 +74,7 @@ class CatalogController
         $record = Catalog::query()->findOrFail($id);
         Gate::authorize("catalog-edit", $record);
         $form = new CatalogAdminForm($record);
-        $data = request()->all();
-        $change = false;
-        if (isset($request->is_active)){
-            $data['is_active'] = $request->is_active;
-        }else{
-            $data['is_active'] = $record->is_active;
-        }
-
-        if ($data['is_active'] != $record->is_active){
-            $change = true;
-        }
-
-        $form->formSave($data);
+        $form->formSave(request()->all());
 
         $record = Catalog::query()
             ->with('recursiveChildren')
@@ -117,12 +105,14 @@ class CatalogController
             }
         }
 
-        if ($change == true){
+        if (isset($request->is_active)){
             Catalog::query()->whereIn('id',$array)
                 ->update([
-                    'is_active' =>  $data['is_active']
+                    'is_active' => $request->is_active
                 ]);
         }
+
+
 
         return ["redirect" => route("catalog.list", 0)];
     }
