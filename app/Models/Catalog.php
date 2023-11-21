@@ -10,6 +10,8 @@ class Catalog extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name_ru','parent_id','commission','name_kz','name_tr','is_active'];
+
     public function parent()
     {
         return $this->belongsTo(self::class, "parent_id", "id");
