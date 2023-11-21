@@ -111,6 +111,7 @@ class CatalogController
             }
         }
         Log::info(print_r($array,true));
+
         if (isset($request->is_active)){
             Catalog::query()->whereIn('id',$array)
                 ->update([
