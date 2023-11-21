@@ -78,7 +78,7 @@ class CatalogController
         if (isset($request->is_active)){
             $data['is_active'] = $request->is_active;
         }else{
-            $data['is_active'] = $form->is_active;
+            $data['is_active'] = $record->is_active;
         }
         $form->formSave($data);
 
