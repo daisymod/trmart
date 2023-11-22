@@ -75,8 +75,8 @@ class CatalogController
         $record = Catalog::query()->findOrFail($id);
         Gate::authorize("catalog-edit", $record);
         $data = request()->all();
-        if (isset($request->is_active))
-        $data['is_active'] = $request->is_active == ('on' || 1) ? 1 : 0;
+        $data['is_active'] = $request->is_active == 'on'  ? 1 : 0;
+        Log::info(print_r($data['is_active'],true));
         $record->update($data);
 
 
