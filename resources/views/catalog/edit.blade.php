@@ -24,6 +24,7 @@
                                             @lang('system.m22')
                                         </label>
                                     </div>
+
                                 @else
                                     <div style="margin:50px 10px" class="mb-5 mt-5 ml-2 row">
                                         <label for="is_active">
