@@ -18,6 +18,12 @@
                                             <p>@lang('system.cant_active')</p>
                                         </div>
                                     </div>
+                                    <div  class="mb-5 mt-5 ml-2 row" style="display: none">
+                                        <label for="is_active">
+                                            <input type="checkbox" name="is_active" @if($active == 1) checked @endif>
+                                            @lang('system.m22')
+                                        </label>
+                                    </div>
                                 @else
                                     <div style="margin:50px 10px" class="mb-5 mt-5 ml-2 row">
                                         <label for="is_active">
