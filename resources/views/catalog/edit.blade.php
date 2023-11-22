@@ -13,12 +13,12 @@
 
                         @if(isset($active))
                                 @if($items > 0)
-                                   <!-- <div class="product-style-wrap">
+                                    <div class="product-style-wrap">
                                         <div class="product-style-block"> <img src="/img/info-icon.svg" alt="">
                                             <p>@lang('system.cant_active')</p>
                                         </div>
-                                    </div> -->
-                                    <div style="margin:50px 10px" class="mb-5 mt-5 ml-2 row">
+                                    </div>
+                                    <div  class="mb-5 mt-5 ml-2 row" style="display: none">
                                         <label for="is_active">
                                             <input type="checkbox" name="is_active" @if($active == 1) checked @endif>
                                             @lang('system.m22')
