@@ -1,7 +1,7 @@
 stages:
   - deploy
   - logs
-##
+#
 deploy_job:
   stage: deploy
   script:
