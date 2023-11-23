@@ -116,6 +116,7 @@ jQuery(document).ready(function () {
                             var currentElement = $(this);
                             var value = currentElement.attr('data-price');
                             var result  = getCountPrice(value ?? currentElement.val() )
+                            console.log(result)
                             currentElement.html(new Intl.NumberFormat('ru-RU').format(Math.ceil(result)) + ' ' + localStorage.getItem('symbol'));
                         });
 
@@ -123,7 +124,7 @@ jQuery(document).ready(function () {
                             var currentElement = $(this);
                             var value = currentElement.attr('data-price');
                             var result  = getCountPrice(value ?? currentElement.val() )
-
+                            console.log(result)
                             currentElement.html(new Intl.NumberFormat('ru-RU').format(Math.ceil(result)) + ' ' + localStorage.getItem('symbol'));
 
                         });
