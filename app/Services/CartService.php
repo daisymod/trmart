@@ -134,6 +134,8 @@ class CartService
 
             $sizeId = CatalogCharacteristicItem::where('catalog_characteristic_id','=',16)
                 ->where('name_tr','=',$cart[$key]["size"])
+                ->where('name_ru','=',$cart[$key]["size"])
+                ->where('name_kz','=',$cart[$key]["size"])
                 ->first();
 
             $item = ProductItem::where('item_id','=',$cart[$key]["id"])
