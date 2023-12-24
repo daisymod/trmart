@@ -97,6 +97,8 @@ class CatalogController
 
         CatalogCatalogCharacteristic::whereIn('catalog_id',$array)
                                     ->delete();
+        Catalog::whereIn('id',$array)
+            ->update(['type_delivery' => $request->type_delivery]);
 
         foreach ($array as $category){
             if (request()->characteristics != null){

@@ -107,6 +107,16 @@
             @lang('customer.orders.status.status_all')
         </a>
     </li>
+
+
+    <li @if(Route::currentRouteName() == "logist.auto_orders")class="active"@endif>
+        <a href="{{ route("logist.auto_orders") }}">
+            @if(Route::currentRouteName() == "logist.auto_orders" )
+                <img src="/img/menu-icon3.svg" alt="">
+            @endif
+            @lang('customer.orders.auto_orders')
+        </a>
+    </li>
 @endcan
 
 @if(\Illuminate\Support\Facades\Auth::user()->role == 'admin' || ((\Illuminate\Support\Facades\Auth::user()->role == 'merchant') && (Auth::user()->status == 2)))
@@ -266,5 +276,12 @@
 @can("delivery-index")
     <li @if(Route::currentRouteName() == "delivery.index")class="active"@endif>
         <a class="nav-link" href="{{ route("delivery.index") }}">{{ __("menu.delivery.index") }}</a>
+    </li>
+@endcan
+
+
+@can("delivery-index")
+    <li @if(Route::currentRouteName() == "auto.index")class="active"@endif>
+        <a class="nav-link" href="{{ route("auto.index") }}">{{ __("menu.auto.index") }}</a>
     </li>
 @endcan

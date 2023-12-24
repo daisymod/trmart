@@ -10,7 +10,7 @@ class Catalog extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name_ru','parent_id','commission','name_kz','name_tr','is_active'];
+    protected $fillable = ['name_ru','parent_id','commission','name_kz','name_tr','is_active','type_delivery'];
 
     public function parent()
     {

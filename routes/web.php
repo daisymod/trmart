@@ -95,6 +95,10 @@ Route::group(["middleware" => ["auth"]], function () {
     Route::get("/customer/canceled/{id}", [\App\Http\Controllers\CustomerController::class, "actionCanceledOrder"])->name("customer.canceled");
     Route::get("/customer/review", [\App\Http\Controllers\CustomerController::class, "actionReview"])->name("customer.review");
 
+    Route::get("/logist/auto/orders", [\App\Http\Controllers\LogistController::class, "actionOrdersAutoGet"])->name("logist.auto_orders");
+    Route::get("/logist/auto/orders/{id}", [\App\Http\Controllers\LogistController::class, "changeStatus"])->name("logist.change_status");
+
+
     Route::get("/logist/orders", [\App\Http\Controllers\LogistController::class, "actionOrdersGet"])->name("logist.orders");
     Route::get("/logist/acceptance", [\App\Http\Controllers\LogistController::class, "actionAcceptanceGet"])->name("logist.acceptance");
     Route::get("/logist/collected", [\App\Http\Controllers\LogistController::class, "actionCollectedGet"])->name("logist.collected");
@@ -262,6 +266,14 @@ Route::group(["middleware" => ["auth"]], function () {
     Route::post("/currency/edit/{id}", [\App\Http\Controllers\CurrencyController::class, "actionEditPost"]);
     Route::get("/currency/del/{id}", [\App\Http\Controllers\CurrencyController::class, "actionDel"])->name("currency.del");
 
+    Route::group(["prefix" => "auto-delivery"], function () {
+        Route::get("/", [\App\Http\Controllers\AutoControllerDelivery::class, "index"])->name("auto.index");
+        Route::get("/create", [\App\Http\Controllers\AutoControllerDelivery::class, "create"])->name("auto.create");
+        Route::post("/create", [\App\Http\Controllers\AutoControllerDelivery::class, "store"])->name("auto.store");
+        Route::get("/{id}", [\App\Http\Controllers\AutoControllerDelivery::class, "show"])->name("auto.show");
+        Route::post("/{id}", [\App\Http\Controllers\AutoControllerDelivery::class, "update"])->name("auto.update");
+        Route::get("/{id}/delete", [\App\Http\Controllers\AutoControllerDelivery::class, "delete"])->name("auto.delete");
+    });
 
     Route::get("/delivery/index", [\App\Http\Controllers\DeliveryController::class, "actionDelivery"])->name("delivery.index");
     Route::get("/delivery/save", [\App\Http\Controllers\DeliveryController::class, "actionPostDelivery"])->name("delivery.save");

@@ -38,6 +38,58 @@ class LogistController extends Controller
         return Excel::download(new LogistFormExport($orders), $fileName);
     }
 
+    public function actionOrdersAutoGet(Request $request){
+        Gate::authorize("logist-acceptance");
+        $record = Customer::query()->findOrFail(Auth::user()->id);
+        $start = $request->start ?? '';
+        $end   = $request->end ?? '';
+
+        if (count($request->all())) {
+            $start = $request->start;
+            $end   = $request->end;
+            if (!$start || !$end) {
+                return Redirect::back()->withErrors('Выберите дата начало и конца');
+            } else {
+                $orders = Order::query()
+                    ->wherehas('items.item.catalog',function ($q){
+                        $q->where('type_delivery','=',2);
+                    })
+                    ->whereDate('created_at','<=', Carbon::parse($end)->toDateString())
+                    ->whereDate('created_at','>=', Carbon::parse($start)->toDateString())
+                    ->when(!empty($request->id),function ($q) use ($request){
+                        $q->where('id','=',$request->id);
+                    })
+                    ->when(!empty($request->barcode),function ($q) use ($request){
+                        $q->where('barcode','=',$request->barcode);
+                    })
+                    ->when(!empty($request->orders_status) && $request->orders_status != 'all',function ($q) use ($request){
+                        $q->where('status','=',$request->orders_status);
+                    })
+                    ->orderBy('id')
+                    ->get();
+            }
+        } else {
+            $orders = Order::query()
+                ->wherehas('items.item.catalog',function ($q){
+                    $q->where('type_delivery','=',2);
+                })
+                ->when(!empty($request->id),function ($q) use ($request){
+                    $q->where('id','=',$request->id);
+                })
+                ->when(!empty($request->barcode),function ($q) use ($request){
+                    $q->where('barcode','=',$request->barcode);
+                })
+                ->when(!empty($request->orders_status) && $request->orders_status != 'all',function ($q) use ($request){
+                    $q->where('status','=',$request->orders_status);
+                })
+                ->orderBy('id')->get();
+        }
+
+        $data = LogistOrdersResource::collection($orders)->resolve();
+
+        return view("logist.all_orders_auto", compact("record", "data", "start", "end"));
+    }
+
     public function getOrders(Request $request){
         Gate::authorize("logist-acceptance");
         $record = Customer::query()->findOrFail(Auth::user()->id);
@@ -56,6 +108,9 @@ class LogistController extends Controller
                     ->when(!empty($request->id),function ($q) use ($request){
                         $q->where('id','=',$request->id);
                     })
+                    ->wherehas('items.item.catalog',function ($q){
+                        $q->where('type_delivery','=',1);
+                    })
                     ->when(!empty($request->barcode),function ($q) use ($request){
                         $q->where('barcode','=',$request->barcode);
                     })
@@ -69,6 +124,9 @@ class LogistController extends Controller
             $orders = Order::query()
                 ->when(!empty($request->id),function ($q) use ($request){
                     $q->where('id','=',$request->id);
+                })
+                ->wherehas('items.item.catalog',function ($q){
+                    $q->where('type_delivery','=',1);
                 })
                 ->when(!empty($request->barcode),function ($q) use ($request){
                     $q->where('barcode','=',$request->barcode);
@@ -321,5 +379,18 @@ class LogistController extends Controller
 
 
         return \redirect()->route('logist.collected');
+    }
+
+
+    public function changeStatus($id,Request $request){
+        Order::query()
+            ->where('id', '=',$id)
+            ->update(
+                [
+                    'status' => $request->status
+                ]
+            );
+
+        return \redirect()->route('logist.auto_orders');
     }
 }

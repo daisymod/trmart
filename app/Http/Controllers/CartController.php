@@ -8,6 +8,7 @@ use App\Clients\KazPost;
 use App\Http\Requests\CartOderPostRequest;
 use App\Jobs\newOrderCopyJob;
 use App\Jobs\newOrderJob;
+use App\Models\AutoDeliverySettings;
 use App\Models\Basket;
 use App\Models\Catalog;
 use App\Models\CatalogCharacteristicItem;
@@ -50,6 +51,22 @@ class CartController extends Controller
 
     public function actionAdd()
     {
+        $itemAdd = CatalogItem::where('id','=',request()->get("id"))
+                ->first();
+
+        $data = CartService::getCart();
+        if (count($data['items']) >0){
+            foreach ($data['items'] as $item){
+                if ($item->catalog->type_delivery != $itemAdd->catalog->type_delivery){
+                    $error = \Illuminate\Validation\ValidationException::withMessages([
+                        trans('system.t10')
+                    ]);
+                    throw $error;
+                }
+            }
+        }
+
+
         session()->forget('deliveryCalDate');
         session()->forget('deliveryPrices');
 
@@ -118,8 +135,34 @@ class CartController extends Controller
         }
 
         $cartCheckCount = $this->cartCheckCount();
+        $data = CartService::getCart();
 
-        return view("cart.index", compact("countries", "cities", "regions", "areas", "postCodes", 'cartCheckCount'));
+        $delivery_auto = 0;
+        foreach ($data['items'] as $item){
+            $weight = $item->weight / 1000;
+
+            $getPrice = AutoDeliverySettings::where('from','>=',$weight)
+                ->where('to','<=',$weight)
+                ->first();
+
+            if (!empty($getPrice->price)){
+                $delivery_auto += $getPrice->price;
+            }else{
+                $getPrice = AutoDeliverySettings::orderByDesc('price')
+                    ->first();
+                if (!empty($getPrice->price)){
+                    $delivery_auto += $getPrice->price;
+                }
+            }
+        }
+
+        if (count($data['items']) > 0) {
+            $getCurrentDelivery = $data['items'][0]->catalog;
+            $type = $getCurrentDelivery->type_delivery;
+        }else{
+            $type = 1;
+        }
+        return view("cart.index", compact("delivery_auto","type","countries", "cities", "regions", "areas", "postCodes", 'cartCheckCount'));
     }
 
     public static function getVKData($method, $params = [])
@@ -344,7 +387,6 @@ class CartController extends Controller
 
     public function actionCalculate(Request $request)
     {
-
         session()->put('deliveryCalDate', Carbon::now()->format('d-m-Y'));
         $td  = DeliveryPrice::query()->where('id', 1)->value('gr_price');
         $client = new KazPost();
@@ -356,22 +398,46 @@ class CartController extends Controller
         $arr = [];
         $coefficent = CurrencyRate::where('id','=',2)
             ->first(); // kzt
+        $delivery_auto = 0;
         foreach ($cart as $key => $item) {
             $count = $count + $item['count'];
             $product = CatalogItem::find($item['id']);
-            $weight  = $product->weight * $item['count'];
-            $price   = ceil(($product->price - ($product->price * $product->sale) / 100) * $coefficent->rate_end) * $item['count'];
-            $kps = $client->getPostRate($weight, $price, Auth::user()->postcode);
-            if (isset($kps->Sum)) {
-                $test[] = [$count, $product->id, $weight, $price, $kps->Sum];
-                $deliveryPrice   = doubleval($kps->Sum);
-                $deliveryTrPrice = doubleval($product->weight) * $td * $item['count'];
-                $delivery = $delivery + ($deliveryPrice * $item['count']);
-                $deliveryTr = $deliveryTr + ($deliveryTrPrice * $item['count']);
+            $weight = $product->weight * $item['count'];
+            $price = ceil(($product->price - ($product->price * $product->sale) / 100) * $coefficent->rate_end) * $item['count'];
+            if ($product->catalog->type_delivery == 1) {
+                if (isset($kps->Sum)) {
+                    $deliveryPrice   = doubleval($kps->Sum);
+                    $deliveryTrPrice = doubleval($product->weight) * $td * $item['count'];
+                    $delivery = $delivery + ($deliveryPrice * $item['count']);
+                    $deliveryTr = $deliveryTr + ($deliveryTrPrice * $item['count']);
+                    $arr['items'][$key] = $deliveryPrice + $deliveryTrPrice;
+                    $total = $total + (($deliveryPrice + $deliveryTrPrice));
+                } else {
+                    return response()->json(['name' => [$kps->ResponseInfo->ResponseText]], 422);
+                }
+            }else {
+                $weight = ($product->weight / 1000) * $item['count'];
+
+                $getPrice = AutoDeliverySettings::where('from','>=',$weight)
+                    ->where('to','<=',$weight)
+                    ->first();
+
+                if (!empty($getPrice->price)){
+                    $delivery_auto += $getPrice->price;
+                }else{
+                    $getPrice = AutoDeliverySettings::orderByDesc('price')
+                        ->first();
+                    if (!empty($getPrice->price)){
+                        $delivery_auto += $getPrice->price;
+                    }
+                }
+
+                $deliveryPrice   = 0;
+                $deliveryTrPrice = doubleval($delivery_auto);
+                $delivery = 0;
+                $deliveryTr = $deliveryTr + ($deliveryTrPrice);
                 $arr['items'][$key] = $deliveryPrice + $deliveryTrPrice;
                 $total = $total + (($deliveryPrice + $deliveryTrPrice));
-            } else {
-                return response()->json(['name' => [$kps->ResponseInfo->ResponseText]], 422);
             }
         }
         $arr['count'] = $count;
@@ -380,6 +446,7 @@ class CartController extends Controller
         $arr['deliveryTr'] = $deliveryTr;
         session()->put('deliveryPrices', $arr);
         return response()->json($arr);
+
     }
 
     private function cartCheckCount() {
