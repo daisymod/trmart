@@ -49,24 +49,23 @@
                                     <thead>
                                     <tr>
                                         <th style="width: 1%"></th>
-                                        <th style="width: 5%">@lang('logist.orders.loi1')</th>
-                                        <th style="width: 5%">@lang('logist.orders.loi10')</th>
-                                        <th style="width: 5%">@lang('logist.orders.loi11')</th>
-                                        <th style="width: 5%">@lang('logist.orders.loi4')</th>
-                                        <th style="width: 5%">@lang('logist.orders.loi5')</th>
+                                        <th style="width: 4%">@lang('logist.orders.loi10')</th>
+                                        <th style="width: 4%">@lang('logist.orders.loi11')</th>
+                                        <th style="width: 4%">@lang('logist.orders.loi4')</th>
+                                        <th style="width: 4%">@lang('logist.orders.loi5')</th>
 
-                                        <th style="width: 5%">@lang('logist.orders.loi6')</th>
-                                        <th style="width: 5%">@lang('logist.orders.loi61')</th>
+                                        <th style="width: 4%">@lang('logist.orders.loi6')</th>
+                                        <th style="width: 4%">@lang('logist.orders.loi61')</th>
 
-                                        <th style="width: 5%">@lang('logist.orders.loi6') - 1</th>
-                                        <th style="width: 7%">@lang('logist.orders.loi61') - 1</th>
+                                        <th style="width: 4%">@lang('logist.orders.loi6') - 1</th>
+                                        <th style="width:4%">@lang('logist.orders.loi61') - 1</th>
 
-                                        <th style="width: 7%">@lang('item.code')</th>
 
-                                        <th style="width: 7%">@lang('logist.orders.loi7')</th>
-                                        <th style="width: 7%">@lang('logist.orders.loi8')</th>
-                                        <th style="width: 7%">@lang('logist.orders.loi12')</th>
-                                        <th style="width: 20%">@lang('logist.orders.loi9')</th>
+                                        <th style="width: 4%">@lang('logist.orders.loi7')</th>
+                                        <th style="width: 4%">@lang('logist.orders.loi8')</th>
+                                        <th style="width: 4%">@lang('logist.orders.loi12')</th>
+                                        <th style="width: 12%"></th>
+                                        <th style="width: 18%">@lang('logist.orders.loi9')</th>
                                     </tr>
                                     </thead>
                                     <tbody id="table-body">
@@ -74,7 +73,6 @@
                                         <tr>
                                             <td><input class="add-to__f103" name="orders[]" value="{{ $order['id'] }}" type="checkbox"></td>
                                             <td><span class="order-id"><a href="{{route('merchant.order',['id'=> $order['id'] ])}}">{{ $order['id'] }}</a></span></td>
-                                            <td><span>{{ $order['article'] }}</span></td>
                                             <td><span>{{ $order['merchant'] }}</span></td>
                                             <td><span>{{ $order['city_name'] }}</span></td>
                                             <td><span>{{ $order['price'] }} ₸</span></td>
@@ -83,7 +81,6 @@
 
                                             <td><span class="logist-table__dp">{{ $order['delivery_kz_weighing'] }} ₸</span></td>
                                             <td><span class="logist-table__tdp">{{ $order['delivery_tr_weighing'] }} ₸</span></td>
-                                            <td><span>{{ $order['barcode'] }} </span></td>
                                             <td>
                                                 <input class="logist-table__input" type="text" value="{{ $order['real_weight'] }}">
                                             </td>
@@ -93,6 +90,11 @@
                                                     @else
                                                         @lang('customer.orders.status.status_'.$order['status'])
                                                     @endif </span></td>
+                                            <td>
+                                                <a href="{{route('logist.download_auto',['id' => $order['id']])}}" class="filter-group__btn">
+                                                    Скачать адресный бланк
+                                                </a>
+                                            </td>
                                             <td style="text-align: right">
                                                <form method="get" action="{{route('logist.change_status',['id' => $order['id']])}}">
                                                     @csrf

@@ -97,7 +97,7 @@ Route::group(["middleware" => ["auth"]], function () {
 
     Route::get("/logist/auto/orders", [\App\Http\Controllers\LogistController::class, "actionOrdersAutoGet"])->name("logist.auto_orders");
     Route::get("/logist/auto/orders/{id}", [\App\Http\Controllers\LogistController::class, "changeStatus"])->name("logist.change_status");
-
+    Route::get("/logist/auto/orders/{id}/download", [\App\Http\Controllers\LogistController::class, "download"])->name("logist.download_auto");
 
     Route::get("/logist/orders", [\App\Http\Controllers\LogistController::class, "actionOrdersGet"])->name("logist.orders");
     Route::get("/logist/acceptance", [\App\Http\Controllers\LogistController::class, "actionAcceptanceGet"])->name("logist.acceptance");
