@@ -139,7 +139,8 @@ class CartController extends Controller
 
         $delivery_auto = 0;
         foreach ($data['items'] as $item){
-            $weight = $item->weight / 1000;
+            $weight = ($item->length != null ?  $item->length : 1) *
+            ($item->width != null ?  $item->width : 1) * ($item->height != null ?  $item->height : 1);
 
             $getPrice = AutoDeliverySettings::where('from','>=',$weight)
                 ->where('to','<=',$weight)
@@ -416,7 +417,10 @@ class CartController extends Controller
                     return response()->json(['name' => [$kps->ResponseInfo->ResponseText]], 422);
                 }
             }else {
-                $weight = ($product->weight / 1000) * $item['count'];
+
+                $weight = ($product->length != null ?  $product->length : 1) *
+                    ($product->width != null ?  $product->width : 1) * ($product->height != null ?  $product->height : 1)
+                    * $item['count'];
 
                 $getPrice = AutoDeliverySettings::where('from','>=',$weight)
                     ->where('to','<=',$weight)

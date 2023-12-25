@@ -122,7 +122,8 @@ class ShopController
         $compact  = ShopService::actionItem($id);
         $delivery = $compact['record']->catalog;
         $delivery_price = 0;
-        $weight = $compact['record']->weight / 1000;
+        $weight = ($compact['record']->length != null ?  $compact['record']->length : 1) *
+            ($compact['record']->width != null ?  $compact['record']->width : 1) * ($compact['record']->height != null ?  $compact['record']->height : 1);
 
         $getPrice = AutoDeliverySettings::where('from','>=',$weight)
                         ->where('to','<=',$weight)

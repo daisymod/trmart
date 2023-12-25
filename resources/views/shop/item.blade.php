@@ -193,7 +193,7 @@
                             @if($type == 2)
                                 <p class="date-text">
                                     @lang('system.t8'):
-                                    {{number_format($delivery_price, 2, '.', ' ')}}
+                                    {{number_format($delivery_price, 0, '', ' ')}} ₸
                                 </p>
                             @endif
                         </div>

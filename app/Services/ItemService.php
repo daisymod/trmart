@@ -39,6 +39,12 @@ class ItemService
 
         $data['sale'] = $attributes['sale'] ?? 0;
 
+
+        $data['width'] = $attributes['width'] ?? 0;
+        $data['height'] = $attributes['height'] ?? 0;
+        $data['length'] = $attributes['length'] ?? 0;
+
+
         $data['price'] = ceil($attributes['price']) ?? 0 ;
         $data['count'] = $attributes['count'] ?? 1;
         $data['catalog_id'] = $attributes['catalog'][0] ?? 1;
@@ -80,6 +86,10 @@ class ItemService
         $data['weight'] = $attributes['weight'] ?? 1;
 
         $data['sale'] = $attributes['sale'] ?? 0;
+
+        $data['width'] = $attributes['width'] ?? 0;
+        $data['height'] = $attributes['height'] ?? 0;
+        $data['length'] = $attributes['length'] ?? 0;
 
         $data['price'] = ceil($attributes['price']) ?? 0 ;
         $data['count'] = $attributes['count'] ?? 1;
