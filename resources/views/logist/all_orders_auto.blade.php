@@ -43,8 +43,7 @@
                         {!! implode('', $errors->all('<div class="logist-orders__error">:message</div>')) !!}
                     @endif
                     @if(count($data))
-                        <form method="GET" action="{{ route("logist.to.collect") }}">
-                            <div class="table-scroll-wrap">
+                        <div class="table-scroll-wrap">
                                 <table cellspacing="1" class="merchant-goods-table">
                                     <thead>
                                     <tr>
@@ -112,7 +111,6 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </form>
                     @else
                         <div>Нет заказов</div>
                     @endif
