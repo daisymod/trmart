@@ -122,11 +122,11 @@ class ShopController
         $compact  = ShopService::actionItem($id);
         $delivery = $compact['record']->catalog;
         $delivery_price = 0;
-        $weight = ($compact['record']->length != null ?  $compact['record']->length : 1) *
-            ($compact['record']->width != null ?  $compact['record']->width : 1) * ($compact['record']->height != null ?  $compact['record']->height : 1);
+        $weight = (($compact['record']->length != null ?  $compact['record']->length : 1) *
+            ($compact['record']->width != null ?  $compact['record']->width : 1) * ($compact['record']->height != null ?  $compact['record']->height : 1)) / 5000 ;
 
-        $getPrice = AutoDeliverySettings::where('from','>=',$weight)
-                        ->where('to','<=',$weight)
+        $getPrice = AutoDeliverySettings::where('from','<=',$weight)
+                        ->where('to','>=',$weight)
                         ->first();
 
         if (!empty($getPrice->price)){
@@ -225,7 +225,7 @@ class ShopController
             $canAddNewFeedback = false;
         }
 
-        return view("shop.item",array_merge($compact,['delivery_price' => $delivery_price, 'type' => $delivery->type_delivery,'canAddCart' => $canAddCart,'canAddNewFeedback' =>$canAddNewFeedback,'colorCurrent' =>$colorCurrent,'checkProducts' => $checkProducts, 'color' => $color, 'size' => $size, 'characteristic'=> $characteristic, 'company' => $company,'avgCompanyFeedback' => $avgCompanyFeedback ?? 0, 'countCompanyFeedback' => $countCompanyFeedback ?? 0,  'count_feedback' =>count($feedback),'rating' => $rating, 'feedback' => $feedback, 'currency' => $currency,'turkeyCurrency'=> $turkeyCurrency,'coefficient'=> $coefficient]));
+        return view("shop.item",array_merge($compact,['weight' => $weight,'delivery_price' => $delivery_price, 'type' => $delivery->type_delivery,'canAddCart' => $canAddCart,'canAddNewFeedback' =>$canAddNewFeedback,'colorCurrent' =>$colorCurrent,'checkProducts' => $checkProducts, 'color' => $color, 'size' => $size, 'characteristic'=> $characteristic, 'company' => $company,'avgCompanyFeedback' => $avgCompanyFeedback ?? 0, 'countCompanyFeedback' => $countCompanyFeedback ?? 0,  'count_feedback' =>count($feedback),'rating' => $rating, 'feedback' => $feedback, 'currency' => $currency,'turkeyCurrency'=> $turkeyCurrency,'coefficient'=> $coefficient]));
     }
 
 

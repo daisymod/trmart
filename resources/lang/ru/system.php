@@ -380,7 +380,7 @@ return [
     'delivery_type' =>'Доставка',
     'delivery_type1' =>'Авиа',
     'delivery_type2' =>'Авто',
-    't1' => 'Внимание! Товар нельзя добавить  в корзину пока есть товар из другой доставки',
+    't1' => 'Dikkat! Hava ve araba teslimatı gerektiren ürünler ayrı ayrı sepete eklenir. Lütfen sepetinizdeki siparişi tamamlayın ve yeni bir sipariş ekleyin.',
     'from' => 'От',
     'to' => 'До',
     't2' => 'Доставка',
@@ -390,7 +390,7 @@ return [
     't6' => '10-12 дней',
     't7' => '24-28 дней',
     't8' => 'Стоимость доставки',
-    't10' => 'Внимание! Товар нельзя добавить  в корзину пока есть товар из другой доставки',
+    't10' => 'Dikkat! Hava ve araba teslimatı gerektiren ürünler ayrı ayrı sepete eklenir. Lütfen sepetinizdeki siparişi tamamlayın ve yeni bir sipariş ekleyin.',
 
     'del' => 'Удалить',
 

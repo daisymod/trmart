@@ -139,11 +139,11 @@ class CartController extends Controller
 
         $delivery_auto = 0;
         foreach ($data['items'] as $item){
-            $weight = ($item->length != null ?  $item->length : 1) *
-            ($item->width != null ?  $item->width : 1) * ($item->height != null ?  $item->height : 1);
+            $weight = (($item->length != null ?  $item->length : 1) *
+            ($item->width != null ?  $item->width : 1) * ($item->height != null ?  $item->height : 1)) / 5000 ;
 
-            $getPrice = AutoDeliverySettings::where('from','>=',$weight)
-                ->where('to','<=',$weight)
+            $getPrice = AutoDeliverySettings::where('from','<=',$weight)
+                ->where('to','>=',$weight)
                 ->first();
 
             if (!empty($getPrice->price)){
@@ -418,12 +418,12 @@ class CartController extends Controller
                 }
             }else {
 
-                $weight = ($product->length != null ?  $product->length : 1) *
-                    ($product->width != null ?  $product->width : 1) * ($product->height != null ?  $product->height : 1)
+                $weight = (($product->length != null ?  $product->length : 1) *
+                    ($product->width != null ?  $product->width : 1) * ($product->height != null ?  $product->height : 1)) / 5000
                     * $item['count'];
 
-                $getPrice = AutoDeliverySettings::where('from','>=',$weight)
-                    ->where('to','<=',$weight)
+                $getPrice = AutoDeliverySettings::where('from','<=',$weight)
+                    ->where('to','>=',$weight)
                     ->first();
 
                 if (!empty($getPrice->price)){
