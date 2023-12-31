@@ -38,7 +38,9 @@ class CatalogItemMerchantForm extends BasicForm
         "stock" => [TextboxField::class,'readOnly' => true],
        // "equipment" => [LanguageTextboxField::class, "find" => false],
         "image" => [ImagesField::class, "width" => 800, "height" => 1200, "find" => false],
-
+        "length" => [TextboxField::class],
+        "width" => [TextboxField::class],
+        "height" => [TextboxField::class],
 
         'compound' => [CompoundField::class, "find" => false],
 

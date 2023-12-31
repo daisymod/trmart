@@ -148,20 +148,54 @@
                             </div>
 
                         </div>
-                        <div class="buttons">
-                            <div class="green-wrap">
-                                <a class="green-btn add-to-cart-many" data-id="{{ $record->id }}">@lang('products.addToCart')</a>
-                                <div class="product-count">
-                                    <input type="text" class="input-number-item"  id="input-number-item" value="1" min="1">
-                                    <div class="btns">
-                                        <button type="button" class="btn-minus-item"><img src="/img/arr-right.svg" alt="">
-                                        </button>
-                                        <button type="button" class="btn-plus-item"><img src="/img/arr-right.svg" alt="">
-                                        </button>
+                        @if($canAddCart)
+                           <div class="buttons">
+                                        <div class="green-wrap">
+                                            <a class="green-btn add-to-cart-many" data-id="{{ $record->id }}">@lang('products.addToCart')</a>
+                                            <div class="product-count">
+                                                <input type="text" class="input-number-item"  id="input-number-item" value="1" min="1">
+                                                <div class="btns">
+                                                    <button type="button" class="btn-minus-item"><img src="/img/arr-right.svg" alt="">
+                                                    </button>
+                                                    <button type="button" class="btn-plus-item"><img src="/img/arr-right.svg" alt="">
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a  class="black-btn add-to-cart-many go-now" data-id="{{ $record->id }}">@lang('products.buyNow')</a>
                                     </div>
-                                </div>
-                            </div>
-                            <a  class="black-btn add-to-cart-many go-now" data-id="{{ $record->id }}">@lang('products.buyNow')</a>
+                        @else
+                           <div class="product-style-wrap">
+                                 <div class="product-style-block"> <img src="/img/info-icon.svg" alt="">
+                                       <p>
+                                           @lang('system.t1')
+                                       </p>
+                                 </div>
+                           </div>
+                        @endif
+                        <div class="card">
+                            <p class="delivery-text">
+                                @lang('system.t2'):
+                                @if($type == 1)
+                                    @lang('system.t3')
+                                @else
+                                    @lang('system.t4')
+                                @endif
+                            </p>
+                            <p class="date-text">
+                                @lang('system.t5'):
+                                @if($type == 1)
+                                    @lang('system.t6')
+                                @else
+                                    @lang('system.t7')
+                                @endif
+                            </p>
+                            @if($type == 2)
+                                <p class="date-text">
+                                    @lang('system.t8'):
+                                    {{number_format($delivery_price, 0, '', ' ')}} ₸
+                                </p>
+                            @endif
                         </div>
                     </div>
                 </div>

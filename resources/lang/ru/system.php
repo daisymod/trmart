@@ -377,6 +377,20 @@ return [
     'aboutUs33' => 'Маркетплейс TürkiyeMart придерживается подхода, ориентированного на безопасность и удобство для покупателей, сотрудничество и развитие электронной коммерции со стороны турецких производителей.',
     'aboutUs34' => 'Благодарим всех пользователей за оказанное доверие при использовании маркетплейса TürkiyeMart.',
 
+    'delivery_type' =>'Доставка',
+    'delivery_type1' =>'Авиа',
+    'delivery_type2' =>'Авто',
+    't1' => 'Dikkat! Hava ve araba teslimatı gerektiren ürünler ayrı ayrı sepete eklenir. Lütfen sepetinizdeki siparişi tamamlayın ve yeni bir sipariş ekleyin.',
+    'from' => 'От',
+    'to' => 'До',
+    't2' => 'Доставка',
+    't3' => 'Авиа',
+    't4' => 'Авто',
+    't5' => 'Срок доставки',
+    't6' => '10-12 дней',
+    't7' => '24-28 дней',
+    't8' => 'Стоимость доставки',
+    't10' => 'Dikkat! Hava ve araba teslimatı gerektiren ürünler ayrı ayrı sepete eklenir. Lütfen sepetinizdeki siparişi tamamlayın ve yeni bir sipariş ekleyin.',
 
     'del' => 'Удалить',
 

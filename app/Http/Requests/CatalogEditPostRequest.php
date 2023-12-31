@@ -20,7 +20,7 @@ class CatalogEditPostRequest extends FormRequest
         return [
             "name_ru" => "required|max:255",
             "is_active" => '',
-
+            'type_delivery' => '',
             //"commission" => "required",
         ];
     }

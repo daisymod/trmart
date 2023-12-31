@@ -242,7 +242,11 @@
                                         <div class="deliverey">
                                             <p>@lang('cart.delivery')<b id="card-delivery-price">{{ isset(session()->get('deliveryPrices')['total']) ? session()->get('deliveryPrices')['total'] : '' }} <b>₸</b></b> </p>
                                             <p><span class="gray">@lang('cart.deliverySomeTime')</span>
-                                                <span class="red">{{\Carbon\Carbon::parse()->now()->addDays(14)->format('d')}} - {{\Carbon\Carbon::parse()->now()->addDays(15)->format('d')}} {{\Carbon\Carbon::parse()->now()->addDays(15)->format('F')}}</span></p>
+                                                @if($type == 2)
+                                                    <span class="red">{{\Carbon\Carbon::parse()->now()->addDays(12)->format('d')}} - {{\Carbon\Carbon::parse()->now()->addDays(24)->format('d')}} {{\Carbon\Carbon::parse()->now()->addDays(28)->format('F')}}</span></p>
+                                                @else
+                                                    <span class="red">{{\Carbon\Carbon::parse()->now()->addDays(12)->format('d')}} - {{\Carbon\Carbon::parse()->now()->addDays(12)->format('d')}} {{\Carbon\Carbon::parse()->now()->addDays(14)->format('F')}}</span></p>
+                                            @endif
                                         </div>
                                         <input type="hidden" name="price" value="" id="price-order">
 
@@ -252,19 +256,20 @@
                                         <p>ИТОГО <span class="bold" id="total-order-price-data"></span></p>
                                         {{--<p>Ваша экономия:<span class="green">1 521.00 ₺l</span></p>--}}
                                         <button
-                                            type="submit"
-                                            id="new-order-button"
-                                            class="green-btn">
+                                                type="submit"
+                                                id="new-order-button"
+                                                class="green-btn">
                                             @lang('cart.toPay')
                                         </button>
                                     </div>
                                     <span
-                                        @if($cartCheckCount) style="display: none" @endif
-                                        id="get-del-price"
-                                        class="green-btn">
+                                            @if($cartCheckCount) style="display: none" @endif
+                                    id="get-del-price"
+                                            class="green-btn">
                                         Рассчитать стоимость доставки
                                     </span>
                                 </div>
+
 
                                 <div class="product-style-block-cart">
                                     <img src="/img/info-icon.svg" alt="">

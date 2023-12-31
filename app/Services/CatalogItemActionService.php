@@ -245,9 +245,10 @@ class CatalogItemActionService
     }
 
     public function getNewItems(){
-        $items =  CatalogItem::query()->orderByDesc('id')
+        $items =  CatalogItem::query()
             ->where("status", 2)
             ->where("active", "Y")
+            ->inRandomOrder()
             ->limit(30)
             ->get();
 
@@ -263,7 +264,7 @@ class CatalogItemActionService
 
 
     public function topItems(){
-        $items =  CatalogItem::query()->orderByDesc('id')
+        $items =  CatalogItem::query()
             ->where("status", 2)
             ->where("active", "Y")
             ->limit(30)

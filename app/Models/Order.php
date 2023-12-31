@@ -30,6 +30,11 @@ class Order extends Model
         return $this->belongsTo(User::class, "user_id", "id");
     }
 
+    public function merchantData()
+    {
+        return $this->belongsTo(User::class, "merchant_id", "id");
+    }
+
     public function commission()
     {
         return $this->hasMany(OrderCommission::class, "order_id");

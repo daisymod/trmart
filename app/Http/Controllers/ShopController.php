@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AutoDeliverySettings;
 use App\Models\Catalog;
 use App\Models\CatalogCatalogCharacteristic;
 use App\Models\CatalogCharacteristic;
@@ -13,6 +14,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ProductItem;
 use App\Models\User;
+use App\Services\CartService;
 use App\Services\CurrencyService;
 use App\Services\FeedbackService;
 use App\Services\LanguageService;
@@ -105,7 +107,6 @@ class ShopController
 
     public function actionItem($id)
     {
-
         $checkProducts = $this->showProductService->getAll();
         if (count($checkProducts) > 0){
             foreach ($checkProducts as $product){
@@ -119,6 +120,33 @@ class ShopController
         $turkeyCurrency = $this->currency->getTurkeyCurrency();
         $coefficient =  Cookie::get('currency') == 2 ? 1 : $this->rates->getRateTurkey(Cookie::get('currency'));
         $compact  = ShopService::actionItem($id);
+        $delivery = $compact['record']->catalog;
+        $delivery_price = 0;
+        $weight = (($compact['record']->length != null ?  $compact['record']->length : 1) *
+            ($compact['record']->width != null ?  $compact['record']->width : 1) * ($compact['record']->height != null ?  $compact['record']->height : 1)) / 5000 ;
+
+        $getPrice = AutoDeliverySettings::where('from','<=',$weight)
+                        ->where('to','>=',$weight)
+                        ->first();
+
+        if (!empty($getPrice->price)){
+            $delivery_price = $getPrice->price;
+        }else{
+            $getPrice = AutoDeliverySettings::orderByDesc('price')
+                ->first();
+            if (!empty($getPrice->price)){
+                $delivery_price = $getPrice->price;
+            }
+        }
+
+        $cart = CartService::getCart();
+        $canAddCart = true;
+        if (count($cart['items']) > 0){
+            $getCurrentDelivery = $cart['items'][0]->catalog;
+            if ($delivery->type_delivery != $getCurrentDelivery->type_delivery){
+                $canAddCart = false;
+            }
+        }
 
         $size = ProductItem::where('item_id','=',$id)
             ->with('sizeData')
@@ -197,7 +225,7 @@ class ShopController
             $canAddNewFeedback = false;
         }
 
-        return view("shop.item",array_merge($compact,['canAddNewFeedback' =>$canAddNewFeedback,'colorCurrent' =>$colorCurrent,'checkProducts' => $checkProducts, 'color' => $color, 'size' => $size, 'characteristic'=> $characteristic, 'company' => $company,'avgCompanyFeedback' => $avgCompanyFeedback ?? 0, 'countCompanyFeedback' => $countCompanyFeedback ?? 0,  'count_feedback' =>count($feedback),'rating' => $rating, 'feedback' => $feedback, 'currency' => $currency,'turkeyCurrency'=> $turkeyCurrency,'coefficient'=> $coefficient]));
+        return view("shop.item",array_merge($compact,['weight' => $weight,'delivery_price' => $delivery_price, 'type' => $delivery->type_delivery,'canAddCart' => $canAddCart,'canAddNewFeedback' =>$canAddNewFeedback,'colorCurrent' =>$colorCurrent,'checkProducts' => $checkProducts, 'color' => $color, 'size' => $size, 'characteristic'=> $characteristic, 'company' => $company,'avgCompanyFeedback' => $avgCompanyFeedback ?? 0, 'countCompanyFeedback' => $countCompanyFeedback ?? 0,  'count_feedback' =>count($feedback),'rating' => $rating, 'feedback' => $feedback, 'currency' => $currency,'turkeyCurrency'=> $turkeyCurrency,'coefficient'=> $coefficient]));
     }
 
 

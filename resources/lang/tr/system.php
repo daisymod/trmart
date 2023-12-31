@@ -372,4 +372,21 @@ Türkiye'nin tanıdığınız tüm markaları tek bir marketplace'te.",
     'warning-11' => "Dikkat!\n
 Sitedeki malların ve teslimatın maliyeti tenge'de belirtilir ve ödeme sayfasına geçtiğinizde bu tutar otomatik olarak Türk lirasına dönüştürülür.\n
 Banka kartınızdan para çekme işlemi, toplam sipariş tutarına uygun olarak tenge'de yapılacaktır.",
+
+
+
+    'delivery_type' =>'Доставка',
+    'delivery_type1' =>'Авиа',
+    'delivery_type2' =>'Авто',
+    't1' => 'Внимание! Товары с авиа и авто доставкой добавляются в корзину раздельно. Завершите заказ в корзине и добавьте новый заказ.',
+    'from' => 'От',
+    'to' => 'До',
+    't2' => 'Доставка',
+    't3' => 'Авиа',
+    't4' => 'Авто',
+    't5' => 'Срок доставки',
+    't6' => '10-12 дней',
+    't7' => '24-28 дней',
+    't8' => 'Стоимость доставки',
+    't10' => 'Внимание! Товары с авиа и авто доставкой добавляются в корзину раздельно. Завершите заказ в корзине и добавьте новый заказ.',
 ];

@@ -2,6 +2,8 @@
 
 return [
     "form" => [
+        'width' => 'Genişlik',
+        'height' => 'Yükseklikler',
         'sale' => 'İndirim',
         "name" => "İsim",
         "image" => "Resim",

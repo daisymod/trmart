@@ -22,7 +22,8 @@ class CatalogItem extends Model
     protected $fillable = ["barcode", "user_id","name_ru",'name_kz','name_tr','brand','article',
         'country_title','city_id','country_id','equipment_ru','equipment_tr',
         'equipment_kz','body_ru','body_tr','body_kz','active','status','status_text','sex',
-        'weight','style','size','sale','length','catalog_id','price','image','stock','reason','gpt_translate'];
+        'weight','style','size','sale','length','catalog_id','price','image','stock','reason','gpt_translate',
+        'length','width','height'];
 
     public function catalog()
     {
