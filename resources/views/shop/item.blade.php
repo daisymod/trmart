@@ -196,14 +196,6 @@
                                     {{number_format($delivery_price, 0, '', ' ')}} ₸
                                 </p>
                             @endif
-
-                            <p class="date-text">
-                                Вес физический: {{$record->weight}}
-                            </p>
-
-                            <p class="date-text">
-                                Вес объёмный: {{$weight}}
-                            </p>
                         </div>
                     </div>
                 </div>
