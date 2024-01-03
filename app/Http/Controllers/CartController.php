@@ -142,6 +142,12 @@ class CartController extends Controller
             $weight = (($item->length != null ?  $item->length : 1) *
             ($item->width != null ?  $item->width : 1) * ($item->height != null ?  $item->height : 1)) / 5000 ;
 
+            $weightReal = (($item->weight != null ?  $item->weight : 1)) / 1000;
+
+            if ($weightReal > $weight){
+                $weight = $weightReal;
+            }
+
             $getPrice = AutoDeliverySettings::where('from','<=',$weight)
                 ->where('to','>=',$weight)
                 ->first();
@@ -421,6 +427,12 @@ class CartController extends Controller
                 $weight = (($product->length != null ?  $product->length : 1) *
                     ($product->width != null ?  $product->width : 1) * ($product->height != null ?  $product->height : 1)) / 5000
                     * $item['count'];
+
+                $weightReal = ((($product->weight != null ?  $product->weight : 1)) / 1000)  * $item['count'];
+
+                if ($weightReal > $weight){
+                    $weight = $weightReal;
+                }
 
                 $getPrice = AutoDeliverySettings::where('from','<=',$weight)
                     ->where('to','>=',$weight)
