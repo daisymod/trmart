@@ -125,6 +125,12 @@ class ShopController
         $weight = (($compact['record']->length != null ?  $compact['record']->length : 1) *
             ($compact['record']->width != null ?  $compact['record']->width : 1) * ($compact['record']->height != null ?  $compact['record']->height : 1)) / 5000 ;
 
+        $weightReal = (($compact['record']->weight != null ?  $compact['record']->weight : 1)) / 1000;
+
+        if ($weightReal > $weight){
+            $weight = $weightReal;
+        }
+
         $getPrice = AutoDeliverySettings::where('from','<=',$weight)
                         ->where('to','>=',$weight)
                         ->first();
