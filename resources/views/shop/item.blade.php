@@ -197,7 +197,7 @@
                                 </p>
                             @endif
                             <p class="date-text">
-                                Вес физический: {{$record->weight}}
+                                Вес физический: {{$record->weight / 1000}}
                             </p>
 
                             <p class="date-text">

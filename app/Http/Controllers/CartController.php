@@ -412,6 +412,7 @@ class CartController extends Controller
             $weight = $product->weight * $item['count'];
             $price = ceil(($product->price - ($product->price * $product->sale) / 100) * $coefficent->rate_end) * $item['count'];
             if ($product->catalog->type_delivery == 1) {
+                $kps = $client->getPostRate($weight, $price, Auth::user()->postcode);
                 if (isset($kps->Sum)) {
                     $deliveryPrice   = doubleval($kps->Sum);
                     $deliveryTrPrice = doubleval($product->weight) * $td * $item['count'];
