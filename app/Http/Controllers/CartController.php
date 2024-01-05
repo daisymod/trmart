@@ -153,12 +153,12 @@ class CartController extends Controller
                 ->first();
 
             if (!empty($getPrice->price)){
-                $delivery_auto += $getPrice->price;
+                $delivery_auto += $getPrice->price * $weight;
             }else{
                 $getPrice = AutoDeliverySettings::orderByDesc('price')
                     ->first();
                 if (!empty($getPrice->price)){
-                    $delivery_auto += $getPrice->price;
+                    $delivery_auto += $getPrice->price * $weight;
                 }
             }
         }
@@ -440,12 +440,12 @@ class CartController extends Controller
                     ->first();
 
                 if (!empty($getPrice->price)){
-                    $delivery_auto += $getPrice->price;
+                    $delivery_auto += $getPrice->price * $weight;
                 }else{
                     $getPrice = AutoDeliverySettings::orderByDesc('price')
                         ->first();
                     if (!empty($getPrice->price)){
-                        $delivery_auto += $getPrice->price;
+                        $delivery_auto += $getPrice->price * $weight;
                     }
                 }
 
