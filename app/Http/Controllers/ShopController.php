@@ -138,12 +138,12 @@ class ShopController
                         ->first();
 
         if (!empty($getPrice->price)){
-            $delivery_price = $getPrice->price;
+            $delivery_price = $getPrice->price * $weightTotal;
         }else{
             $getPrice = AutoDeliverySettings::orderByDesc('price')
                 ->first();
             if (!empty($getPrice->price)){
-                $delivery_price = $getPrice->price;
+                $delivery_price = $getPrice->price * $weightTotal;
             }
         }
 
