@@ -378,7 +378,7 @@ Banka kartınızdan para çekme işlemi, toplam sipariş tutarına uygun olarak 
     'delivery_type' =>'Доставка',
     'delivery_type1' =>'Авиа',
     'delivery_type2' =>'Авто',
-    't1' => 'Внимание! Товары с авиа и авто доставкой добавляются в корзину раздельно. Завершите заказ в корзине и добавьте новый заказ.',
+    't1' => 'Dikkat! Hava ve araba teslimatı gerektiren ürünler ayrı ayrı sepete eklenir. Lütfen sepetinizdeki siparişi tamamlayın ve yeni bir sipariş ekleyin.',
     'from' => 'От',
     'to' => 'До',
     't2' => 'Доставка',
@@ -388,5 +388,10 @@ Banka kartınızdan para çekme işlemi, toplam sipariş tutarına uygun olarak 
     't6' => '10-12 дней',
     't7' => '24-28 дней',
     't8' => 'Стоимость доставки',
-    't10' => 'Внимание! Товары с авиа и авто доставкой добавляются в корзину раздельно. Завершите заказ в корзине и добавьте новый заказ.',
+    't10' => 'Dikkat! Hava ve araba teslimatı gerektiren ürünler ayrı ayrı sepete eklenir. Lütfen sepetinizdeki siparişi tamamlayın ve yeni bir sipariş ekleyin.',
+
+
+    'Вес физический' => 'Fiziksel ağırlık',
+    'Вес объёмный' => 'Hacimsel ağırlık',
+
 ];

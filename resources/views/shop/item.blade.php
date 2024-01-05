@@ -197,11 +197,11 @@
                                 </p>
                             @endif
                             <p class="date-text">
-                                Вес физический: {{$record->weight / 1000}}
+                                @lang('system.Вес физический'): {{$record->weight / 1000}} kg
                             </p>
 
                             <p class="date-text">
-                                Вес объёмный: {{$weight}}
+                                @lang('system.Вес объёмный'): {{$weight}} kg
                             </p>
 
                         </div>
