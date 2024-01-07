@@ -95,9 +95,9 @@ class CartService
 
         $sizeId = CatalogCharacteristicItem::select('id')
             ->where('catalog_characteristic_id','=',16)
-            ->where('name_tr','=',request()->get("size"))
-            ->orWhere('name_ru','=',request()->get("size"))
-            ->orWhere('name_kz','=',request()->get("size"))
+            ->where('name_tr','=',$size)
+            ->orWhere('name_ru','=',$size)
+            ->orWhere('name_kz','=',$size)
             ->get()->toArray();
 
         $result = [];
