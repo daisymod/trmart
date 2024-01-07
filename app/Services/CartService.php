@@ -111,7 +111,7 @@ class CartService
             ->first();
 
 
-        if ($item->count - $count  < 0){
+        if ($item->count - ($count ?? 1)  < 0){
             return 422;
         }
 
