@@ -84,6 +84,7 @@ class CartService
     public static function add($id, $count, $size = 0,$color = 0)
     {
         $size = str_replace('+','',$size);
+        Log::info(print_r($size,true));
         $cart = session()->get("cart");
         $key = "id{$id}size{$size}color{$color}";
 
@@ -112,7 +113,7 @@ class CartService
             ->first();
 
 
-        if ($item->count - ($count ?? 1)  < 0){
+        if (($item->count ?? 2) - ($count ?? 1)  < 0){
             return 422;
         }
 
