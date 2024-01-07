@@ -83,6 +83,7 @@ class CartService
 
     public static function add($id, $count, $size = 0,$color = 0)
     {
+        $size = str_replace('+','',$size);
         $cart = session()->get("cart");
         $key = "id{$id}size{$size}color{$color}";
 
