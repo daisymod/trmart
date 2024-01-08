@@ -41,6 +41,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 
 class CartController extends Controller
 {
@@ -303,12 +304,11 @@ class CartController extends Controller
         if (Auth::check()){
             $this->service->update($request->all());
         }
+        if (!empty($checkoutFormInitialize->getErrorMessage())){
+            throw ValidationException::withMessages([$checkoutFormInitialize->getErrorMessage()]);
+        }
+
         return ["redirect" => $checkoutFormInitialize->getPaymentPageUrl()];
-
-
-        //newOrderJob::dispatch($request->all(),CartService::getCart(),Auth::user());
-
-
     }
 
     public function actionDone()
