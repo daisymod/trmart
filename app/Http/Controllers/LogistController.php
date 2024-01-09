@@ -411,7 +411,8 @@ class LogistController extends Controller
             'city' => $id->city_name,
             'house_number' => $id->house_number,
             'room' => $id->room,
-            'delivery' => self::num2str($id->tr_delivery_price),
+            'price' => $id->price,
+            'delivery' => self::num2str($id->price),
             'to' => $id->merchantData->company->company_name ?? null,
             'weight' => $weight,
         ];
