@@ -25,6 +25,7 @@ class OrdersResource extends JsonResource
             'id'                => $this->id,
             'sale'        => 	$this->sale,
             'created_at'        => $this->created_at,
+            'delivery_sum'        => $this->delivery_sum,
         ];
     }
     private function leftData($date): string

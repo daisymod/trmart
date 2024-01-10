@@ -35,6 +35,7 @@
                                     <th style="width: 14%">@lang('customer.orders.created_data')</th>
                                     <th style="width: 18%">@lang('customer.orders.will_be_delivered_remaining')</th>
                                     <th style="width: 7%">@lang('customer.orders.sum')</th>
+                                    <th style="width: 7%">@lang('customer.orders.delivery')</th>
                                     <th style="width: 11%">@lang('customer.orders.discount')</th>
                                     <th style="width: 11%">@lang('customer.orders.order_status')</th>
                                     <th style="width: 7%"></th>
@@ -55,6 +56,7 @@
                                         @endif
                                     </td>
                                     <td><span>{{ $order['price'] }} ₸</span></td>
+                                    <td><span>{{ $order['delivery_sum'] ?? 0 }} ₸</span></td>
                                     <td><span>{{ $order['sale'] }} ₸</span></td>
                                     <td>
                                         <span class="{{ $order['status'] == 4 ? 'green-text' : 'red-text' }}">
