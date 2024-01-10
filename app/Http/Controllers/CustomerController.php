@@ -169,8 +169,7 @@ class CustomerController extends Controller
         foreach ($orders as $order){
 
             //* $order->items[0]->count;
-            $order->delivery_sum = $order->delivery_price + $order->tr_delivery_price;
-            $order->price = $order->price + $order->delivery_sum;
+            $order->delivery_sum = ($order->delivery_price ?? 0) + ($order->tr_delivery_price ?? 0);
             $order->delivery_dt_end = Carbon::parse($order->created_at)->addDays(15)->format('Y-m-d');
             $order->left = Carbon::parse($order->created_at)->addDays(15)->diffInDays(Carbon::now());
             $order->left = $order->left < 0 ? 0 : $order->left;
