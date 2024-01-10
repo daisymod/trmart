@@ -53,12 +53,7 @@
                                         <th style="width: 4%">@lang('logist.orders.loi4')</th>
                                         <th style="width: 4%">@lang('logist.orders.loi5')</th>
 
-                                        <th style="width: 4%">@lang('logist.orders.loi6')</th>
-                                        <th style="width: 4%">@lang('logist.orders.loi61')</th>
-
-                                        <th style="width: 4%">@lang('logist.orders.loi6') - 1</th>
-                                        <th style="width:4%">@lang('logist.orders.loi61') - 1</th>
-
+                                        <th style="width: 4%">delivery auto</th>
 
                                         <th style="width: 4%">@lang('logist.orders.loi7')</th>
                                         <th style="width: 4%">@lang('logist.orders.loi8')</th>
@@ -75,11 +70,8 @@
                                             <td><span>{{ $order['merchant'] }}</span></td>
                                             <td><span>{{ $order['city_name'] }}</span></td>
                                             <td><span>{{ $order['price'] }} ₸</span></td>
-                                            <td><span>{{ $order['delivery_price'] }} ₸</span></td>
-                                            <td><span>{{ $order['tr_delivery_price'] }} ₸</span></td>
+                                            <td><span>{{ ($order['delivery_price'] ?? 0 + $order['tr_delivery_price'] ?? 0)  }} ₸</span></td>
 
-                                            <td><span class="logist-table__dp">{{ $order['delivery_kz_weighing'] }} ₸</span></td>
-                                            <td><span class="logist-table__tdp">{{ $order['delivery_tr_weighing'] }} ₸</span></td>
                                             <td>
                                                 <input class="logist-table__input" type="text" value="{{ $order['real_weight'] }}">
                                             </td>
