@@ -16,7 +16,7 @@
                                     <option value="1">Admin</option>
                                     @foreach($users as $user)
                                         @if(isset($user->user->id))
-                                            <option value="{{$user->user->id ?? null}}">{{$user->company_name}} / {{$user->user->name.' '.$user->user->s_name }}</option>
+                                            <option value="{{$user->user->id ?? null}}">{{$user->company_name ?? ''}} / {{$user->user->name.' '.$user->user->s_name }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -51,7 +51,7 @@
                                 @if($i->user->role == 'admin')
                                     {{ $i->user->name. ' ' .$i->user->s_name }}
                                 @else
-                                    {{ $i->user->company->company_name}}
+                                    {{ $i->user->company->company_name ?? ''}}
                                 @endif
                             </td>
                             <td>{{ \Carbon\Carbon::parse($i->start_parse) }}</td>
