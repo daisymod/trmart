@@ -402,11 +402,19 @@ class LogistController extends Controller
             $currentWeightItem = $item->item->weight / 1000 * $item->count;
             $weight +=$currentWeightItem;
         }
+
         $template = [
             'created_at' => Carbon::parse($id->created_at),
             'postcode' => $id->postcode,
             'phone' => $id->phone,
             'fio' => $id->name.' '.$id->surname.' '.$id->middle_name,
+
+            'from_phone' => $id->merchantData->company->phone ?? '',
+            'from_street' => $id->merchantData->company->street ?? '',
+            'from_city' => $id->merchantData->company->city ?? '',
+            'from_house_number' => $id->merchantData->company->number ?? '',
+            'from_room' => $id->merchantData->company->office ?? '',
+
             'street' => $id->street,
             'city' => $id->city_name,
             'house_number' => $id->house_number,

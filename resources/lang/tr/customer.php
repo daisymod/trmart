@@ -53,8 +53,8 @@ return [
             'status_1' => 'Sipariş devam ediyor',
             'status_2' => "Sipariş Türkiye'deki depoya gönderildi",
             'status_3' => "Sipariş Türkiye'deki depoya ulaştı",
-            'status_4' => 'Sipariş Kazakhstan A.Ş. tasnif merkezine gönderildi',
-            'status_5' => 'Sipariş Kazakhstan A.Ş. tasnif merkezine ulaştı',
+            'status_4' => "Sipariş, Kazakistan'daki sıralama merkezine sevk edildi",
+            'status_5' => "Sipariş, Kazakistan'daki sıralama merkezine ulaştı",
             'status_6' => 'Teslim edildi',
         ],
         'will_be_delivered_remaining'   => 'Teslim Yapılacak / Kalan',
@@ -87,9 +87,10 @@ return [
         'total'                         => 'Toplam',
         'more'                          => 'Daha fazla',
         'sum'                           => 'Toplam',
+        'sum1'                           => 'Tüccar ödeme miktarı',
         'delivery_sum'                  => 'Teslimat miktarı',
         'delivery_sum1' => 'Ödeme tutarı (teslimatlı mal)',
         'commission'                  => 'Komisyon tutarı',
-        'sum_without_commission'                  => 'Sipariş fiyatı',
+        'sum_without_commission'                  => 'Sipariş tutarı',
     ]
 ];
