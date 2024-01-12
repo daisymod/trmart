@@ -235,14 +235,21 @@ class LogistController extends Controller
                 return Redirect::back()->withErrors('Выберите дата начало и конца');
             } else {
                 $orders = Order::query()
-                    ->where('status', 2)
+                    ->whereIn('status', [1,2])
+                    ->whereHas('items.item.catalog',function ($q){
+                        $q->where('type_delivery','=','1');
+                    })
                     ->whereDate('created_at','<=', Carbon::parse($end)->toDateString())
                     ->whereDate('created_at','>=', Carbon::parse($start)->toDateString())
                     ->orderBy('id')
                     ->get();
             }
         } else {
-            $orders = Order::query()->where('status', 2)->orderBy('id')->get();
+            $orders = Order::query()->whereIn('status', [1,2])
+                ->whereHas('items.item.catalog',function ($q){
+                    $q->where('type_delivery','=','1');
+                })
+                ->orderBy('id')->get();
         }
 
         $data = LogistOrdersResource::collection($orders)->resolve();

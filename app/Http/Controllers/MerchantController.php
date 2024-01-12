@@ -517,10 +517,10 @@ class MerchantController extends Controller
         return Redirect::to(route("merchant.orders"));
     }
 
-    public function getOrderPage($id){
+    public function getOrderPage(Order $id){
         $record = Customer::query()->findOrFail(Auth::user()->id);
-        $order = OrderInfoResource::collection(Order::query()->where(['id' => $id])->get())->resolve();
-        $items = OrderItemResource::collection(OrderItem::query()->where('order_id', $id)->get())->resolve();
+        $order = OrderInfoResource::collection(Order::query()->where(['id' => $id->id])->get())->resolve();
+        $items = OrderItemResource::collection(OrderItem::query()->where('order_id', $id->id)->get())->resolve();
         //Gate::authorize("customer-orders", $record);
 
         return view("merchant.order", compact("record", "order", "items"));
