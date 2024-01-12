@@ -45,7 +45,7 @@
                                     <td><span>{{ $item['article'] }}</span></td>
                                     <td>
                                         <span>
-                                            <img height="100px" src="{{$item['image'][0]['file']}}" alt=""> &nbsp;
+                                            <img height="100px" src="{{$item['image'][0]['file'] ?? '/img/logo.svg'}}" alt=""> &nbsp;
                                         </span>
                                         <span class="name">{{ $item['name'] }}</span>
                                         <span class="brand">{{ $item['brand'] }}</span>

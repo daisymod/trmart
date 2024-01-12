@@ -77,7 +77,7 @@
                                 <th style="width: 10%">@lang('customer.orders.order_number')</th>
                                 <th style="width: 14%">@lang('customer.orders.created_data')</th>
                                 <th style="width: 18%">@lang('customer.orders.will_be_delivered_remaining')</th>
-                                <th style="width: 7%">@lang('customer.orders.sum')</th>
+                                <th style="width: 7%">@lang('customer.orders.sum1')</th>
 
                                 @if(Auth::user()->role == 'admin')
                                     <th style="width: 7%">@lang('customer.orders.delivery_sum')</th>
