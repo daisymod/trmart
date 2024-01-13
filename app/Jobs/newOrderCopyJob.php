@@ -7,6 +7,7 @@ use App\Mail\AdminNewOrder;
 use App\Mail\MerchantNewOrder;
 use App\Mail\NewOrderMail;
 use App\Mail\UserNewOrder;
+use App\Models\AutoDeliverySettings;
 use App\Models\Catalog;
 use App\Models\CatalogItem;
 use App\Models\Country;
@@ -54,6 +55,7 @@ class newOrderCopyJob implements ShouldQueue
 
         $client = new KazPost();
         foreach ($cart["items"] as $item) {
+
             $coefficient = CurrencyRate::where('currency_id','=',2)
                 ->where('currency_to_id','=',1)
                 ->first();
@@ -106,9 +108,38 @@ class newOrderCopyJob implements ShouldQueue
 
             $kps = $client->getPostRate($order->real_weight, $order->payment, $order->postcode);
 
-            $order->delivery_price =  $kps->Sum  ?? null;
-            $order->tr_delivery_price = (doubleval($real_weight) * $td ) ?? null;
+            if ($product->catalog->type_delivery == 1) {
+                $order->delivery_price = $kps->Sum ?? null;
+                $order->tr_delivery_price = (doubleval($real_weight) * $td) ?? null;
+            }else{
+                $delivery_auto = 0;
+                $weight = (($product->length != null ?  $product->length : 1) *
+                        ($product->width != null ?  $product->width : 1) * ($product->height != null ?  $product->height : 1)) / 5000
+                    * $item['count'];
 
+                $weightReal = ((($product->weight != null ?  $product->weight : 1)) / 1000)  * $item['count'];
+
+                if ($weightReal > $weight){
+                    $weight = $weightReal;
+                }
+
+                $getPrice = AutoDeliverySettings::where('from','<=',$weight)
+                    ->where('to','>=',$weight)
+                    ->first();
+
+                if (!empty($getPrice->price)){
+                    $delivery_auto += $getPrice->price * $weight;
+                }else{
+                    $getPrice = AutoDeliverySettings::orderByDesc('price')
+                        ->first();
+                    if (!empty($getPrice->price)){
+                        $delivery_auto += $getPrice->price * $weight;
+                    }
+                }
+
+                $order->delivery_price = $delivery_auto;
+                $order->tr_delivery_price = 0;
+            }
             $order->save();
 
 
@@ -129,7 +160,7 @@ class newOrderCopyJob implements ShouldQueue
             $orderItem->price_tenge = ceil($price * $coefficient->rate_end) * $item->count;
 
             $order->items()->save($orderItem);
-            
+
             $calculateCommission = new OrderComissionCopy();
             $calculateCommission->order_id = $order->id;
             $calculateCommission->product_id = $orderItem->catalog_item_id;
