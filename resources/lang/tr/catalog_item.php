@@ -4,6 +4,7 @@ return [
     "form" => [
         'width' => 'Genişlik (Santimetre)',
         'height' => 'Yükseklikler (Santimetre)',
+        'length' => 'Uzunluk (сантиметр)',
         'sale' => 'İndirim',
         "name" => "İsim",
         "image" => "Resim",
