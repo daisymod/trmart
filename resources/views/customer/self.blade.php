@@ -123,7 +123,7 @@
                             <input type="hidden" name="area_title" id="profile-area_title" value="{{Auth::user()->area_title}}">
                             <input type="hidden" name="postcode" id="profile-postcode_id" value="{{Auth::user()->postcode_id}}">
                         </div>
-                        <button class="green-btn" type="submit">@lang('system.takeChange')</button>
+                        <button @if(isset($_GET['from_cart'])) name="to_cart" @endif class="green-btn" type="submit">@lang('system.takeChange')</button>
                     </div>
                     <div class="right">
                         <h5> @lang('system.m53')</h5>

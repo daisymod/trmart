@@ -101,33 +101,66 @@ class CartController extends Controller
         //session()->remove("order_data");
         $countries = Country::query()
             ->select('id', 'name_ru')
-            ->get()
-            ->values();;
+            ->where('id','=',Auth::user()->country_id)
+            ->first();
+        if (!empty($countries->name_ru)){
+            $country_id = $countries->name_ru;
+        }else{
+            $country_id = '';
+        }
+
         if (Auth::check() && Auth::user()->country_id === 3) {
             $regions   = KPLocation::query()
                 ->orderBy('name')
                 ->where('parent_id', 0)
                 ->select('id', 'name')
-                ->get()
-                ->values();
+                ->where('id','=',Auth::user()->region_id)
+                ->first();
+
+            if (!empty($regions->name)){
+                $region_id = $regions->name;
+            }else{
+                $region_id = '';
+            }
+
             $areas     = KPLocation::query()
                 ->orderBy('name')
                 ->where('parent_id', KPLocation::query()->where('id', Auth::user()->area_id)->value('parent_id'))
                 ->select('id', 'name')
-                ->get()
-                ->values();
+                ->where('id','=',Auth::user()->area_id)
+                ->first();
+
+            if (!empty($areas->name)){
+                $area_id = $regions->name;
+            }else{
+                $area_id = '';
+            }
+
             $cities    = KPLocation::query()
                 ->orderBy('name')
                 ->where('parent_id', KPLocation::query()->where('id',  Auth::user()->city_id)->value('parent_id'))
                 ->select('id', 'name')
-                ->get()
-                ->values();
+                ->where('id','=',Auth::user()->city_id)
+                ->first();
+
+            if (!empty($cities->name)){
+                $city_id = $cities->name;
+            }else{
+                $city_id = '';
+            }
+
             $postCodes = KPPostCode::query()
                 ->orderBy('title')
-                ->where('kp_locations_id', KPPostCode::query()->where('id',  Auth::user()->postcode_id)->value('kp_locations_id'))
                 ->select('id', 'title')
-                ->get()
-                ->values();
+                ->where('id','=',Auth::user()->postcode_id)
+                ->first();
+
+            if (!empty($postCodes->title)){
+                $postcode_id = $postCodes->title;
+            }else{
+                $postcode_id = '';
+            }
+
         } else {
             $areas = [];
             $regions = [];
@@ -170,7 +203,9 @@ class CartController extends Controller
         }else{
             $type = 1;
         }
-        return view("cart.index", compact("delivery_auto","type","countries", "cities", "regions", "areas", "postCodes", 'cartCheckCount'));
+        return view("cart.index", compact(
+            "city_id",'area_id','postcode_id','region_id',"country_id",
+            "delivery_auto","type","countries", "cities", "regions", "areas", "postCodes", 'cartCheckCount'));
     }
 
     public static function getVKData($method, $params = [])
@@ -450,11 +485,11 @@ class CartController extends Controller
                 }
 
                 $deliveryPrice   = 0;
-                $deliveryTrPrice = doubleval($delivery_auto);
+                $deliveryTrPrice = ceil(doubleval($delivery_auto));
                 $delivery = 0;
-                $deliveryTr = $deliveryTr + ($deliveryTrPrice);
-                $arr['items'][$key] = $deliveryPrice + $deliveryTrPrice;
-                $total = $total + (($deliveryPrice + $deliveryTrPrice));
+                $deliveryTr = ceil($deliveryTr + ($deliveryTrPrice));
+                $arr['items'][$key] = ceil($deliveryPrice + $deliveryTrPrice);
+                $total = ceil($total + (($deliveryPrice + $deliveryTrPrice)));
             }
         }
         $arr['count'] = $count;

@@ -144,72 +144,37 @@
                                 </div>
                             </div>
                             <div class="info info2">
-                                <h4>@lang('cart.addressDelivery') <a class="green-text ml-2" href="{{route('customer.self')}}">@lang('customer.orders.change') </a></h4>
+                                <h4 class="data-address-cart">@lang('cart.addressDelivery')
+                                    <a class="to_cart_btn green-btn" href="{{route('customer.self',['from_cart' => 1])}}">
+                                        @lang('system.to_change_address')
+                                    </a>
+                                </h4>
                                 <div class="customer-addresses">
                                     <div class="inputs-wrap">
                                         <span class="input-title">@lang('customer.form-label.fl1')</span>
-                                        <select readonly class="form-control" name="country_id" id="profile-country_id">
-                                            @foreach($countries as $item)
-                                                @if(Auth::user()->country_id === $item->id)
-                                                    <option @if(Auth::user()->country_id === $item->id) selected @endif value="{{$item->id}}">{{$item->name_ru}}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
+                                        <input type="text" readonly class="form-control" name="country_id" id="profile-country_id" value="{{$country_id}}">
                                     </div>
                                     <div class="inputs-wrap">
                                         <span class="input-title">@lang('customer.form-label.fl2')</span>
-                                        <select readonly class="form-control" name="region_id" id="profile-region_id">
-                                            @if($regions)
-                                                @foreach($regions as $item)
-                                                    @if(Auth::user()->region_id === $item->id)
-                                                        <option @if(Auth::user()->region_id === $item->id) selected @endif value="{{$item->id}}">{{$item->name}}</option>
-                                                    @endif
-                                                @endforeach
-                                            @endif
-                                        </select>
+                                        <input type="text" readonly class="form-control" name="region_id" id="profile-region_id" value="{{$region_id}}">
                                     </div>
                                     <div class="inputs-wrap">
                                         <span class="input-title">@lang('customer.form-label.fl3')</span>
-                                        <select readonly class="form-control" name="area_id" id="profile-area_id">
-                                            @if($areas)
-                                                @foreach($areas as $item)
-                                                    @if(Auth::user()->area_id === $item->id)
-                                                        <option @if(Auth::user()->area_id === $item->id) selected @endif value="{{$item->id}}">{{$item->name}}</option>
-                                                    @endif
-                                                @endforeach
-                                            @endif
-                                        </select>
+                                        <input type="text" readonly class="form-control" name="area_id" id="profile-area_id" value="{{$area_id}}">
                                     </div>
                                     <div class="inputs-wrap">
                                         <span class="input-title">@lang('customer.form-label.fl4')</span>
-                                        <select readonly class="form-control" name="city_id" id="profile-city_id">
-                                            @if($cities)
-                                                @foreach($cities as $item)
-                                                    @if(Auth::user()->city_id === $item->id)
-                                                        <option selected value="{{$item->id}}">{{$item->name}}</option>
-                                                    @endif
-                                                @endforeach
-                                            @endif
-                                        </select>
+                                        <input type="text" readonly class="form-control" name="city_id" id="profile-city_id" value="{{$city_id}}">
                                     </div>
                                     <div class="inputs-wrap">
                                         <span class="input-title">@lang('customer.form-label.fl5')</span>
-                                        <select readonly class="form-control" name="postcode_id" id="profile-postcode">
-                                            @if($postCodes)
-                                                @foreach($postCodes as $item)
-                                                    @if(Auth::user()->postcode_id === $item->id)
-                                                        <option @if(Auth::user()->postcode_id === $item->id) selected @endif value="{{$item->id}}">{{$item->title}}</option>
-                                                    @endif
-                                                @endforeach
-                                            @else
-                                                <option disabled selected id="profile-postcode__def">@lang('customer.form-label.fl5')</option>
-                                            @endif
-                                        </select>
+                                        <input type="text" readonly class="form-control" name="postcode_id" id="profile-postcode" value="{{$postcode_id}}">
+
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <span class="input-title">@lang('cart.street')</span>
-                                    <input type="text" name="street" value="{{Auth::user()->address_invoice ?? ''}}" placeholder="@lang('cart.street')">
+                                    <input readonly type="text" name="street" value="{{Auth::user()->address_invoice ?? ''}}" placeholder="@lang('cart.street')">
                                     @error('street')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
@@ -218,14 +183,14 @@
                                 <div class="inputs">
                                     <div>
                                         <span class="input-title" style="width: 100%">@lang('cart.homeNumber')</span>
-                                        <input type="text" name="house_number" value="{{\Illuminate\Support\Facades\Auth::user()->house_number ?? ''}}" placeholder="@lang('cart.homeNumber')">
+                                        <input readonly type="text" name="house_number" value="{{\Illuminate\Support\Facades\Auth::user()->house_number ?? ''}}" placeholder="@lang('cart.homeNumber')">
                                         @error('house_number')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div>
                                         <span class="input-title" style="width: 100%">@lang('cart.appartments')</span>
-                                        <input type="text" name="room" value="{{\Illuminate\Support\Facades\Auth::user()->room ?? ''}}" placeholder="@lang('cart.appartments')">
+                                        <input readonly type="text" name="room" value="{{\Illuminate\Support\Facades\Auth::user()->room ?? ''}}" placeholder="@lang('cart.appartments')">
                                         @error('room')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
