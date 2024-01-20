@@ -29,6 +29,7 @@ class CustomerRequest extends FormRequest
             'name'            => 'required',
             's_name'            => 'required',
             'postcode_id'            => 'required',
+            'to_cart'            => '',
         ];
     }
 

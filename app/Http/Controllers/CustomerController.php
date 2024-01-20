@@ -86,7 +86,13 @@ class CustomerController extends Controller
         Gate::authorize("customer-edit", $record);
         $form = new CustomerSelfForm($record);
         $form->formSave($request->all());
-        return ["redirect" => route("customer.self", ["send" => true])];
+
+        if (isset($request->all()['from_cart']) && ($request->all()['from_cart'] == 1)){
+            return ["redirect" => route("cart.index", ["send" => true])];
+        }else{
+            return ["redirect" => route("customer.self", ["send" => true])];
+        }
+
     }
 
     public function actionFavoritesGet(Request $request): View|Factory|JsonResponse|Application

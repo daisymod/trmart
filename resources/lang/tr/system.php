@@ -1,5 +1,6 @@
 <?php
 return [
+    'to_change_address' => 'Teslimat adresi ekle/değiştir',
     'is_active' => 'Активен?',
     'cant_active' => "Dikkat! \n
      Bu kategoride / alt kategorilerde ürünler bulunmaktadır. Ürünlerin kategorisini değiştiriniz.. 

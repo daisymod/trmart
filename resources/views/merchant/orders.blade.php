@@ -107,18 +107,18 @@
                                             <span class="{{ $order['left_status'] == 0 ? 'red-text' : 'green-text' }}">{{ $order['left'] }}</span>
                                         @endif
                                     </td>
-                                    <td><span>{{ $order['commission'][0]->total_price ?? 0 }} ₸</span></td>
+                                    <td><span>{{ $order['commission'][0]->total_price ?? 0 }} ₺l</span></td>
                                     @if(Auth::user()->role == 'admin')
-                                        <td><span>{{ $order['delivery_sum'] }} ₸</span></td>
+                                        <td><span>{{ $order['delivery_sum'] }}₺l</span></td>
                                     @endif
 
-                                    <td><span>{{ $order['price']}} ₸</span></td>
-                                    <td><span>{{ $order['commission'][0]->commission_price ?? 0 }} ₸</span></td>
+                                    <td><span>{{ $order['price']}} ₺l</span></td>
+                                    <td><span>{{ $order['commission'][0]->commission_price ?? 0 }} ₺l</span></td>
                                     @if(Auth::user()->role == 'admin')
-                                        <td><span>{{ $order['order_price'] }} ₸</span></td>
+                                        <td><span>{{ $order['order_price'] }} ₺l</span></td>
                                     @endif
 
-                                    <td><span>{{ $order['sale'] }} ₸</span></td>
+                                    <td><span>{{ $order['sale'] }} ₺l</span></td>
                                     <td>
 
                                         <select name="orders_status" data-status="{{$order['status']}}" class="form-control orders_status">
@@ -149,16 +149,16 @@
                                 <td><strong>TOTAL</strong></td>
                                 <td>-</td>
                                 <td>-</td>
-                                <td>{{$data->total_price}} ₸</td>
+                                <td>{{$data->total_price}} ₺l</td>
                                 @if(Auth::user()->role == 'admin')
-                                    <td>{{$data->sum_delivery_price}} ₸</td>
+                                    <td>{{$data->sum_delivery_price}} ₺l</td>
                                 @endif
-                                <td>{{$data->total_price_without_commission}} ₸</td>
-                                <td>{{$data->total_commission}} ₸</td>
+                                <td>{{$data->total_price_without_commission}} ₺l</td>
+                                <td>{{$data->total_commission}} ₺l</td>
                                 @if(Auth::user()->role == 'admin')
-                                    <td>{{$data->total_price_order}} ₸</td>
+                                    <td>{{$data->total_price_order}} ₺l</td>
                                 @endif
-                                <td>{{$data->total_sale_order}} ₸</td>
+                                <td>{{$data->total_sale_order}} ₺l</td>
                                 <td>-</td>
                                 <td>-</td>
                             </tr>

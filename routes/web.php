@@ -172,6 +172,11 @@ Route::group(["middleware" => ["auth"]], function () {
     Route::group(["prefix" => "parse-statistic"], function () {
         Route::get("/list", [\App\Http\Controllers\ParseStatisticController::class, "index"])->name("ParseStatistic.list");
     });
+
+    Route::group(["prefix" => "parse-import"], function () {
+        Route::get("/list", [\App\Http\Controllers\ParserImportController::class, "index"])->name("ParserImport.list");
+    });
+
     Route::group(["prefix" => "geo"], function () {
         Route::get("/list", [\App\Http\Controllers\GeoController::class, "index"])->name("geo.list");
         Route::get("/create", [\App\Http\Controllers\GeoController::class, "create"])->name("geo.create");

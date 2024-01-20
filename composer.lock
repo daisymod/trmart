@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ffeedc6e4b500356136e870bf2c813a0",
+    "content-hash": "6afc3b117682b8640a74634b181ac8c9",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -1631,6 +1631,54 @@
                 }
             ],
             "time": "2022-03-20T21:55:58+00:00"
+        },
+        {
+            "name": "hasokeyk/trendyol",
+            "version": "1.0.26",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Hasokeyk/trendyol-php.git",
+                "reference": "b3225bd2b954f79ae00f800d7bf365c5a7d84dbd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Hasokeyk/trendyol-php/zipball/b3225bd2b954f79ae00f800d7bf365c5a7d84dbd",
+                "reference": "b3225bd2b954f79ae00f800d7bf365c5a7d84dbd",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Hasokeyk\\Trendyol\\": "src/trendyol"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Hasan Yüksektepe",
+                    "email": "hasanhasokeyk@hotmail.com"
+                }
+            ],
+            "description": "Basit Trendyol PHP API",
+            "keywords": [
+                "PHP API",
+                "eticaret",
+                "pazaryeri",
+                "trendyol",
+                "trendyol php api"
+            ],
+            "support": {
+                "issues": "https://github.com/Hasokeyk/trendyol-php/issues",
+                "source": "https://github.com/Hasokeyk/trendyol-php/tree/1.0.26"
+            },
+            "time": "2023-12-01T22:09:30+00:00"
         },
         {
             "name": "intervention/image",
@@ -9829,5 +9877,5 @@
         "ext-soap": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.2.0"
 }

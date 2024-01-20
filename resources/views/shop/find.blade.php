@@ -192,7 +192,7 @@
                         </span>
                             <p>
                                 <span class="new price-product"  data-price="{{ number_format($item->product->new_price, 0, ".", " ") }}">{{ number_format($item->product->new_price, 0, ".", " ") }} </span>
-                                @if($i->sale > 0)
+                                @if($item->sale > 0)
                                     <span class="old-price" data-old-price="{{ $item->product->price }}">{{ $item->product->price }}</span>
                                 @endif
                             </p>
