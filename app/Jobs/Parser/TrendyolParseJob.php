@@ -2,10 +2,13 @@
 
 namespace App\Jobs\Parser;
 
+use App\Exports\ImportDataCatalogResultExport;
 use App\Exports\ParseExport;
 use App\Mail\ParserMail;
+use App\Models\ParseImport;
 use App\Models\User;
 use App\Requests\Trendyol\TrendyolParser;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,11 +16,16 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class TrendyolParseJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public $timeout = 9999999;
+    public $tries = 1;
+    public $backoff = [2, 10, 20];
 
     public $import;
 
@@ -38,10 +46,21 @@ class TrendyolParseJob implements ShouldQueue
      */
     public function handle()
     {
+        $log = ParseImport::create(
+        [
+            'job_id' => $this->job->getJobId(),
+            'domain' => 'https://www.trendyol.com',
+            'status' => 'in progress',
+            "error" => 'none',
+            'uuid' => $this->job->uuid(),
+            ]
+        );
+        $start = Carbon::now();
         $pars = new TrendyolParser();
         $page = $pars->getPageResponse($this->import['url']);
         $found = preg_match('/window\.__SEARCH_APP_INITIAL_STATE__=(.+);/', $page);
         $productExcel = array();
+
 
         if ($found) {
             $text = substr($page, strpos($page, '__SEARCH_APP_INITIAL_STATE__') + 29);
@@ -54,11 +73,9 @@ class TrendyolParseJob implements ShouldQueue
         if (isset($data['totalCount'])){
             $totalPage = ceil($data['totalCount'] / 24);
         }
-
-        while (1 >= $page){
-
-            $url = $this->import['url']."&pi=".$page;
-
+        $url = strtok($this->import['url'], '?');
+        while ($totalPage >= $page){
+            $url = $url."?pi=".$page;
             $pageCategory = $pars->getPageResponse($url);
             $found = preg_match('/window\.__SEARCH_APP_INITIAL_STATE__=(.+);/', $pageCategory);
 
@@ -159,6 +176,7 @@ class TrendyolParseJob implements ShouldQueue
             }
 
             $page++;
+            sleep(1);
         }
 
         $adminUser = User::where('id','=',1)
@@ -172,6 +190,23 @@ class TrendyolParseJob implements ShouldQueue
                 ->first();
             Mail::to($user->email)->send(new ParserMail($user,$productExcel,$user->lang ?? 'tr',$this->import['url']));
         }
+
+        $end = Carbon::now();
+        $minuteDiff = $end->diffInSeconds($start);
+
+        $attachment = Excel::raw(
+            new ImportDataCatalogResultExport($productExcel, 'ru'),
+            \Maatwebsite\Excel\Excel::XLSX
+        );
+        $fileResultName = Carbon::now().'-import-data.xlsx';
+        Storage::disk('public-files')->put($fileResultName, $attachment);
+
+        $log->time = $minuteDiff;
+        $log->totalCount = count($productExcel);
+        $log->status = 'done';
+        $log->file = $fileResultName;
+        $log->save();
+
         if (ob_get_length() == 0 ) {
             ob_start();
             $result = Excel::download(new ParseExport($productExcel,'tr'), 'Parse.xlsx', \Maatwebsite\Excel\Excel::XLSX);

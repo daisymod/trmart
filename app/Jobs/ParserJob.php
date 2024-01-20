@@ -2,17 +2,21 @@
 
 namespace App\Jobs;
 
+use App\Exports\ImportDataCatalogResultExport;
 use App\Exports\ParseExport;
 use App\Mail\ParserMail;
 use App\Models\CatalogCharacteristic;
+use App\Models\ParseImport;
 use App\Models\User;
 use App\Requests\MSRequest;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ParserJob implements ShouldQueue
@@ -40,7 +44,16 @@ class ParserJob implements ShouldQueue
         if (!str_contains($this->request['url'], "www.ozdilekteyim.com")) {
             throw \Illuminate\Validation\ValidationException::withMessages(['Site Is wrong']);
         }
-
+        $log = ParseImport::create(
+            [
+                'job_id' => $this->job->getJobId(),
+                'domain' => 'https://www.trendyol.com',
+                'status' => 'in progress',
+                "error" => 'none',
+                'uuid' => $this->job->uuid(),
+            ]
+        );
+        $start = Carbon::now();
         $link_array = explode('/',$this->request['url']);
         $category = end($link_array);
         $service = new MSRequest();
@@ -189,6 +202,23 @@ class ParserJob implements ShouldQueue
                 ->first();
             Mail::to($user->email)->send(new ParserMail($user,$productExcel,$user->lang ?? 'tr',$this->request['url']));
         }
+
+        $end = Carbon::now();
+        $minuteDiff = $end->diffInSeconds($start);
+
+        $attachment = Excel::raw(
+            new ImportDataCatalogResultExport($productExcel, 'ru'),
+            \Maatwebsite\Excel\Excel::XLSX
+        );
+        $fileResultName = Carbon::now().'-import-data.xlsx';
+        Storage::disk('public-files')->put($fileResultName, $attachment);
+
+        $log->time = $minuteDiff;
+        $log->totalCount = count($productExcel);
+        $log->status = 'done';
+        $log->file = $fileResultName;
+        $log->save();
+
         if (ob_get_length() == 0 ) {
             ob_start();
             $result = Excel::download(new ParseExport($productExcel,'tr'), 'Parse.xlsx', \Maatwebsite\Excel\Excel::XLSX);

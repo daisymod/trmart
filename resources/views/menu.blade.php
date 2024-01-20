@@ -273,6 +273,13 @@
     </li>
 @endif
 
+@if(Auth::user()->role == 'admin')
+    <li @if(Route::currentRouteName() == "ParserImport.list")class="active"@endif>
+        <a class="nav-link" href="{{ route("ParserImport.list") }}">{{ __("menu.parser.list") }} - Statistic / Import </a>
+    </li>
+@endif
+
+
 @can("delivery-index")
     <li @if(Route::currentRouteName() == "delivery.index")class="active"@endif>
         <a class="nav-link" href="{{ route("delivery.index") }}">{{ __("menu.delivery.index") }}</a>

@@ -44,6 +44,7 @@ class ParserController extends Controller
         ini_set('max_execution_time', 6000);
         set_time_limit(6000);
 
+
         switch (request()->url){
             case (str_contains(request()->url, "www.ozdilekteyim.com")):
                 ParserJob::dispatch($request->all());
