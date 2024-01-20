@@ -39,4 +39,5 @@ require("./validation");
 require("./auth");
 require("./form");
 require("./socket");
+require("./dynamicFormParser");
 import intlTelInput from 'intl-tel-input';

@@ -21,7 +21,8 @@
         "phpoffice/phpspreadsheet": "^1.24",
         "pusher/pusher-php-server": "^7.2",
         "sendpulse/rest-api": "^1.0",
-        "stevebauman/location": "^6.6"
+        "stevebauman/location": "^6.6",
+        "ext-dom": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

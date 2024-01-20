@@ -32,7 +32,7 @@ jQuery(document).ready(function () {
             dataType: 'json',
 
             success: function (data) {
-
+               document.cookie = "currency_id="+localStorage.getItem('country_id');
                 var formoption = "";
                 $.each(data.items, function(v) {
                     var val = data.items[v]
@@ -355,6 +355,8 @@ jQuery(document).ready(function () {
 
     jQuery("#country-list").change(function (){
         var id = $(this).val()
+
+        document.cookie = "currency_id="+id;
       /*  $.ajax({
             url: "/api/city/get/"+id,
             type: "GET",

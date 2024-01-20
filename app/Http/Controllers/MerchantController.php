@@ -41,6 +41,7 @@ use App\Models\User;
 use App\Services\CatalogMerchantService;
 use App\Services\MerchantCompanyEmployeeService;
 use App\Services\MerchantCompanyService;
+use App\Services\RatesService;
 use App\Services\SendMailService;
 use App\Services\UserLoginService;
 use App\Services\UserService;
@@ -400,23 +401,28 @@ class MerchantController extends Controller
             $sum_delivery_price = 0;
             $total_price_order = 0;
             $total_sale_order = 0;
+
+
+            $coefficient = CurrencyRate::first();
             foreach ($orders as $order){
 
-                $order->delivery_sum = $order->delivery_price + $order->tr_delivery_price;
+                $order->delivery_sum = ceil(($order->delivery_price + $order->tr_delivery_price) * $coefficient->rate_end);
 
                 $order->delivery_dt_end = Carbon::parse($order->created_at)->addDays(15)->format('Y-m-d');
                 $order->left = Carbon::parse($order->created_at)->addDays(15)->diffInDays(Carbon::now());
                 $order->left = $order->left < 0 ? 0 : $order->left;
                 $order->left = $this->num_decline( $order->left, [trans('system.day'), trans('system.day1'), trans('system.day2')] );
-                $order->order_price = $order->delivery_sum + $order->price;
 
+                $order->price = ceil($order->price * $coefficient->rate_end);
 
-
+                $order->order_price = ($order->delivery_sum + $order->price);
                 $total_price_order += $order->order_price;
-                $total_price += $order->commission[0]['total_price'] ?? 0;
-                $total_commission += $order->commission[0]['commission_price'] ?? 0;
+
+
+                $total_price += ceil($order->commission[0]['total_price'] ?? 0 * $coefficient->rate_end);
+                $total_commission +=  ceil(($order->commission[0]['commission_price'] ?? 0 * $coefficient->rate_end));
                 $sum_delivery_price += $order->delivery_sum;
-                $total_sale_order += $order->sale;
+                $total_sale_order += ceil($order->sale ?? 0 * $coefficient->rate_end);
             }
 
             $orders->total_price_order = $total_price_order;
