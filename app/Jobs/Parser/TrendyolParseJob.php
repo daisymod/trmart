@@ -15,6 +15,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -77,6 +78,7 @@ class TrendyolParseJob implements ShouldQueue
         while ($totalPage >= $page){
             $url = strtok($this->import['url'], '?');
             $url = $url."?pi=".$page;
+            Log::info(print_r($url,true));
             $pageCategory = $pars->getPageResponse($url);
             $found = preg_match('/window\.__SEARCH_APP_INITIAL_STATE__=(.+);/', $pageCategory);
 
