@@ -73,8 +73,9 @@ class TrendyolParseJob implements ShouldQueue
         if (isset($data['totalCount'])){
             $totalPage = ceil($data['totalCount'] / 24);
         }
-        $url = strtok($this->import['url'], '?');
+
         while ($totalPage >= $page){
+            $url = strtok($this->import['url'], '?');
             $url = $url."?pi=".$page;
             $pageCategory = $pars->getPageResponse($url);
             $found = preg_match('/window\.__SEARCH_APP_INITIAL_STATE__=(.+);/', $pageCategory);
