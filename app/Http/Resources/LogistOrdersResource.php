@@ -28,6 +28,7 @@ class LogistOrdersResource extends JsonResource
             'country_name'      => $this->country_name,
             'delivery_price'    => number_format($this->delivery_price, 2, '.', ' '),
             'tr_delivery_price' => number_format($this->tr_delivery_price, 2, '.', ' '),
+            'total_delivery_price'    => number_format($this->delivery_price + $this->tr_delivery_price, 2, '.', ' '),
             'delivery_kz_weighing'    => number_format($this->delivery_kz_weighing, 2, '.', ' '),
             'delivery_tr_weighing' => number_format($this->delivery_tr_weighing, 2, '.', ' '),
         ];

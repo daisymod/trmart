@@ -70,7 +70,7 @@
                                             <td><span>{{ $order['merchant'] }}</span></td>
                                             <td><span>{{ $order['city_name'] }}</span></td>
                                             <td><span>{{ $order['price'] }} ₸</span></td>
-                                            <td><span>{{ ($order['delivery_price'] ?? 0 + $order['tr_delivery_price'] ?? 0)  }} ₸</span></td>
+                                            <td><span>{{ $order['total_delivery_price'] }} ₸</span></td>
 
                                             <td>
                                                 <input class="logist-table__input" type="text" value="{{ $order['real_weight'] }}">
