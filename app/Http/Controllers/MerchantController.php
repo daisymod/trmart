@@ -372,9 +372,7 @@ class MerchantController extends Controller
 
             $orders = Order::query()
                 ->when(Auth::user()->role == 'merchant',function ($q){
-                    $q->whereHas('items.item.merchant',function ($query){
-                        $query->where('user_id','=',Auth::user()->id);
-                    });
+                    $q->where('merchant_id','=',Auth::user()->id);
                 })
                 ->when(empty($request->to),function ($q){
                     $q->whereBetween('created_at',[Carbon::now()->subDays(7)->format('Y-m-d 00:00"00'),Carbon::now()->format('Y-m-d 23:59:59')]);
@@ -395,7 +393,6 @@ class MerchantController extends Controller
                     ])
                 ->orderByDesc('id')
                 ->get();
-
             $total_price = 0;
             $total_commission = 0;
             $sum_delivery_price = 0;
