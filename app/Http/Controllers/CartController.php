@@ -98,16 +98,21 @@ class CartController extends Controller
 
     public function actionIndexGet()
     {
-        //session()->remove("order_data");
-        $countries = Country::query()
-            ->select('id', 'name_ru')
-            ->where('id','=',Auth::user()->country_id)
-            ->first();
-        if (!empty($countries->name_ru)){
-            $country_id = $countries->name_ru;
+        if (Auth::check()){
+            $countries = Country::query()
+                ->select('id', 'name_ru')
+                ->where('id','=',Auth::user()->country_id)
+                ->first();
+            if (!empty($countries->name_ru)){
+                $country_id = $countries->name_ru;
+            }else{
+                $country_id = '';
+            }
         }else{
             $country_id = '';
         }
+        //session()->remove("order_data");
+
 
         if (Auth::check() && Auth::user()->country_id === 3) {
             $regions   = KPLocation::query()
