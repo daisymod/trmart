@@ -120,17 +120,29 @@
 
                                     <td><span>{{ $order['sale'] }} ₺l</span></td>
                                     <td>
-
-                                        <select name="orders_status" data-status="{{$order['status']}}" class="form-control orders_status">
-                                            <option value="1">@lang('customer.orders.status.status_1')</option>
-                                            <option value="2">@lang('customer.orders.status.status_2')</option>
-                                            <option value="3">@lang('customer.orders.status.status_3')</option>
-                                            <option value="4">@lang('customer.orders.status.status_4')</option>
-                                            <option value="5">@lang('customer.orders.status.status_5')</option>
-                                            <option value="6">@lang('customer.orders.status.status_6')</option>
-                                            <option value="7">@lang('customer.orders.status.status_0')</option>
-
-                                        </select>
+                                        @switch($order['status'])
+                                            @case(1)
+                                                <p>@lang('customer.orders.status.status_1')</p>
+                                            @break
+                                            @case(2)
+                                                <p>@lang('customer.orders.status.status_2')</p>
+                                                @break
+                                            @case(3)
+                                                <p>@lang('customer.orders.status.status_3')</p>
+                                                @break
+                                            @case(4)
+                                                <p>@lang('customer.orders.status.status_4')</p>
+                                                @break
+                                            @case(5)
+                                                <p>@lang('customer.orders.status.status_5')</p>
+                                                @break
+                                            @case(6)
+                                                <p>@lang('customer.orders.status.status_6')</p>
+                                                @break
+                                            @case(7)
+                                                <p>@lang('customer.orders.status.status_0')</p>
+                                                @break
+                                        @endswitch
                                     </td>
                                     <td>
                                         <a href="{{ route("merchant.order", $order['id']) }}" class="arrow">

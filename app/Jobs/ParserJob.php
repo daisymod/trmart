@@ -51,6 +51,7 @@ class ParserJob implements ShouldQueue
                 'status' => 'in progress',
                 "error" => 'none',
                 'uuid' => $this->job->uuid(),
+                'url' => $this->request['url'],
             ]
         );
         $start = Carbon::now();

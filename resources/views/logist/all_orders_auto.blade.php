@@ -53,7 +53,7 @@
                                         <th style="width: 4%">@lang('logist.orders.loi4')</th>
                                         <th style="width: 4%">@lang('logist.orders.loi5')</th>
 
-                                        <th style="width: 4%">delivery auto</th>
+                                        <th style="width: 4%">@lang('logist.orders.loi6')</th>
 
                                         <th style="width: 4%">@lang('logist.orders.loi7')</th>
                                         <th style="width: 4%">@lang('logist.orders.loi8')</th>
