@@ -54,6 +54,7 @@ class TrendyolParseJob implements ShouldQueue
             'status' => 'in progress',
             "error" => 'none',
             'uuid' => $this->job->uuid(),
+            'url' => $this->import['url'],
             ]
         );
         $start = Carbon::now();

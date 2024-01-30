@@ -25,6 +25,7 @@
                         <th>№</th>
                         <th>Время вполнения</th>
                         <th>Сайт</th>
+                        <th>Ссылка парсера</th>
                         <th>к-во записей в файле</th>
                         <th>Статус</th>
                         <th width="30%">Ошибка</th>
@@ -35,8 +36,9 @@
                     @foreach($records as $k=>$i)
                         <tr>
                             <td>{{ $i->id }}</td>
-                            <td>{{strtotime($i->time)}}</td>
+                            <td>{{gmdate("H:i:s", $i->time)}}</td>
                             <td>{{ $i->domain }}</td>
+                            <td>{{ $i->url }}</td>
                             <td>
                                 {{ $i->totalCount }}
                             </td>
