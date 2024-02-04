@@ -34,6 +34,7 @@ class CatalogController
         $record->parent_id = $id;
         $form = new CatalogAdminForm($record);
         $form = $form->formRenderAdd();
+
         return view("catalog.edit", compact( "form"));
     }
 

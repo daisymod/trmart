@@ -62,6 +62,9 @@ class ImportDataCatalogResultExport implements FromArray,WithColumnWidths,Should
             trans('system.images').' Gallery photo - 4',
             trans('system.images').' Gallery photo - 5',
             trans('system.images').' Gallery photo - 6',
+            trans('catalog_item.form.length'),
+            trans('catalog_item.form.width'),
+            trans('catalog_item.form.height'),
             'result',
         ];
 

@@ -97,10 +97,9 @@ class TrendyolParseJob implements ShouldQueue
                     if (isset($productPage['product'])){
                         $image = $pars->getImages($productPage['product']['images']);
                         $description = $pars->getDescription($productPage['product']['descriptions']);
-
                         foreach ($productPage['product']['allVariants'] as $productItemVariant){
                             $sizeVariant = explode("/", $productItemVariant['value']);
-                            $compound = $pars->getCompound($productPage['product']['contentDescriptions'][0]['description']);
+                            $compound = $pars->getCompound($productPage['product']['attributes']);
 
                             if (gettype($sizeVariant) == 'array'){
                                 foreach ($sizeVariant as $size){
@@ -118,7 +117,7 @@ class TrendyolParseJob implements ShouldQueue
                                             0,
                                             $productItemVariant['price'],
                                             $productPage['product']['color'] ?? '',
-                                            $size == '' ?  'standart' : $size,
+                                            $size == '' ?  $pars->getSize($productPage['product']['attributes']) : $size,
                                             $productPage['product']['hasStock'] == true ? 100 : 0,
                                             $this->import['status'] ?? 1,
                                             $this->import['active'] ?? 'N',
@@ -134,6 +133,9 @@ class TrendyolParseJob implements ShouldQueue
                                             $image[3] ?? '',
                                             $image[4] ?? '',
                                             $image[5] ?? '',
+                                            $pars->getLength($productPage['product']),
+                                            $pars->getWidth($productPage['product']),
+                                            $pars->getHeight($productPage['product']),
                                         ])
                                     );
                                 }
@@ -152,7 +154,7 @@ class TrendyolParseJob implements ShouldQueue
                                             0,
                                             $productItemVariant['price'],
                                             $productPage['product']['color'] ?? '',
-                                            $productItemVariant['value'] == '' ?  'standart' : $productItemVariant['value'],
+                                            $productItemVariant['value'] == '' ?  $pars->getSize($productPage['product']['attributes']) : $productItemVariant['value'],
 
                                             $productPage['product']['hasStock'] == true ? 100 : 0,
 
@@ -170,11 +172,13 @@ class TrendyolParseJob implements ShouldQueue
                                             $image[3] ?? '',
                                             $image[4] ?? '',
                                             $image[5] ?? '',
+                                            $pars->getLength($productPage['product']),
+                                            $pars->getWidht($productPage['product']),
+                                            $pars->getHeight($productPage['product']),
                                         ])
                                     );
                             }
                         }
-
                     }
                 }
             }

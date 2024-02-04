@@ -115,7 +115,7 @@ class CatalogItemsExcelLoadService
                     break;
                 }
 
-                $getLastRowToResult = 28;
+                $getLastRowToResult = 31;
 
                 if (empty($row[7])){
                     $resultArrayParse[$i][$getLastRowToResult + 1] = 'IMG value cannot be empty';
@@ -203,6 +203,10 @@ class CatalogItemsExcelLoadService
                     ],
                     'image' => $imageResult,
                     'weight' => $row[21] ?? 1,
+
+                    'length' => $row[28] ?? 0,
+                    'width' => $row[29] ?? 0,
+                    'height' => $row[30] ?? 0,
                 ];
 
                 $model = new CatalogItem();
