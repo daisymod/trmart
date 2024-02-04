@@ -135,24 +135,98 @@ class TrendyolParser
 
     public function getCompound($compound)
     {
-        $compound =  str_replace('%','',$compound);
-        $array = explode(' ',$compound);
-
         $result = array();
-        $buffer = 0;
-        foreach ($array as $item){
-            if (is_numeric($item)){
-                $buffer = $item;
-            }else{
-                array_push($result,$item);
-                array_push($result,$buffer);
-                $buffer = 0;
+        foreach ($compound as $item){
+            if ($item['key']['name'] == 'Materyal'){
+                array_push($result,$item['value']['name']);
+                array_push($result,100);
             }
         }
 
         return $result;
     }
 
+    public function getLength($product)
+    {
+        $result = 1;
+        foreach ($product['descriptions'] as $item){
+            if (strpos($item['text'], 'Ürün Ölçüleri Masa')){
+                $data = explode(' ',$item['text']);
+                $index = 0;
+                foreach ($data as $word){
+                    if (str_contains($word, 'uzunluk:')){
+                        $length = explode(':',$word);
+                        $result = intval($length[1]) ?? 1;
+                    }
+                    if (preg_match('/^\d+x\d+/', $word)){
+                        $length = explode('x',$word);
+                        $result = intval($length[0]) ?? 1;
+                    }
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    public function getWidth($product)
+    {
+        $result = 1;
+        foreach ($product['descriptions'] as $item){
+            if (strpos($item['text'], 'Ürün Ölçüleri Masa')){
+                $data = explode(' ',$item['text']);
+                $index = 0;
+                foreach ($data as $word){
+                    if (str_contains($word, 'en:')){
+                        $length = explode(':',$word);
+                        $result = intval($length[1]) ?? 1;
+                    }
+                    if (preg_match('/^\d+x\d+/', $word)){
+                        $length = explode('x',$word);
+                        $result = intval($length[1]) ?? 1;
+                    }
+                    $index++;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    public function getHeight($product)
+    {
+        $result = 1;
+        foreach ($product['descriptions'] as $item){
+            if (strpos($item['text'], 'Ürün Ölçüleri Masa')){
+                $data = explode(' ',$item['text']);
+                $index = 0;
+                foreach ($data as $word){
+                    if (str_contains($word, 'h:')){
+                        $length = explode(':',$word);
+                        $result = intval($length[1]) ?? 1;
+                    }
+                    if (str_contains($word, 'yüksekliği')){
+                        $result = intval($word[$index + 1]) ?? 1;
+                    }
+                    $index++;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    public function getSize($product)
+    {
+        $result = 'standart';
+        foreach ($product as $item){
+            if ($item['key']['name'] == 'Masa Ölçüsü'){
+                $result = $item['value']['name'];
+            }
+        }
+
+        return $result;
+    }
 
     /**
      * Get product from url and parse it attributes

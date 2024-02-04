@@ -13,13 +13,12 @@
 
                             <div class="form-group form-field-box-commission">
                                 <div class="form-label">@lang('system.delivery_type')</div>
-
-
-                                <select  class="form-control"  name="type_delivery">
-                                    <option @if($record->type_delivery == 1) selected @endif value="1">@lang('system.delivery_type1')</option>
-                                    <option @if($record->type_delivery == 2) selected @endif value="2">@lang('system.delivery_type2')</option>
-                                </select>
-
+                                @if(isset($record->type_delivery))
+                                    <select  class="form-control"  name="type_delivery">
+                                        <option @if($record->type_delivery == 1) selected @endif value="1">@lang('system.delivery_type1')</option>
+                                        <option @if($record->type_delivery == 2) selected @endif value="2">@lang('system.delivery_type2')</option>
+                                    </select>
+                                @endif
                             </div>
 
                         @if(isset($active))

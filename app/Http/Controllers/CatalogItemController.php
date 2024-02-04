@@ -413,6 +413,7 @@ class CatalogItemController
                 ->first();
 
         header("Content-type: application/vnd.ms-excel;charset:UTF-8");
+
         $response =  Excel::download(new ProductExport($user,$request->category_id ?? null), 'Items.xlsx', \Maatwebsite\Excel\Excel::XLSX);
         ob_end_clean();
         return $response;

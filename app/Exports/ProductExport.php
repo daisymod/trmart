@@ -50,7 +50,6 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
                 $query->where('id','>',1);
             })
             ->get();
-
         $result = array();
 
         $lang = $this->user->lang ?? 'ru';
@@ -95,6 +94,9 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
             trans('system.images').' Gallery photo - 4',
             trans('system.images').' Gallery photo - 5',
             trans('system.images').' Gallery photo - 6',
+            trans('catalog_item.form.length'),
+            trans('catalog_item.form.width'),
+            trans('catalog_item.form.height'),
         ];
 
 
@@ -102,6 +104,7 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
         array_push($result,$headers);
 
         foreach ($items as $item){
+            //if ($item->catalogItem->height != null)
             $compoundItemTr = '[';
             $compoundItemRu = '[';
             $compoundItemKz = '[';
@@ -148,7 +151,6 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
 
 
             $gallery = json_decode($item->image, true);
-
             array_push($result,array_merge([
                 $item->catalogItem->name_ru ?? '',
                 $item->catalogItem->name_tr ?? '',
@@ -178,6 +180,9 @@ class ProductExport implements FromArray,WithColumnWidths,ShouldQueue
                 !empty($gallery[3]["img"]) ? 'https://turkiyemart.com'.$gallery[3]["img"] : '',
                 !empty($gallery[4]["img"]) ? 'https://turkiyemart.com'.$gallery[4]["img"] : '',
                 !empty($gallery[5]["img"]) ? 'https://turkiyemart.com'.$gallery[5]["img"] : '',
+                empty($item->catalogItem->length)  ? '0' : $item->catalogItem->length,
+                empty($item->catalogItem->width)  ? '0' : $item->catalogItem->width,
+                empty($item->catalogItem->height)  ? '0' : $item->catalogItem->height ,
             ]));
         }
 
