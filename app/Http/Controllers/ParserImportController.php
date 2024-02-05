@@ -19,6 +19,7 @@ class ParserImportController extends Controller
     public function index(Request $request){
         Gate::authorize("brand-list");
         $records = $this->service->getAll($request);
+
         return view("parseImport.list", compact("records"));
     }
 

@@ -16,7 +16,7 @@ class ParseImport extends Model
         return $this->belongsTo(User::class, "merchant",'id');
     }
 
-    public function catalog()
+    public function catalogs()
     {
         return $this->belongsTo(Catalog::class, "catalog",'id');
     }
