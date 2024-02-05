@@ -270,7 +270,6 @@ class CatalogItemsExcelLoadService
 
                 $compoundData = explode(",", $compoundData);
                 $indexForCreate = 0;
-
                 log::info(print_r($compoundData,true));
                 foreach ($compoundData as $compoundItem) {
                     if ($compoundItem == '[]'){
@@ -286,7 +285,9 @@ class CatalogItemsExcelLoadService
                             'name_kz' =>  $compoundData[$indexForCreate] ?? '',
                         ];
 
-                        $percent = isset($compoundData[$indexForCreate + 1]) ? $compoundData[$indexForCreate + 1] : 0;
+                        $percent = isset($compoundData[$indexForCreate + 1]) ?
+                            (is_numeric($compoundData[$indexForCreate + 1]) ? $compoundData[$indexForCreate + 1] : 0)
+                            : 0;
                         $compoundExist = Compound::where('name_tr','=',$attribute['name_tr'])
                             ->first();
                         if (!empty($compoundExist->name_tr)){
