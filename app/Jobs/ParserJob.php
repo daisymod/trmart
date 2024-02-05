@@ -100,16 +100,19 @@ class ParserJob implements ShouldQueue
 
                 $descriptionProduct =  str_replace('p>Tanımlama:', '', $description[3] ?? $description);
 
-                $check_width = explode(' ',$descriptionProduct);
-                $length_data = 1;
-                $width_data = 1;
-                foreach ($check_width as $word){
-                    if (preg_match('/^\d+x\d+/', $word)){
-                        $length = explode('x',$word);
-                        $length_data = intval($length[0]) ?? 1;
-                        $width_data = intval($length[1]) ?? 1;
+                if (gettype($descriptionProduct) == 'string'){
+                    $check_width = explode(' ',$descriptionProduct);
+                    $length_data = 1;
+                    $width_data = 1;
+                    foreach ($check_width as $word){
+                        if (preg_match('/^\d+x\d+/', $word)){
+                            $length = explode('x',$word);
+                            $length_data = intval($length[0]) ?? 1;
+                            $width_data = intval($length[1]) ?? 1;
+                        }
                     }
                 }
+
 
                 $data = CatalogCharacteristic::all();
                 $characteristicArray = array();
