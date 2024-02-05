@@ -41,8 +41,8 @@
                             <td>{{gmdate("H:i:s", $i->time)}}</td>
                             <td>{{ $i->domain }}</td>
                             <td>{{ $i->url }}</td>
-                            <td>{{ $i->user->first_name ?? ''  }} {{ $i->user->last_name ?? ''  }} </td>
-                            <td>{{ $i->catalog->{'name_'.app()->getLocale()} ?? ''  }}</td>
+                            <td>{{ $i->user->name ?? ''  }} {{ $i->user->s_name ?? ''  }} </td>
+                            <td>{{ $i->catalogs->{'name_'.app()->getLocale()} ?? ''  }}</td>
                             <td>{{ $i->url }}</td>
                             <td>
                                 {{ $i->totalCount }}
