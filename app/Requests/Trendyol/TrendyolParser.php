@@ -160,12 +160,13 @@ class TrendyolParser
                     }
                 }
             }
-
-            $data = explode(' ',$item['text']);
-            foreach ($data as $word){
-                if (preg_match('/^\d+x\d+/', $word)){
-                    $length = explode('x',$word);
-                    $result = intval($length[0]) ?? 1;
+            else{
+                $data = explode(' ',$item['text']);
+                foreach ($data as $word){
+                    if (preg_match('/^\d+x\d+/', $word)){
+                        $length = explode('x',$word);
+                        $result = intval($length[0]) ?? 1;
+                    }
                 }
             }
         }
@@ -185,14 +186,16 @@ class TrendyolParser
                         $result = intval($length[1]) ?? 1;
                     }
                 }
-            }
-            $data = explode(' ',$item['text']);
-            foreach ($data as $word){
-                if (preg_match('/^\d+x\d+/', $word)){
-                    $length = explode('x',$word);
-                    $result = intval($length[1]) ?? 1;
+            }else{
+                $data = explode(' ',$item['text']);
+                foreach ($data as $word){
+                    if (preg_match('/^\d+x\d+/', $word)){
+                        $length = explode('x',$word);
+                        $result = intval($length[1]) ?? 1;
+                    }
                 }
             }
+
         }
 
         return $result;
