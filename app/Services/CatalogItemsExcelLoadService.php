@@ -262,6 +262,7 @@ class CatalogItemsExcelLoadService
 
                 $compoundData =  str_replace(']', '', str_replace('[', '', $row[3]));
                 $compoundData =  str_replace(',,', ',', $compoundData);
+                $compoundData =  str_replace(':', ',', $compoundData);
                 if (substr($compoundData, -1) == ','){
                     $compoundData = substr($compoundData, 0, -1);
                 }
