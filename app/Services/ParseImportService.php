@@ -49,6 +49,7 @@ class ParseImportService
     public function getAll($request)
     {
         $items =  $this->model->query()
+            ->with(['user','catalog'])
             ->orderByDesc('id')
             ->paginate(100);
 

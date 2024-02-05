@@ -52,6 +52,8 @@ class ParserJob implements ShouldQueue
                 "error" => 'none',
                 'uuid' => $this->job->uuid(),
                 'url' => $this->request['url'],
+                'catalog' => $this->request['catalog'],
+                'merchant' => $this->request['user'],
             ]
         );
         $start = Carbon::now();

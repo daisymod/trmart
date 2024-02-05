@@ -26,6 +26,8 @@
                         <th>Время вполнения</th>
                         <th>Сайт</th>
                         <th>Ссылка парсера</th>
+                        <th>Мерчант</th>
+                        <th>Каталог</th>
                         <th>к-во записей в файле</th>
                         <th>Статус</th>
                         <th width="30%">Ошибка</th>
@@ -38,6 +40,9 @@
                             <td>{{ $i->id }}</td>
                             <td>{{gmdate("H:i:s", $i->time)}}</td>
                             <td>{{ $i->domain }}</td>
+                            <td>{{ $i->url }}</td>
+                            <td>{{ $i->user->first_name ?? ''  }} {{ $i->user->last_name ?? ''  }} </td>
+                            <td>{{ $i->catalog->{'name_'.app()->getLocale()} ?? ''  }}</td>
                             <td>{{ $i->url }}</td>
                             <td>
                                 {{ $i->totalCount }}
