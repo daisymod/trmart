@@ -47,7 +47,7 @@ class ParserJob implements ShouldQueue
         $log = ParseImport::create(
             [
                 'job_id' => $this->job->getJobId(),
-                'domain' => 'https://www.trendyol.com',
+                'domain' => 'https://www.ozdilekteyim.com',
                 'status' => 'in progress',
                 "error" => 'none',
                 'uuid' => $this->job->uuid(),
@@ -66,8 +66,8 @@ class ParserJob implements ShouldQueue
 
         for ($page = 0;$page < $totalPages; $page++){
             $pageResponse = $service->getData($category,$page);
-
             foreach ($pageResponse['data']['products'] as $product){
+
                 $dataProduct = $service->getDataProduct($product['customUrl']);
                 $images = array();
                 $gallery = array();
@@ -100,6 +100,16 @@ class ParserJob implements ShouldQueue
 
                 $descriptionProduct =  str_replace('p>Tanımlama:', '', $description[3] ?? $description);
 
+                $check_width = explode(' ',$descriptionProduct);
+                $length_data = 1;
+                $width_data = 1;
+                foreach ($check_width as $word){
+                    if (preg_match('/^\d+x\d+/', $word)){
+                        $length = explode('x',$word);
+                        $length_data = intval($length[0]) ?? 1;
+                        $width_data = intval($length[1]) ?? 1;
+                    }
+                }
 
                 $data = CatalogCharacteristic::all();
                 $characteristicArray = array();
@@ -145,6 +155,9 @@ class ParserJob implements ShouldQueue
                                 $gallery[3] ?? '',
                                 $gallery[4] ?? '',
                                 $gallery[5] ?? '',
+                                $length_data,
+                                $width_data,
+                                1,
                             ])
                         );
                     }
@@ -183,6 +196,9 @@ class ParserJob implements ShouldQueue
                                     $gallery[3] ?? '',
                                     $gallery[4] ?? '',
                                     $gallery[5] ?? '',
+                                    $length_data,
+                                    $width_data,
+                                    1,
                                 ]));
                         }
                     }
