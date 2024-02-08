@@ -19,37 +19,34 @@
                         </form>
                     </div>
                 </div>
-                <table class="table table-striped table-hover table-bordered">
-                    <thead>
+                <table style="width: 100%;">
+                    <tbody>
                     <tr>
                         <th width="5%">№</th>
                         <th width="5%">Время вполнения</th>
                         <th width="10%">Сайт</th>
                         <th width="10%">Ссылка парсера</th>
-                        <th width="10%">Мерчант</th>
-                        <th width="10%">Каталог</th>
-                        <th width="10%">к-во записей в файле</th>
+                        <th width="5%">Мерчант</th>
+                        <th width="5%">Каталог</th>
+                        <th width="5%">к-во записей в файле</th>
                         <th width="5%">Статус</th>
                         <th width="30%">Ошибка</th>
-                        <th width="5%">Файл результат</th>
+                        <th width="20%">Файл результат</th>
                     </tr>
-                    </thead>
-                    <tbody>
                     @foreach($records as $k=>$i)
-                        <tr>
-                            <td>{{ $i->id }}</td>
-                            <td>{{gmdate("H:i:s", $i->time)}}</td>
-                            <td>{{ $i->domain }}</td>
-                            <td>{{ $i->url }}</td>
-                            <td>{{ $i->user->name ?? ''  }} {{ $i->user->s_name ?? ''  }} </td>
-                            <td>{{ $i->catalogs->{'name_'.app()->getLocale()} ?? ''  }}</td>
-                            <td>{{ $i->url }}</td>
-                            <td>
+                        <tr style="height: 200px">
+                            <td width="5%">{{ $i->id }}</td>
+                            <td width="5%">{{gmdate("H:i:s", $i->time)}}</td>
+                            <td width="10%">{{ $i->domain }}</td>
+                            <td width="10%">{{ $i->url }}</td>
+                            <td width="5%"> {{ $i->user->name ?? ''  }} {{ $i->user->s_name ?? ''  }} </td>
+                            <td width="5%"> {{ $i->catalogs->{'name_'.app()->getLocale()} ?? ''  }}</td>
+                            <td width="5%">
                                 {{ $i->totalCount }}
-                            </td>
-                            <td>{{ $i->status }}</td>
+                            </td >
+                            <td width="5%">{{ $i->status }}</td>
                             <td width="30%">{{ $i->error }}</td>
-                            <td class="controls">
+                            <td width="20%">
                                 @if($i->file != null)
                                     <a href="/storage/files/{{$i->file}}" class="btn gren-btn">Файл результата</a>
                                 @endif
@@ -65,3 +62,13 @@
         </div>
     </div>
 @endsection
+
+<style>
+    td{
+        white-space: pre-wrap; /* CSS3 */
+        white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+        white-space: -pre-wrap; /* Opera 4-6 */
+        white-space: -o-pre-wrap; /* Opera 7 */
+        word-wrap: break-word; /* Internet Explorer 5.5+ */
+    }
+</style>
