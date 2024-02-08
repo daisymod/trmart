@@ -62,7 +62,7 @@ class TrendyolParseJob implements ShouldQueue
         $start = Carbon::now();
         $pars = new TrendyolParser();
         $page = $pars->getPageResponse($this->import['url']);
-
+        dd($page);
         $found = preg_match('/window\.__SEARCH_APP_INITIAL_STATE__=(.+);/', $page);
 
         $productExcel = array();
