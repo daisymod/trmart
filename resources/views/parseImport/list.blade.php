@@ -22,16 +22,16 @@
                 <table class="table table-striped table-hover table-bordered">
                     <thead>
                     <tr>
-                        <th>№</th>
-                        <th>Время вполнения</th>
-                        <th>Сайт</th>
-                        <th>Ссылка парсера</th>
-                        <th>Мерчант</th>
-                        <th>Каталог</th>
-                        <th>к-во записей в файле</th>
-                        <th>Статус</th>
+                        <th width="5%">№</th>
+                        <th width="5%">Время вполнения</th>
+                        <th width="10%">Сайт</th>
+                        <th width="10%">Ссылка парсера</th>
+                        <th width="10%">Мерчант</th>
+                        <th width="10%">Каталог</th>
+                        <th width="10%">к-во записей в файле</th>
+                        <th width="5%">Статус</th>
                         <th width="30%">Ошибка</th>
-                        <th>Файл результат</th>
+                        <th width="5%">Файл результат</th>
                     </tr>
                     </thead>
                     <tbody>
