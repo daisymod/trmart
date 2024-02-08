@@ -81,7 +81,7 @@ class TrendyolParseJob implements ShouldQueue
         }
 
         while ($totalPage >= $page){
-            $url = strtok($this->import['url'], '?');
+            $url = $this->import['url'];
             $url = $url."?pi=".$page;
             Log::info(print_r($url,true));
             $pageCategory = $pars->getPageResponse($url);
