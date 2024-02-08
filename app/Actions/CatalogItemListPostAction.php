@@ -49,6 +49,7 @@ class CatalogItemListPostAction
 
                 if (!empty($record->body_tr)){
                     $dataBodyRu = $request->getData($record->body_tr,'русский');
+                    dd($dataBodyRu);
                     $dataBodyKz = $request->getData($record->body_tr,'казахский');
                     if (isset($dataBodyKz['data']['choices'][0]['message']['content'])){
                         $record->body_kz = $dataBodyKz['data']['choices'][0]['message']['content'];
