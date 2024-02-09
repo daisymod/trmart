@@ -10,7 +10,7 @@ use GuzzleHttp\Psr7\Request;
 
 class GptRequest extends BaseRequest
 {
-    public function getData($text,$language){
+    public function getData($text,$language,$log = null){
         $post_fields = '{
               "model": "gpt-4",
                 "messages": [
@@ -29,7 +29,9 @@ class GptRequest extends BaseRequest
                 "frequency_penalty": 0,
                 "presence_penalty": 0 
         }';
-
+        if ($log == true){
+            dd($post_fields);
+        }
         $this->request = new Request('POST', "https://api.openai.com/v1/chat/completions",
             [
                 'Content-Type' => 'application/json',
