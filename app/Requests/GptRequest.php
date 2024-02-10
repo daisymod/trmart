@@ -30,10 +30,6 @@ class GptRequest extends BaseRequest
                 "presence_penalty": 0 
         }';
 
-        if ($log == true){
-            dd($post_fields);
-        }
-
         $this->request = new Request('POST', "https://api.openai.com/v1/chat/completions",
             [
                 'Content-Type' => 'application/json',
