@@ -20,7 +20,7 @@ class GptRequest extends BaseRequest
                     },
                     {
                         "role": "user",
-                        "content": "'.$text.'"
+                        "content": "'.trim($text, " \n.").'"
                     }
                 ],
                 "temperature": 1,
