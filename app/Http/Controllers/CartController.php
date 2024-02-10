@@ -98,6 +98,11 @@ class CartController extends Controller
 
     public function actionIndexGet()
     {
+        $city_id = null;
+        $area_id = null;
+        $postcode_id = null;
+        $region_id = null;
+        $countries = null;
         if (Auth::check()){
             $countries = Country::query()
                 ->select('id', 'name_ru')
