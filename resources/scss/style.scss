@@ -26,12 +26,12 @@
 
 header {
     background: #2B2A28;
-    padding: 23px 0;
+    padding: 10px 0;
     position: relative;
     z-index: 101;
 
     @media(max-width: 1024px) {
-        padding: 20px 0;
+        padding: 5px 0;
     }
 
     @media(max-width: 767px) {
@@ -42,8 +42,6 @@ header {
         .top-line {
             @include flex;
             @include align-center;
-            margin-bottom: 20px;
-
             @media(max-width: 767px) {
                 margin-bottom: 15px;
             }
