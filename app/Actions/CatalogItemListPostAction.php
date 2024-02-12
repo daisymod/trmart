@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Jobs\ChatGptJob;
 use App\Models\CatalogItem;
 use App\Requests\GptRequest;
 use Illuminate\Support\Facades\Gate;
@@ -35,38 +36,7 @@ class CatalogItemListPostAction
                 $record->save();
             }
             elseif (str_contains($action, "gpt")) {
-                $request = new GptRequest();
-                $dataNameKz = $request->getData($record->name_tr,'казахский',null);
-                if (isset($dataNameKz['data']['choices'][0]['message']['content'])){
-                    $record->name_kz = $dataNameKz['data']['choices'][0]['message']['content'];
-                }
-
-                $dataNameRu = $request->getData($record->name_tr,'русский',null);
-                if (isset($dataNameRu['data']['choices'][0]['message']['content'])){
-                    $record->name_ru = $dataNameRu['data']['choices'][0]['message']['content'];
-                }
-
-
-                if (!empty($record->body_tr)){
-                    $dataBodyRu = $request->getData($record->body_tr,'русский',true);
-                    $dataBodyKz = $request->getData($record->body_tr,'казахский',null);
-                    if (isset($dataBodyKz['data']['choices'][0]['message']['content'])){
-                        $record->body_kz = $dataBodyKz['data']['choices'][0]['message']['content'];
-                    }
-                    if (isset($dataBodyRu['data']['choices'][0]['message']['content'])){
-                        $record->body_ru = $dataBodyRu['data']['choices'][0]['message']['content'];
-                    }
-                }
-
-                CatalogItem::query()->where('id','=',$record->id)
-                    ->update([
-                        'name_ru' => $record->name_ru,
-                        'name_kz' => $record->name_kz,
-                        'body_ru' => $record->body_ru,
-                        'body_kz' => $record->body_kz,
-
-                    ]);
-
+                ChatGptJob::dispatch($record);
             }
         }
 

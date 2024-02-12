@@ -95,6 +95,7 @@ Route::group(["middleware" => ["auth"]], function () {
     Route::get("/customer/canceled/{id}", [\App\Http\Controllers\CustomerController::class, "actionCanceledOrder"])->name("customer.canceled");
     Route::get("/customer/review", [\App\Http\Controllers\CustomerController::class, "actionReview"])->name("customer.review");
 
+    Route::post("/logist/auto/orders/{id}", [\App\Http\Controllers\LogistController::class, "update"])->name("logist.auto_orders.update");
     Route::get("/logist/auto/orders", [\App\Http\Controllers\LogistController::class, "actionOrdersAutoGet"])->name("logist.auto_orders");
     Route::get("/logist/auto/orders/{id}", [\App\Http\Controllers\LogistController::class, "changeStatus"])->name("logist.change_status");
     Route::get("/logist/auto/orders/{id}/download", [\App\Http\Controllers\LogistController::class, "download"])->name("logist.download_auto");
