@@ -73,7 +73,12 @@
                                             <td><span>{{ $order['total_delivery_price'] }} ₸</span></td>
 
                                             <td>
-                                                <input class="logist-table__input" type="text" value="{{ $order['real_weight'] }}">
+                                                <form action="{{route('logist.auto_orders.update',['id' => $order['id']])}}" method="post">
+                                                    @csrf
+                                                    <input class="logist-table__input" type="text" name="real_weight" value="{{ $order['real_weight'] }}">
+                                                    <button class="filter-group__btn" type="submit">@lang('system.takeChange')</button>
+                                                </form>
+
                                             </td>
                                             <td><span>{{ $order['created_at'] }}</span></td>
                                             <td><span> @if($order['status'] == 7)

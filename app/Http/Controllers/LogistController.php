@@ -350,6 +350,12 @@ class LogistController extends Controller
 
         return \redirect('/logist/collected/item/'.$formId);
     }
+    public function update(Order $id, Request $request)
+    {
+        $id->real_weight = $request->real_weight;
+        $id->save();
+        return \redirect()->route('logist.auto_orders');
+    }
 
     public function actionCollectedItemAdd(Request $request): Redirector|Application|RedirectResponse
     {
@@ -406,7 +412,7 @@ class LogistController extends Controller
         $weight = 0;
         foreach ($id->items as $item){
             $currentWeightItem = 0;
-            $currentWeightItem = $item->item->weight / 1000 * $item->count;
+            $currentWeightItem = $id->real_weight / 1000 * $item->count;
             $weight +=$currentWeightItem;
         }
 
