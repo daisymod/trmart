@@ -102,16 +102,62 @@ class TrendyolParseJob implements ShouldQueue
                 if (isset($data['products']) ){
                     foreach ($data['products'] as $product) {
                         if (!in_array($product['url'],$arrayProductSearch)){
-                            $productPage = $pars->parse($product['url']);
-                            if (isset($productPage['product'])){
-                                $image = $pars->getImages($productPage['product']['images']);
-                                $description = $pars->getDescription($productPage['product']['descriptions']);
-                                foreach ($productPage['product']['allVariants'] as $productItemVariant){
-                                    $sizeVariant = explode("/", $productItemVariant['value']);
-                                    $compound = $pars->getCompound($productPage['product']['attributes']);
+                            $response = $send->getData($product['url']);
+                            if (gettype($response) == 'string'){
+                                $found = preg_match('/window\.__PRODUCT_DETAIL_APP_INITIAL_STATE__=(.+);/', $response);
+                                if ($found) {
+                                    $text = substr($response, strpos($response, '__PRODUCT_DETAIL_APP_INITIAL_STATE__') + 37);
+                                    $to = strpos($text, 'window.TYPageName') - 1;
+                                    $json = substr($text, 0, $to);
+                                    $productPage = json_decode($json,true);
+                                }
 
-                                    if (gettype($sizeVariant) == 'array'){
-                                        foreach ($sizeVariant as $size){
+                                if (isset($productPage['product'])){
+                                    $image = $pars->getImages($productPage['product']['images']);
+                                    $description = $pars->getDescription($productPage['product']['descriptions']);
+                                    foreach ($productPage['product']['allVariants'] as $productItemVariant){
+                                        $sizeVariant = explode("/", $productItemVariant['value']);
+                                        $compound = $pars->getCompound($productPage['product']['attributes']);
+
+                                        if (gettype($sizeVariant) == 'array'){
+                                            foreach ($sizeVariant as $size){
+                                                array_push($productExcel,
+                                                    array_merge([
+                                                        $productPage['product']['name'],
+                                                        $productPage['product']['name'],
+                                                        $productPage['product']['name'],
+                                                        "[".implode(',',$compound)."]",
+                                                        $description ?? '',
+                                                        $description ?? '',
+                                                        $description ?? '',
+                                                        implode(',',$image),
+                                                        $productItemVariant['barcode'],
+                                                        0,
+                                                        $productItemVariant['price'],
+                                                        $productPage['product']['color'] ?? '',
+                                                        $size == '' ?  $pars->getSize($productPage['product']['attributes']) : $size,
+                                                        $productPage['product']['hasStock'] == true ? 100 : 0,
+                                                        $this->import['status'] ?? 1,
+                                                        $this->import['active'] ?? 'N',
+                                                        $this->import['catalog'] ?? 0,
+                                                        $this->import['user'] ?? 0,
+                                                        $productPage['product']['brand']['name'] ?? '',
+                                                        ["",0],
+                                                        ["",0],
+                                                        1,
+                                                        $image[0] ?? '',
+                                                        $image[1] ?? '',
+                                                        $image[2] ?? '',
+                                                        $image[3] ?? '',
+                                                        $image[4] ?? '',
+                                                        $image[5] ?? '',
+                                                        $pars->getLength($productPage['product']),
+                                                        $pars->getWidth($productPage['product']),
+                                                        $pars->getHeight($productPage['product']),
+                                                    ])
+                                                );
+                                            }
+                                        }else{
                                             array_push($productExcel,
                                                 array_merge([
                                                     $productPage['product']['name'],
@@ -126,8 +172,10 @@ class TrendyolParseJob implements ShouldQueue
                                                     0,
                                                     $productItemVariant['price'],
                                                     $productPage['product']['color'] ?? '',
-                                                    $size == '' ?  $pars->getSize($productPage['product']['attributes']) : $size,
+                                                    $productItemVariant['value'] == '' ?  $pars->getSize($productPage['product']['attributes']) : $productItemVariant['value'],
+
                                                     $productPage['product']['hasStock'] == true ? 100 : 0,
+
                                                     $this->import['status'] ?? 1,
                                                     $this->import['active'] ?? 'N',
                                                     $this->import['catalog'] ?? 0,
@@ -143,53 +191,15 @@ class TrendyolParseJob implements ShouldQueue
                                                     $image[4] ?? '',
                                                     $image[5] ?? '',
                                                     $pars->getLength($productPage['product']),
-                                                    $pars->getWidth($productPage['product']),
+                                                    $pars->getWidht($productPage['product']),
                                                     $pars->getHeight($productPage['product']),
                                                 ])
                                             );
                                         }
-                                    }else{
-                                        array_push($productExcel,
-                                            array_merge([
-                                                $productPage['product']['name'],
-                                                $productPage['product']['name'],
-                                                $productPage['product']['name'],
-                                                "[".implode(',',$compound)."]",
-                                                $description ?? '',
-                                                $description ?? '',
-                                                $description ?? '',
-                                                implode(',',$image),
-                                                $productItemVariant['barcode'],
-                                                0,
-                                                $productItemVariant['price'],
-                                                $productPage['product']['color'] ?? '',
-                                                $productItemVariant['value'] == '' ?  $pars->getSize($productPage['product']['attributes']) : $productItemVariant['value'],
-
-                                                $productPage['product']['hasStock'] == true ? 100 : 0,
-
-                                                $this->import['status'] ?? 1,
-                                                $this->import['active'] ?? 'N',
-                                                $this->import['catalog'] ?? 0,
-                                                $this->import['user'] ?? 0,
-                                                $productPage['product']['brand']['name'] ?? '',
-                                                ["",0],
-                                                ["",0],
-                                                1,
-                                                $image[0] ?? '',
-                                                $image[1] ?? '',
-                                                $image[2] ?? '',
-                                                $image[3] ?? '',
-                                                $image[4] ?? '',
-                                                $image[5] ?? '',
-                                                $pars->getLength($productPage['product']),
-                                                $pars->getWidht($productPage['product']),
-                                                $pars->getHeight($productPage['product']),
-                                            ])
-                                        );
                                     }
                                 }
+                                array_push($arrayProductSearch,$product['url']);
                             }
-                            array_push($arrayProductSearch,$product['url']);
                         }
 
                     }
