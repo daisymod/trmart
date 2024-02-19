@@ -102,7 +102,7 @@ class TrendyolParseJob implements ShouldQueue
                 if (isset($data['products']) ){
                     foreach ($data['products'] as $product) {
                         if (!in_array($product['url'],$arrayProductSearch)){
-                            $response = $send->getData($product['url']);
+                            $response = $send->getData("https://www.trendyol.com".$product['url']);
                             if (gettype($response) == 'string'){
                                 $found = preg_match('/window\.__PRODUCT_DETAIL_APP_INITIAL_STATE__=(.+);/', $response);
                                 if ($found) {
