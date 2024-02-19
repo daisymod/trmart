@@ -188,7 +188,7 @@ class TrendyolParseJob implements ShouldQueue
             }
 
             $page++;
-            sleep(1);
+            sleep(3);
         }
 
         $adminUser = User::where('id','=',1)
