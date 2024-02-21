@@ -81,13 +81,13 @@ class TrendyolParseJob implements ShouldQueue
         $totalPage = 1;
         $page = 1;
         if (isset($data['totalCount'])){
-            $totalPage = ceil($data['totalCount'] / 24);
+            $totalPage = ceil($data['totalCount'] / 20);
         }
-        $arrayProductSearch = array();
+
         while ($totalPage >= $page){
             $url = $this->import['url'];
             $url = $url."?pi=".$page;
-            Log::info(print_r($url,true));
+            Log::info(print_r($page,true));
             $pageCategory = $send->getData($url);
             if (gettype($pageCategory) == 'string'){
                 $found = preg_match('/window\.__SEARCH_APP_INITIAL_STATE__=(.+);/', $pageCategory);
@@ -101,7 +101,6 @@ class TrendyolParseJob implements ShouldQueue
                 }
                 if (isset($data['products']) ){
                     foreach ($data['products'] as $product) {
-                        if (!in_array($product['url'],$arrayProductSearch)){
                             $response = $send->getData("https://www.trendyol.com".$product['url']);
                             if (gettype($response) == 'string'){
                                 $found = preg_match('/window\.__PRODUCT_DETAIL_APP_INITIAL_STATE__=(.+);/', $response);
@@ -198,10 +197,7 @@ class TrendyolParseJob implements ShouldQueue
                                         }
                                     }
                                 }
-                                array_push($arrayProductSearch,$product['url']);
-                            }
                         }
-
                     }
                 }
             }
