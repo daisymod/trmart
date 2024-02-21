@@ -78,10 +78,11 @@ class TrendyolParseJob implements ShouldQueue
             $json = substr($text, 0, $to);
             $data = json_decode($json."}",true);
         }
+
         $totalPage = 1;
         $page = 1;
         if (isset($data['totalCount'])){
-            $totalPage = ceil($data['totalCount'] / 20);
+            $totalPage = ceil($data['totalCount'] / 24);
         }
 
         while ($totalPage >= $page){
