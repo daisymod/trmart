@@ -11,6 +11,9 @@ use GuzzleHttp\Psr7\Request;
 class GptRequest extends BaseRequest
 {
     public function getData($text,$language,$log = null){
+        $res = str_replace( array( '\'', '"',
+            ',' , ';', '<', '>' ), ' ', $text);
+
         $post_fields = '{
               "model": "gpt-4",
                 "messages": [
@@ -20,7 +23,7 @@ class GptRequest extends BaseRequest
                     },
                     {
                         "role": "user",
-                        "content": "'.trim($text, " \n.").'"
+                        "content": "'.trim($res, " \n.").'"
                     }
                 ],
                 "temperature": 1,
