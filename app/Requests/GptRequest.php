@@ -11,7 +11,7 @@ use GuzzleHttp\Psr7\Request;
 class GptRequest extends BaseRequest
 {
     public function getData($text,$language,$log = null){
-        $res = str_replace( array( '\'', '"',
+        $res = str_replace( array( '\'','\'',"\r\n","\n", '"',
             ',' , ';', '<', '>' ), ' ', $text);
 
         $post_fields = '{
