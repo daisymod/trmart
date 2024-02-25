@@ -16,10 +16,10 @@ class GptRequest extends BaseRequest
 
         switch ($type){
             case 'name':
-                $token = 100;
+                $token = 200;
                 break;
             case 'body':
-                $token = 1500;
+                $token = 2000;
                 break;
             default:
                 $token = 500;
