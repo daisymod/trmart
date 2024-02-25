@@ -270,7 +270,7 @@ class CatalogItemsExcelLoadService
 
                 $compoundData = explode(",", $compoundData);
                 $indexForCreate = 0;
-                log::info(print_r($compoundData,true));
+
                 foreach ($compoundData as $compoundItem) {
                     if ($compoundItem == '[]'){
                         break;

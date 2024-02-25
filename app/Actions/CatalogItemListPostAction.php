@@ -11,7 +11,6 @@ class CatalogItemListPostAction
 {
     public function __invoke($ids, $action)
     {
-
         foreach ($ids as $id) {
             $record = CatalogItem::query()->findOrFail($id);
             if ($action == "delete") {
