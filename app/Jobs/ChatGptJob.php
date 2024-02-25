@@ -38,8 +38,10 @@ class ChatGptJob implements ShouldQueue
      */
     public function handle()
     {
-        sleep(10);
         $request = new GptRequest();
+
+
+
         $dataNameKz = $request->getData($this->record->name_tr,'казахский',null,'name');
         if (isset($dataNameKz['data']['choices'][0]['message']['content'])){
             $this->record->name_kz = $dataNameKz['data']['choices'][0]['message']['content'];
@@ -50,8 +52,10 @@ class ChatGptJob implements ShouldQueue
             $this->record->name_ru = $dataNameRu['data']['choices'][0]['message']['content'];
         }
 
+        $res = str_replace( array( '\'','\'',"\r\n","\n", '"',
+            ',' , ';', '<', '>' ), ' ', $this->record->body_tr);
 
-        if (!empty($this->record->body_tr)){
+        if (!empty($res)){
             $dataBodyRu = $request->getData($this->record->body_tr,'русский',true,'body');
             $dataBodyKz = $request->getData($this->record->body_tr,'казахский',null,'body');
             if (isset($dataBodyKz['data']['choices'][0]['message']['content'])){
