@@ -6,11 +6,13 @@ use App\Jobs\ChatGptJob;
 use App\Models\CatalogItem;
 use App\Requests\GptRequest;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class CatalogItemListPostAction
 {
     public function __invoke($ids, $action)
     {
+        $array = array();
         foreach ($ids as $id) {
             $record = CatalogItem::query()->findOrFail($id);
             if ($action == "delete") {
@@ -36,8 +38,11 @@ class CatalogItemListPostAction
             }
             elseif (str_contains($action, "gpt")) {
                 ChatGptJob::dispatch($record);
+                array_push($array,$record->id);
             }
         }
+
+        Log::info(print_r($array,true));
 
         return redirect(route("catalog_item.list",
             [
