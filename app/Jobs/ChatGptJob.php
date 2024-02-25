@@ -40,20 +40,20 @@ class ChatGptJob implements ShouldQueue
     {
         sleep(10);
         $request = new GptRequest();
-        $dataNameKz = $request->getData($this->record->name_tr,'казахский',null);
+        $dataNameKz = $request->getData($this->record->name_tr,'казахский',null,'name');
         if (isset($dataNameKz['data']['choices'][0]['message']['content'])){
             $this->record->name_kz = $dataNameKz['data']['choices'][0]['message']['content'];
         }
 
-        $dataNameRu = $request->getData($this->record->name_tr,'русский',null);
+        $dataNameRu = $request->getData($this->record->name_tr,'русский',null,'name');
         if (isset($dataNameRu['data']['choices'][0]['message']['content'])){
             $this->record->name_ru = $dataNameRu['data']['choices'][0]['message']['content'];
         }
 
 
         if (!empty($this->record->body_tr)){
-            $dataBodyRu = $request->getData($this->record->body_tr,'русский',true);
-            $dataBodyKz = $request->getData($this->record->body_tr,'казахский',null);
+            $dataBodyRu = $request->getData($this->record->body_tr,'русский',true,'body');
+            $dataBodyKz = $request->getData($this->record->body_tr,'казахский',null,'body');
             if (isset($dataBodyKz['data']['choices'][0]['message']['content'])){
                 $this->record->body_kz = $dataBodyKz['data']['choices'][0]['message']['content'];
             }

@@ -10,12 +10,23 @@ use GuzzleHttp\Psr7\Request;
 
 class GptRequest extends BaseRequest
 {
-    public function getData($text,$language,$log = null){
+    public function getData($text,$language,$log = null,$type = null){
         $res = str_replace( array( '\'','\'',"\r\n","\n", '"',
             ',' , ';', '<', '>' ), ' ', $text);
 
+        switch ($type){
+            case 'name':
+                $token = 100;
+                break;
+            case 'body':
+                $token = 1500;
+                break;
+            default:
+                $token = 500;
+                break;
+        }
         $post_fields = '{
-              "model": "gpt-4",
+              "model": "gpt-4-turbo-preview",
                 "messages": [
                     {
                         "role": "system",
@@ -27,7 +38,7 @@ class GptRequest extends BaseRequest
                     }
                 ],
                 "temperature": 1,
-                "max_tokens": 9000,
+                "max_tokens": '.$token.',
                 "top_p": 1,    
                 "frequency_penalty": 0,
                 "presence_penalty": 0 
