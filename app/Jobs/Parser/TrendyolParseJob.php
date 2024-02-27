@@ -48,6 +48,7 @@ class TrendyolParseJob implements ShouldQueue
      */
     public function handle()
     {
+        try {
         $log = ParseImport::create(
         [
             'job_id' => $this->job->getJobId(),
@@ -205,6 +206,22 @@ class TrendyolParseJob implements ShouldQueue
 
             $page++;
         }
+            $attachment = Excel::raw(
+                new ImportDataCatalogResultExport($productExcel, 'ru'),
+                \Maatwebsite\Excel\Excel::XLSX
+            );
+            $fileResultName = Carbon::now().'-import-data.xlsx';
+            Storage::disk('public-files')->put($fileResultName, $attachment);
+            $end = Carbon::now();
+            $minuteDiff = $end->diffInSeconds($start);
+
+
+
+            $log->time = $minuteDiff;
+            $log->totalCount = count($productExcel);
+            $log->status = 'done';
+            $log->file = $fileResultName;
+            $log->save();
 
         $adminUser = User::where('id','=',1)
             ->first();
@@ -218,21 +235,6 @@ class TrendyolParseJob implements ShouldQueue
             Mail::to($user->email)->send(new ParserMail($user,$productExcel,$user->lang ?? 'tr',$this->import['url']));
         }
 
-        $end = Carbon::now();
-        $minuteDiff = $end->diffInSeconds($start);
-
-        $attachment = Excel::raw(
-            new ImportDataCatalogResultExport($productExcel, 'ru'),
-            \Maatwebsite\Excel\Excel::XLSX
-        );
-        $fileResultName = Carbon::now().'-import-data.xlsx';
-        Storage::disk('public-files')->put($fileResultName, $attachment);
-
-        $log->time = $minuteDiff;
-        $log->totalCount = count($productExcel);
-        $log->status = 'done';
-        $log->file = $fileResultName;
-        $log->save();
 
         if (ob_get_length() == 0 ) {
             ob_start();
@@ -240,7 +242,9 @@ class TrendyolParseJob implements ShouldQueue
             ob_end_clean();
 
         }
-
+        }catch (\Exception $e){
+            print_r($e);
+        }
 
     }
 }
