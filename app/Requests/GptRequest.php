@@ -56,7 +56,7 @@ class GptRequest extends BaseRequest
                 'verify' => false,
                 'connect_timeout' => 60,
             ]);
-
+            dd($response->getBody()->getContents());
             return ['data' => json_decode($response->getBody()->getContents(), true), 'code' => 200];
 
         }
