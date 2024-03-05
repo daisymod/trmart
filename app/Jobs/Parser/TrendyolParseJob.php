@@ -48,7 +48,7 @@ class TrendyolParseJob implements ShouldQueue
      */
     public function handle()
     {
-        try {
+
         $log = ParseImport::create(
         [
             'job_id' => $this->job->getJobId(),
@@ -203,7 +203,8 @@ class TrendyolParseJob implements ShouldQueue
                     }
                 }
             }
-
+            $log->totalCount +=24;
+            $log->save();
             $page++;
         }
             $attachment = Excel::raw(
@@ -225,15 +226,21 @@ class TrendyolParseJob implements ShouldQueue
 
         $adminUser = User::where('id','=',1)
             ->first();
+
         if (!empty($adminUser->email)){
             Mail::to($adminUser->email)->send(new ParserMail($adminUser,$productExcel,$user->lang ?? 'tr',$this->import['url']));
         }
 
-        if (!empty($this->request['user'])){
-            $user = User::where('id','=',$this->request['user'] )
-                ->first();
-            Mail::to($user->email)->send(new ParserMail($user,$productExcel,$user->lang ?? 'tr',$this->import['url']));
+        try {
+            if (!empty($this->request['user'])){
+                $user = User::where('id','=',$this->request['user'] )
+                    ->first();
+                Mail::to($user->email)->send(new ParserMail($user,$productExcel,$user->lang ?? 'tr',$this->import['url']));
+            }
+        }catch (\Exception $e){
+
         }
+
 
 
         if (ob_get_length() == 0 ) {
@@ -242,9 +249,7 @@ class TrendyolParseJob implements ShouldQueue
             ob_end_clean();
 
         }
-        }catch (\Exception $e){
-            print_r($e);
-        }
+
 
     }
 }

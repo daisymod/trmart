@@ -7,7 +7,6 @@ namespace App\Requests;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Request;
-use Illuminate\Support\Facades\Log;
 
 class GptRequest extends BaseRequest
 {
@@ -57,7 +56,7 @@ class GptRequest extends BaseRequest
                 'verify' => false,
                 'connect_timeout' => 60,
             ]);
-            Log::info(print_r($response->getBody()->getContents(),true));
+
             return ['data' => json_decode($response->getBody()->getContents(), true), 'code' => 200];
 
         }
