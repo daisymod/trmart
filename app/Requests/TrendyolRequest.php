@@ -13,7 +13,7 @@ class TrendyolRequest    extends BaseRequest
 {
     public function getData($url){
         $this->request = new Request('GET', $url, ['Content-Type' => 'html/text']);
-
+        sleep(3);
         try {
             // отправка запроса и получение результата
             $response = $this->client->send($this->request,[
