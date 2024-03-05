@@ -127,8 +127,13 @@ class TrendyolParser
     {
         $result = "";
         foreach ($description as $item){
-            if ($item['viewType'] == 'inline')
+            if (isset($item['viewType'])){
+                if ($item['viewType'] == 'inline')
+                    $result .= $item['text']."\n";
+            }else{
                 $result .= $item['text']."\n";
+            }
+
         }
         return $result;
     }
