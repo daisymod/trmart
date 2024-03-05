@@ -7,6 +7,7 @@ namespace App\Requests;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Facades\Log;
 
 class TrendyolRequest    extends BaseRequest
 {
@@ -36,6 +37,9 @@ class TrendyolRequest    extends BaseRequest
             }
             if ($exception->getCode() === 422){
                 return ['data' => ['error' => 'Такого записи нет'], 'code' => 422];
+            }
+            if ($exception->getCode() === 429){
+                Log::info(print_r($exception->getResponse(),true));
             }
             return ['data' => ['error' => $exception->getMessage()], 'code' => $exception->getCode()];
         }
