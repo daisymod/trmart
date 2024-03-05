@@ -39,7 +39,10 @@ class TrendyolRequest    extends BaseRequest
                 return ['data' => ['error' => 'Такого записи нет'], 'code' => 422];
             }
             if ($exception->getCode() === 429){
-                Log::info(print_r($exception->getResponse(),true));
+                Log::info(print_r($exception->getResponse()->getHeader('Retry-After')[0],true));
+                if (isset($exception->getResponse()->getHeader('Retry-After')[0])){
+                    sleep($exception->getResponse()->getHeader('Retry-After')[0]);
+                }
             }
             return ['data' => ['error' => $exception->getMessage()], 'code' => $exception->getCode()];
         }
