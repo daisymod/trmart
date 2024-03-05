@@ -152,23 +152,28 @@
                                 <div class="customer-addresses">
                                     <div class="inputs-wrap">
                                         <span class="input-title">@lang('customer.form-label.fl1')</span>
-                                        <input type="text" readonly class="form-control" name="country_id" id="profile-country_id" value="{{$country_id}}">
+                                        <input type="hidden" readonly class="form-control" name="country_id" id="profile-country_id" value="{{$country_id_int}}">
+                                        <input type="text" readonly class="form-control"  id="profile-country_id" value="{{$country_id}}">
                                     </div>
                                     <div class="inputs-wrap">
                                         <span class="input-title">@lang('customer.form-label.fl2')</span>
-                                        <input type="text" readonly class="form-control" name="region_id" id="profile-region_id" value="{{$region_id}}">
+                                        <input type="hidden" readonly class="form-control" name="region_id" id="profile-country_id" value="{{$region_id_int}}">
+                                        <input type="text" readonly class="form-control"  id="profile-region_id" value="{{$region_id}}">
                                     </div>
                                     <div class="inputs-wrap">
                                         <span class="input-title">@lang('customer.form-label.fl3')</span>
-                                        <input type="text" readonly class="form-control" name="area_id" id="profile-area_id" value="{{$area_id}}">
+                                        <input type="hidden" readonly class="form-control" name="area_id" id="profile-country_id" value="{{$area_id_int}}">
+                                        <input type="text" readonly class="form-control"  id="profile-area_id" value="{{$area_id}}">
                                     </div>
                                     <div class="inputs-wrap">
                                         <span class="input-title">@lang('customer.form-label.fl4')</span>
-                                        <input type="text" readonly class="form-control" name="city_id" id="profile-city_id" value="{{$city_id}}">
+                                        <input type="hidden" readonly class="form-control" name="city_id" id="profile-country_id" value="{{$city_id_int}}">
+                                        <input type="text" readonly class="form-control" id="profile-city_id" value="{{$city_id}}">
                                     </div>
                                     <div class="inputs-wrap">
                                         <span class="input-title">@lang('customer.form-label.fl5')</span>
-                                        <input type="text" readonly class="form-control" name="postcode_id" id="profile-postcode" value="{{$postcode_id}}">
+                                        <input type="hidden" readonly class="form-control" name="postcode_id" id="profile-postcode" value="{{$postcode_id_int}}">
+                                        <input type="text" readonly class="form-control"  id="profile-postcode" value="{{$postcode_id}}">
 
                                     </div>
                                 </div>

@@ -110,8 +110,10 @@ class CartController extends Controller
                 ->first();
             if (!empty($countries->name_ru)){
                 $country_id = $countries->name_ru;
+                $country_id_int = $countries->id;
             }else{
                 $country_id = '';
+                $country_id_int = null;
             }
         }else{
             $country_id = '';
@@ -129,8 +131,10 @@ class CartController extends Controller
 
             if (!empty($regions->name)){
                 $region_id = $regions->name;
+                $region_id_int = $regions->id;
             }else{
                 $region_id = '';
+                $region_id_int = null;
             }
 
             $areas     = KPLocation::query()
@@ -142,8 +146,10 @@ class CartController extends Controller
 
             if (!empty($areas->name)){
                 $area_id = $regions->name;
+                $area_id_int = $regions->id;
             }else{
                 $area_id = '';
+                $area_id_int = null;
             }
 
             $cities    = KPLocation::query()
@@ -155,8 +161,10 @@ class CartController extends Controller
 
             if (!empty($cities->name)){
                 $city_id = $cities->name;
+                $city_id_int = $cities->id;
             }else{
                 $city_id = '';
+                $city_id_int = null;
             }
 
             $postCodes = KPPostCode::query()
@@ -167,8 +175,10 @@ class CartController extends Controller
 
             if (!empty($postCodes->title)){
                 $postcode_id = $postCodes->title;
+                $postcode_id_int = $postCodes->id;
             }else{
                 $postcode_id = '';
+                $postcode_id_int = null;
             }
 
         } else {
@@ -213,7 +223,7 @@ class CartController extends Controller
         }else{
             $type = 1;
         }
-        return view("cart.index", compact(
+        return view("cart.index", compact("city_id_int",'area_id_int','postcode_id_int','region_id_int',"country_id_int",
             "city_id",'area_id','postcode_id','region_id',"country_id",
             "delivery_auto","type","countries", "cities", "regions", "areas", "postCodes", 'cartCheckCount'));
     }
