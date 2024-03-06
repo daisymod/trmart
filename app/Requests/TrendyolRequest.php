@@ -13,7 +13,6 @@ class TrendyolRequest    extends BaseRequest
 {
     public function getData($url){
         $this->request = new Request('GET', $url, ['Content-Type' => 'html/text']);
-        sleep(3);
         try {
             // отправка запроса и получение результата
             $response = $this->client->send($this->request,[
@@ -40,9 +39,6 @@ class TrendyolRequest    extends BaseRequest
             }
             if ($exception->getCode() === 429){
                 Log::info(print_r($exception->getResponse()->getHeader('Retry-After')[0],true));
-                if (isset($exception->getResponse()->getHeader('Retry-After')[0])){
-                    sleep($exception->getResponse()->getHeader('Retry-After')[0]);
-                }
             }
             return ['data' => ['error' => $exception->getMessage()], 'code' => $exception->getCode()];
         }
