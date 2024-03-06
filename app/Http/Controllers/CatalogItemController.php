@@ -69,9 +69,9 @@ class CatalogItemController
             ->where("active", "Y")
             ->paginate(30);
 
-        return response()->json(['items' =>
-            $items
-        ]);
+            return response()->json(['items' =>
+                $items
+            ]);
     }
 
 
