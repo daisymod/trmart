@@ -184,9 +184,9 @@ class CatalogItemsExcelLoadService
                     'article' => $article,
                     'barcode' => $row[8],
                     'body' => [
-                        'ru' => $row[4],
-                        'kz' => $row[6],
-                        'tr' => $row[5],
+                        'ru' => str_replace('[page="merchant_info"]POİNT GROUP E-TİCARET İTHALAT İHRACAT PA[/page]'," ",$row[4]),
+                        'kz' => str_replace('[page="merchant_info"]POİNT GROUP E-TİCARET İTHALAT İHRACAT PA[/page]'," ",$row[6]),
+                        'tr' => str_replace('[page="merchant_info"]POİNT GROUP E-TİCARET İTHALAT İHRACAT PA[/page]'," ",$row[5]),
                     ],
                     'active' => $row[15],
                     'status' => $row[14],
