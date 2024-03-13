@@ -77,6 +77,7 @@ class CatalogController
         Gate::authorize("catalog-edit", $record);
         $data = request()->all();
         $data['is_active'] = $request->is_active == 'on'  ? 1 : 0;
+        $data['parent_id'] = $request->parent[0] ?? null;
         Log::info(print_r($data['is_active'],true));
         $record->update($data);
 
