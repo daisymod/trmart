@@ -228,6 +228,7 @@ class TrendyolParseJob implements ShouldQueue
             ->first();
 
         if (!empty($adminUser->email)){
+            Log::info(print_r($adminUser->email,true));
             Mail::to($adminUser->email)->send(new ParserMail($adminUser,$productExcel,$user->lang ?? 'tr',$this->import['url']));
         }
 
@@ -235,6 +236,7 @@ class TrendyolParseJob implements ShouldQueue
             if (!empty($this->request['user'])){
                 $user = User::where('id','=',$this->request['user'] )
                     ->first();
+                Log::info(print_r($user->email,true));
                 Mail::to($user->email)->send(new ParserMail($user,$productExcel,$user->lang ?? 'tr',$this->import['url']));
             }
         }catch (\Exception $e){
