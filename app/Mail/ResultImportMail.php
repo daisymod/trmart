@@ -49,7 +49,7 @@ class ResultImportMail extends Mailable
             \Maatwebsite\Excel\Excel::XLSX
         );
        
-        return $this->from('no-reply@turkiyemart.com', 'Turkiyemart')
+        return $this->from('admin@turkiyemart.com', 'Turkiyemart')
             ->to($this->contact->email, 'Turkiyemart')
             ->subject("Result import file")
             ->view('mail.import',['success' => $this->success,'error' => $this->error])

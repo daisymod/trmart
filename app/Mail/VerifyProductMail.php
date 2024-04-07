@@ -34,7 +34,7 @@ class VerifyProductMail extends Mailable
     {
         app()->setLocale($this->contact->lang);
 
-        return $this->from('no-reply@turkiyemart.com', 'Turkiyemart')
+        return $this->from('admin@turkiyemart.com', 'Turkiyemart')
             ->to($this->contact->email, 'Turkiyemart')
             ->subject('merchant product verification')
             ->view('mail.VerifyProductMail')
