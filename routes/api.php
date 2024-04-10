@@ -55,4 +55,4 @@ Route::get("/product/paginate", [\App\Http\Controllers\CatalogItemController::cl
 Route::get("/product/color-size", [\App\Http\Controllers\ShopController::class, "getColorAndSizeById"])->name("getColorAndSizeById");
 
 
-Route::post("/test", [\App\Http\Controllers\TestController::class, "index"])->name("TestController");
+Route::get("/test", [\App\Http\Controllers\TestController::class, "index"])->name("TestController");
