@@ -48,7 +48,7 @@ class ParserMail extends Mailable
             \Maatwebsite\Excel\Excel::XLSX
         );
 
-        return $this->from('admin@turkiyemart.com', 'Turkiyemart')
+        return $this->from('no-reply@turkiyemart.com', 'Turkiyemart')
             ->to($this->contact->email, 'Turkiyemart')
             ->subject("Result Parser import file-".$this->url)
             ->view('mail.parser')

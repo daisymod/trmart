@@ -32,7 +32,7 @@ class AdminNewOrder extends Mailable
     public function build()
     {
         app()->setLocale($this->contact->lang ?? 'ru');
-        return $this->from('admin@turkiyemart.com', 'Turkiyemart')
+        return $this->from('no-reply@turkiyemart.com', 'Turkiyemart')
             ->to($this->contact->email, 'Turkiyemart')
             ->view('mail.AdminOrder')
             ->with([
