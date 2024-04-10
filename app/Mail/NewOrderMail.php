@@ -38,21 +38,21 @@ class NewOrderMail extends Mailable
 
         switch ($this->role){
             case 'user':
-                return $this->from('admin@turkiyemart.com', 'Turkiyemart')
+                return $this->from('no-reply@turkiyemart.com', 'Turkiyemart')
                     ->to($this->contact->email, 'Turkiyemart')
                     ->view('mail.UserOrder')
                     ->with([
                         'contact' => $this->contact
                     ]);
             case 'merchant':
-                return $this->from('admin@turkiyemart.com', 'Turkiyemart')
+                return $this->from('no-reply@turkiyemart.com', 'Turkiyemart')
                     ->to($this->contact->email, 'Turkiyemart')
                     ->view('mail.MerchantOrder')
                     ->with([
                         'contact' => $this->contact
                     ]);
             case 'admin':
-                return $this->from('admin@turkiyemart.com', 'Turkiyemart')
+                return $this->from('no-reply@turkiyemart.com', 'Turkiyemart')
                     ->to($this->contact->email, 'Turkiyemart')
                     ->view('mail.AdminOrder')
                     ->with([

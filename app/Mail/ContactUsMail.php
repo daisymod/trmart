@@ -28,8 +28,8 @@ class ContactUsMail extends Mailable
      */
     public function build()
     {
-        return $this->from('admin@turkiyemart.com', 'Turkiyemart')
-            ->to('admin@turkiyemart.com', 'Turkiyemart')
+        return $this->from('no-reply@turkiyemart.com', 'Turkiyemart')
+            ->to('no-reply@turkiyemart.com', 'Turkiyemart')
             ->view('mail.sendAdminMessage')
             ->with([
                 'contact' => $this->contact

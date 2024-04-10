@@ -32,7 +32,7 @@ class MerchantNewOrder extends Mailable
     public function build()
     {
         app()->setLocale("tr");
-        return $this->from('admin@turkiyemart.com', 'Turkiyemart')
+        return $this->from('no-reply@turkiyemart.com', 'Turkiyemart')
             ->to($this->contact->email, 'Turkiyemart')
             ->view('mail.MerchantOrder')
             ->with([

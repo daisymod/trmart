@@ -35,7 +35,7 @@ class RejectVerificationMerchantMail extends Mailable
     {
         app()->setLocale($this->contact->lang);
 
-        return $this->from('admin@turkiyemart.com', 'Turkiyemart')
+        return $this->from('no-reply@turkiyemart.com', 'Turkiyemart')
             ->to($this->contact->email, 'Turkiyemart')
             ->subject('reject verification merchant')
             ->view('mail.RejectVerificationMerchantMail')
