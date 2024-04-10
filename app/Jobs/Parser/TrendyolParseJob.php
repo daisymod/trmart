@@ -79,6 +79,7 @@ class TrendyolParseJob implements ShouldQueue
             $json = substr($text, 0, $to);
             $data = json_decode($json."}",true);
         }
+        log::info(print_r($data,true));
 
         $totalPage = 1;
         $page = 1;
@@ -155,7 +156,7 @@ class TrendyolParseJob implements ShouldQueue
                                                     $pars->getWidth($productPage['product']),
                                                     $pars->getHeight($productPage['product']),
                                                 ];
-                                                log::info(print_r($new_line,true));
+
                                                 array_push($productExcel,
                                                     array_merge($new_line)
                                                 );
@@ -197,7 +198,6 @@ class TrendyolParseJob implements ShouldQueue
                                                 $pars->getHeight($productPage['product']),
                                             ];
 
-                                            log::info(print_r($new_line,true));
                                             array_push($productExcel,
                                                 array_merge($new_line)
                                             );
