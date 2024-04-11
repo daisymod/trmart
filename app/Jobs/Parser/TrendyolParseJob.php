@@ -116,7 +116,9 @@ class TrendyolParseJob implements ShouldQueue
 
                                 if (isset($productPage['product'])){
                                     $image = $pars->getImages($productPage['product']['images']);
-                                    $description = str_replace('[page="merchant_info"]POİNT GROUP E-TİCARET İTHALAT İHRACAT PA[/page]'," ",$pars->getDescription($productPage['product']['descriptions']));
+                                    $description = str_replace('[page="merchant_info"]'," ",$pars->getDescription($productPage['product']['descriptions']));
+                                    $description = str_replace('[/page]'," ", $description);
+
                                     foreach ($productPage['product']['allVariants'] as $productItemVariant){
                                         $sizeVariant = explode("/", $productItemVariant['value']);
                                         $compound = $pars->getCompound($productPage['product']['attributes']);
