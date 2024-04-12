@@ -165,12 +165,13 @@
                                         @endif
                                     @endforeach
                                 </div>
-                                <div class="img-wrap">
-                                    <div class="img"><img src="/img/menu-img.jpg" alt=""></div>
-                                    <b>@lang('system.f11') 1 300 @lang('system.f12')</b>
-                                </div>
+                            </div>
+                            <div class="img-wrap">
+                                <div class="img"><img src="/img/menu-img.jpg" alt=""></div>
+                                <b>@lang('system.f11') 1 300 @lang('system.f12')</b>
                             </div>
                         </div>
+
                     @endforeach
                 </div>
             </div>
