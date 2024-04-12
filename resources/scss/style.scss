@@ -360,6 +360,8 @@ header {
                 transition: .3s;
                 overflow-y: auto;
                 height: calc(100vh - 147px);
+                display: flex;
+                flex-wrap: wrap;
 
                 @media(max-width: 767px) {
                     padding: 30px 15px;
