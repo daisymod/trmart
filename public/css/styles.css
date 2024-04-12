@@ -11334,7 +11334,7 @@ header .wrapper .bottom-line .menu-wrapper .tab-menu li.active a {
 header .wrapper .bottom-line .menu-wrapper .tab-content .tab-content-item .tab-menu-wrapper {
   display: flex;
   justify-content: space-between;
-  width: 100%;
+
 }
 @media (max-width: 1024px) {
   header .wrapper .bottom-line .menu-wrapper .tab-content .tab-content-item .tab-menu-wrapper {
