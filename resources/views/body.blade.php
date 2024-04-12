@@ -145,7 +145,7 @@
                 </ul>
                 <div class="tab-content">
                     @foreach($catalogMenu as $k=>$i)
-                        <div class="tab-content-item @if($k==0) active @endif">
+                        <div style="width: 100%!important;" class="tab-content-item @if($k==0) active @endif">
                             <div class="tab-menu-wrapper">
                                 <div class="links">
                                     @foreach($i->child()->where('is_active','=',1)->orderBy("name_".app()->getLocale())->get() as $child)

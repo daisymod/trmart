@@ -918,8 +918,10 @@ $(document).ready(function () {
         $(this).closest(".tab-menu").find("li").removeClass("active");
         $(this).closest("li").addClass("active");
         var index = $(this).closest("li").index();
+
         $(".tab-content-item").removeClass("active");
         $(".tab-content-item").eq(index).addClass("active");
+        $(".tab-content-item").eq(index).css('width','100%');
     });
 
     $(".tab-menu2 li a").on("click", function (e) {
@@ -927,6 +929,7 @@ $(document).ready(function () {
         $(this).closest(".tab-menu2").find("li").removeClass("active");
         $(this).closest("li").addClass("active");
         var index = $(this).closest("li").index();
+
         $(".tab-content2 .tab-content-item").removeClass("active");
         $(".tab-content2 .tab-content-item").eq(index).addClass("active");
     });
