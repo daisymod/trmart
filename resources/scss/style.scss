@@ -2568,6 +2568,7 @@ footer {
         @include flex;
         @include justify-between;
         @include align-center;
+        flex-wrap: wrap;
         margin-bottom: 30px;
 
         > p {
@@ -2582,7 +2583,7 @@ footer {
             @include align-center;
             flex-grow: 1;
             justify-content: flex-end;
-
+            width: 50%;
             .download-link {
                 font-weight: 600;
                 font-size: 13px;
